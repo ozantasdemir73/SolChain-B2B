@@ -6,7 +6,7 @@ Talepten ödemeye kadar satın alma sürecini tek akışta yönetir ve her adım
 
 > Dijital çağın şımarık yıldızı yeterince alkış aldı; artık sahne üretici ve tedarikçinin.
 
-**Demo:** `https://<kullanıcı-adı>.github.io/solchain-b2b/` *(GitHub Pages açıldıktan sonra)*
+**Demo:** https://ozantasdemir73.github.io/SolChain-B2B/ · **Depo:** https://github.com/ozantasdemir73/SolChain-B2B
 
 ---
 
@@ -57,7 +57,7 @@ Veri yalnızca tarayıcıda (localStorage) tutulur. "Demoyu sıfırla" düğmesi
 
 1. Depoyu GitHub'a gönderin.
 2. **Settings › Pages › Build and deployment** bölümünde kaynak olarak `Deploy from a branch`, dal olarak `main` ve klasör olarak `/ (root)` seçin.
-3. Birkaç dakika sonra `https://<kullanıcı-adı>.github.io/solchain-b2b/` açılır; kök sayfa demoya yönlendirir.
+3. Birkaç dakika sonra https://ozantasdemir73.github.io/SolChain-B2B/ açılır; kök sayfa demoya yönlendirir.
 
 ## Solana'nın rolü
 
