@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><title>SolChain B2B · Projenin ayrıntılı anlatımı</title>
+<style>
+@page{size:A4;margin:16mm 15mm 16mm 15mm}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",Arial,sans-serif;font-size:10pt;line-height:1.45;color:#13212A;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cover{background:#0F1A20;color:#EEF2F4;border-radius:10px;padding:26px 28px;margin-bottom:16px}
+.cover .eb{font-size:8.5pt;letter-spacing:2px;color:#6CCBCB;font-weight:600}
+.cover h1{font-size:28pt;font-weight:800;margin:6px 0 4px;color:#fff}
+.cover .sub{font-size:13pt;color:#EEF2F4}
+.cover .verbs{margin-top:10px;font-size:10.5pt;color:#6CCBCB;font-weight:600}
+.cover p.d{margin-top:10px;color:#A8B9C2;font-size:10pt}
+h2{font-size:14pt;color:#0D6B6E;margin:18px 0 8px;padding-bottom:4px;border-bottom:2px solid #D9ECEC;break-after:avoid}
+h3{font-size:11pt;margin:12px 0 5px;color:#13212A;break-after:avoid}
+p{margin:4px 0}
+ul,ol{margin:4px 0 4px 18px}
+li{margin:2px 0}
+table{width:100%;border-collapse:collapse;margin:6px 0 8px;font-size:9pt;break-inside:auto}
+tr{break-inside:avoid}
+th{background:#0D6B6E;color:#fff;text-align:left;padding:5px 7px;font-weight:600}
+td{padding:5px 7px;border-bottom:1px solid #D2DADE;vertical-align:top}
+tr:nth-child(even) td{background:#F3F5F6}
+td.hl,th.hl{font-weight:700}
+td.hl{color:#0D6B6E}
+.box{background:#D9ECEC;border-radius:8px;padding:10px 14px;margin:8px 0;break-inside:avoid}
+.box.dark{background:#0F1A20;color:#EEF2F4}
+.box.dark b{color:#6CCBCB}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0}
+.card{border:1px solid #D2DADE;border-radius:8px;padding:9px 12px;break-inside:avoid;background:#FBFCFC}
+.card .t{font-weight:700;color:#0D6B6E;font-size:9pt;letter-spacing:1px;margin-bottom:3px}
+.note{font-size:8.5pt;color:#66757F}
+.sec{break-inside:avoid}
+.foot{margin-top:18px;font-size:8.5pt;color:#66757F;border-top:1px solid #D2DADE;padding-top:6px}
+</style></head><body>
+
+<div class="cover">
+<div class="eb">PROJE AYRINTI DOSYASI · KASIM 2026</div>
+<h1>SolChain B2B</h1>
+<div class="sub">Sanayinin dijital ticaret ve güven altyapısı</div>
+<div class="verbs">Keşfet · Doğrula · Sipariş ver · Güvenceye al · Ölç · Finanse et</div>
+<p class="d">SolChain B2B, üretici ile ham madde tedarikçisi arasındaki ticaretin tamamını tek bir kanıt zincirinde toplayan dijital bir altyapı. Tedarikçi keşfi, doğrulama, sipariş, ödeme güvencesi, kalite ölçümü ve finansman aynı yerde yürüyor.</p>
+</div>
+
+<h2>1. Fark ettiğimiz ve çözdüğümüz sorunlar</h2>
+<table>
+<tr><th style="width:4%">#</th><th style="width:22%">Sorun</th><th style="width:34%">Bugün ne oluyor?</th><th>SolChain'in çözümü</th></tr>
+<tr><td>1</td><td class="hl">Güvenilir tedarikçi bulmak zor</td><td>Tavsiye, fuar ve eski ilişkilerle seçiliyor; geçmiş performans doğrulanamıyor</td><td>Doğrulanmış dijital kimlik ve karne; yapay zekâ ile gerekçeli eşleşme</td></tr>
+<tr><td>2</td><td class="hl">Kalite beyanı ile gerçek kalite farklı</td><td>Sertifika var ama teslim edilen malın kalitesi tutmayabiliyor</td><td>Sektöre özel kalite profili, beyan–ölçüm uyumu ve giriş kalite kontrolü karneye işleniyor</td></tr>
+<tr><td>3</td><td class="hl">Ödeme güvensizliği</td><td>Üretici peşin ödemekten, tedarikçi vadeye mal vermekten çekiniyor</td><td>Tutar lisanslı ödeme kuruluşunda kilitleniyor, teslim ve kalite onayıyla aktarılıyor</td></tr>
+<tr><td>4</td><td class="hl">Kalite anlaşmazlıkları uzun sürüyor</td><td>Taraflar birbirini suçluyor, ödeme aylarca bekliyor</td><td>Kalan tutar donuyor, bağımsız uzman yeniden inceliyor, akrediteli laboratuvar karar veriyor; sonuç otomatik uygulanıyor</td></tr>
+<tr><td>5</td><td class="hl">İyi performans başka müşteriye taşınmıyor</td><td>Tedarikçi her yeni müşteriyle güveni sıfırdan kuruyor</td><td>Karne zincirde duruyor, tedarikçi onu yeni müşterisine taşıyabiliyor</td></tr>
+<tr><td>6</td><td class="hl">Tedarikçinin mali ve üretim sorunları geç fark ediliyor</td><td>Firma batınca ya da üretim durunca öğreniliyor</td><td>Risk erken uyarı: faaliyet belgesi, SGK ve vergi durumu, ilanlar, kapasite ve bağımlılık takibi</td></tr>
+<tr><td>7</td><td class="hl">Fiyat artışları sürpriz oluyor</td><td>Sipariş verildikten sonra zam geliyor</td><td>Anonim piyasa fiyat endeksi, eşik uyarısı ve sözleşmede fiyat revizyon maddesi</td></tr>
+<tr><td>8</td><td class="hl">Teklifler aynı zeminde karşılaştırılamıyor</td><td>Vadesi, nakliyesi ve teslim şekli farklı teklifler yalnızca fiyata bakılarak seçiliyor</td><td>Bugünkü değer hesabı, teslim şekilleri (Incoterms) ve kapıda toplam maliyet</td></tr>
+<tr><td>9</td><td class="hl">Ne alınacağı bilinmiyor</td><td>Mühendis malzeme seçimini tek başına araştırıyor</td><td>Malzeme Danışmanı alternatifleri kaynaklarıyla karşılaştırıyor</td></tr>
+<tr><td>10</td><td class="hl">Tedarikçinin nakit sıkışıklığı</td><td>Uzun vadeler küçük tedarikçiyi zorluyor</td><td>Karneye bağlı avans ve onaylı faturanın vadesinden önce tahsili</td></tr>
+<tr><td>11</td><td class="hl">Üretici tarafı ölçülmüyor</td><td>Geç ödeyen ya da haksız itiraz eden alıcı da görünmüyor</td><td>Alıcı endeksi; güven iki yönlü ölçülüyor</td></tr>
+<tr><td>12</td><td class="hl">Veriler dağınık</td><td>ERP, e-Fatura, kalite laboratuvarı ve banka ayrı ayrı çalışıyor</td><td>Hepsi tek akışta entegre</td></tr>
+</table>
+
+<h2>2. Amacımız</h2>
+<div class="g2" style="grid-template-columns:1fr 1fr 1fr">
+<div class="card"><div class="t">KISA VADE</div>Satın almada riski sipariş vermeden önce görünür kılmak; kalite ve ödeme anlaşmazlıklarını hızlı ve tarafsız çözmek.</div>
+<div class="card"><div class="t">ORTA VADE</div>Tedarikçinin performansını şirketten şirkete taşınabilen bir güven kaydına dönüştürmek.</div>
+<div class="card"><div class="t">UZUN VADE</div>Doğrulanmış teslimat verisini avans ve finansmana dönüştürüp sanayinin dijital ticaret ve güven altyapısı olmak.</div>
+</div>
+
+<h2>3. İşleyiş: yedi adım</h2>
+<table>
+<tr><th style="width:17%">Adım</th><th>Ne oluyor?</th><th style="width:28%">Zincire ne yazılıyor?</th></tr>
+<tr><td class="hl">1. Keşif</td><td>Üretici ihtiyacını yazıyor; asistan malzeme ve tedarikçi öneriyor</td><td>—</td></tr>
+<tr><td class="hl">2. Doğrulama</td><td>Vergi kaydı, MERSİS, oda faaliyet belgesi, sertifikalar, kapasite kontrol ediliyor</td><td>Belge özetleri ve doğrulama imzası</td></tr>
+<tr><td class="hl">3. Teklif talebi</td><td>Kalite profili, miktar, vade, güvence, teslim şekli ve fiyat revizyon maddesi tanımlanıyor</td><td>Talep özeti</td></tr>
+<tr><td class="hl">4. Eşleşme</td><td>Risk kontrolü, toplam maliyet karşılaştırması ve gerekçeli kısa liste</td><td>—</td></tr>
+<tr><td class="hl">5. Sipariş</td><td>İki taraf imzalıyor, güncel belge teyit ediliyor, tutar kilitleniyor</td><td>Sipariş ve fon kilidi kaydı</td></tr>
+<tr><td class="hl">6. Teslim</td><td>Teslim kanıtı, avans, giriş kalite kontrolü</td><td>Teslim ve kalite sonucu</td></tr>
+<tr><td class="hl">7. Mutabakat</td><td>Ödeme, karne güncellemesi, erken tahsilat, garanti süresince saha izleme</td><td>Ödeme ve karne kaydı</td></tr>
+</table>
+<div class="box"><b>İtiraz çıkarsa dört adım işliyor:</b> 1) <b>Dondur:</b> kalan tutar kilitli kalıyor. 2) <b>Muayene:</b> bağımsız uzman malı yeniden inceliyor ve numune alıyor. 3) <b>Karar:</b> akrediteli laboratuvar sonucu zincire imzalıyor. 4) <b>Uygula:</b> ödeme ya da iade otomatik yapılıyor, sonuç karneye işleniyor.<br><b>Süreci imzalayan taraflar:</b> alıcı, tedarikçi, ödeme kuruluşu veya banka, e-belge doğrulayıcı ve hakem laboratuvar.</div>
+
+<h2>4. Sistemin modülleri</h2>
+<div class="sec">
+<h3>4.1 Dijital tedarikçi kimliği</h3>
+<ul>
+<li><b>Resmî kimlik:</b> vergi numarası, MERSİS kaydı, e-Fatura mükellefiyeti</li>
+<li><b>Oda faaliyet belgesi:</b> 90 günden eskiyse siparişten önce yenisi isteniyor</li>
+<li><b>Sertifikalar:</b> ISO, TSE, ürün belgeleri ve geçerlilik takibi</li>
+<li><b>Makine, kapasite ve uzmanlık alanı:</b> beyan edilen kapasite gerçekleşenle karşılaştırılıyor</li>
+</ul>
+</div>
+
+<h3>4.2 Karne ve Güven Skoru</h3>
+<p>Karne dört katmandan oluşuyor: <b>Yeterlilik</b> (üretebilir mi?), <b>Performans</b> (teslim etti mi?), <b>İlişki</b> (güvenilir mi?), <b>Süreklilik</b> (yarın da var mı?).</p>
+<table>
+<tr><th>Endeks bileşeni</th><th style="width:16%">Ağırlık</th></tr>
+<tr><td>Zamanında ve eksiksiz teslim (OTIF)</td><td class="hl">%30</td></tr>
+<tr><td>Kalite (%80 giriş kontrolü + %20 saha performansı)</td><td class="hl">%30</td></tr>
+<tr><td>Beyan–ölçüm uyumu</td><td class="hl">%15</td></tr>
+<tr><td>Yeterlilik (sertifikanın geçerliliği)</td><td class="hl">%15</td></tr>
+<tr><td>Uyuşmazlık geçmişi</td><td class="hl">%10</td></tr>
+</table>
+<div class="g2">
+<table>
+<tr><th>Seviye</th><th>Koşul</th></tr>
+<tr><td class="hl">Verified</td><td>Kimlik ve temel belgeler doğrulandı</td></tr>
+<tr><td class="hl">Silver</td><td>≥10 teslimat, endeks ≥70</td></tr>
+<tr><td class="hl">Gold</td><td>≥20 teslimat, endeks ≥85, ≥5 alıcı</td></tr>
+<tr><td class="hl">Platinum</td><td>≥40 teslimat, endeks ≥90, ≥10 alıcı</td></tr>
+<tr><td class="hl" style="color:#9A5410">Askıda</td><td>Zorunlu belgenin süresi doldu</td></tr>
+</table>
+<table>
+<tr><th>Endeks</th><th>Teslimde avans</th></tr>
+<tr><td>85 ve üzeri</td><td class="hl">%40</td></tr>
+<tr><td>70–84</td><td class="hl">%25</td></tr>
+<tr><td>70'in altı</td><td class="hl">%10</td></tr>
+<tr><td>Yeni tedarikçi</td><td class="hl">%0</td></tr>
+</table>
+</div>
+<ul>
+<li>Puan kayıtlardan formülle hesaplanıyor, yapay zekâ tahmin etmiyor. Beş teslimattan azsa gösterilmiyor.</li>
+<li><b>Alıcı endeksi:</b> zamanında ödeme, gecikme günü ve haksız itiraz oranından hesaplanıyor.</li>
+<li><b>Şişirmeye karşı:</b> en az 4 farklı alıcı şartı, karşılıklı puanlama tespiti, puanın yalnızca gerçek siparişten gelmesi.</li>
+</ul>
+
+<div class="g2">
+<div class="card"><div class="t">4.3 YAPAY ZEKÂ SATIN ALMA ASİSTANI</div>
+<ul><li>Düz cümleyle yazılan talepten kategori, miktar, vade, termin ve önceliği çıkarıyor</li><li>Karneye ve risk durumuna göre ilk üç tedarikçiyi öneriyor</li><li>Vade etkisini, kapıda toplam maliyeti ve tasarrufu hesaplıyor</li><li>Talebi tek tıkla teklif talebine çeviriyor</li></ul></div>
+<div class="card"><div class="t">4.4 MALZEME DANIŞMANI</div>
+<ul><li>Ürüne uygun ham maddeleri avantajı, dikkat edilecek noktası ve göreli maliyetiyle karşılaştırıyor</li><li>Kaynak gösteriyor, karar üreticide kalıyor</li><li>Veri yoksa bunu söylüyor</li><li>Gıda temaslı ve güvenlik açısından kritik parçada uzmana yönlendiriyor</li></ul></div>
+</div>
+
+<div class="sec">
+<h3>4.5 Ticari ve teslim koşulları</h3>
+<ul>
+<li><b>Vade:</b> farklı vadeler bugünkü değere çevrilip karşılaştırılıyor.</li>
+<li><b>Teslim şekilleri (Incoterms 2020):</b> EXW, FCA, FOB, CIF, DAP ve DDP için nakliyenin, sigortanın ve riskin kimde olduğu ve teslimin hangi anda kaydedileceği belli.</li>
+<li><b>Kapıda toplam maliyet:</b> fiyata üreticiye düşen nakliye, gümrük ve teminat masrafları ekleniyor.</li>
+<li><b>Fiyat revizyon maddesi:</b> piyasa endeksi belirlenen bandı aşarsa fiyat sözleşmedeki formülle güncelleniyor.</li>
+</ul>
+</div>
+
+<h3>4.6 Risk erken uyarı</h3>
+<table>
+<tr><th style="width:32%">Sinyal</th><th style="width:30%">Eşik</th><th>Aksiyon</th></tr>
+<tr><td>Faaliyet belgesi</td><td>90 günden eski</td><td>Güncel belge iste</td></tr>
+<tr><td>SGK veya vergi borcu</td><td>Yapılandırılmış</td><td>Avansı düşür</td></tr>
+<tr><td>Olumsuz ilan veya icra</td><td>Kayıt var</td><td>Yedek tedarikçi hazırla</td></tr>
+<tr><td>Kapasite kullanımı</td><td>Beyanın %70'inin altında</td><td>Teyit iste</td></tr>
+<tr><td>Beyan–ölçüm uyumu</td><td>80'in altında</td><td>Giriş kontrolünü sıklaştır</td></tr>
+<tr><td>Tek tedarikçiye bağımlılık</td><td>%45 ve üzeri</td><td>İkinci kaynak aç</td></tr>
+</table>
+
+<div class="g2">
+<div class="card"><div class="t">4.7 PİYASA İSTİHBARATI</div>
+<ul><li>Kategori bazında anonim fiyat endeksi ve bölgesel karşılaştırma</li><li>Fiyat %4 veya daha fazla hareket ederse "alımı öne çek" ya da "fiyatı sabitle" önerisi</li><li>Endeks en az 5 firmanın verisi olmadan yayınlanmıyor</li></ul></div>
+<div class="card"><div class="t">4.8 ÖDEME GÜVENCESİ VE FİNANSMAN</div>
+<ul><li>Güvenceli ödeme, endekse bağlı avans, erken tahsilat, üreticiye vade finansmanı</li><li><b>İlke: SolChain banka değildir.</b> Parayı lisanslı kuruluş tutuyor, finansmanı banka ve faktoring ortakları veriyor; biz doğrulanmış veriyi sağlıyoruz</li></ul></div>
+</div>
+
+<h2>5. Entegre ettiğimiz sistemler</h2>
+<table>
+<tr><th style="width:15%">Alan</th><th style="width:38%">Sistemler</th><th>Ne sağlıyor?</th></tr>
+<tr><td class="hl">ERP</td><td>SAP, Microsoft Dynamics, Logo, Netsis, Mikro</td><td>Sipariş, stok ve fatura verisi otomatik akıyor; çift veri girişi yok</td></tr>
+<tr><td class="hl">E-belge</td><td>e-Fatura, e-İrsaliye</td><td>Teslim ve fatura resmî belgeyle doğrulanıyor</td></tr>
+<tr><td class="hl">Ödeme</td><td>Lisanslı ödeme kuruluşu, bankalar</td><td>Fon kilidi, aktarım, erken tahsilat</td></tr>
+<tr><td class="hl">Kalite</td><td>Laboratuvar bilgi sistemi (LIMS), akrediteli laboratuvarlar</td><td>Test sonuçları doğrudan karneye işleniyor</td></tr>
+<tr><td class="hl">Resmî kayıt</td><td>Sanayi ve ticaret odaları</td><td>Faaliyet belgesi doğrulaması</td></tr>
+<tr><td class="hl">Geliştirici</td><td>REST API ve webhook</td><td>Şirketin kendi sistemlerine bağlantı</td></tr>
+<tr><td class="hl">Kanıt</td><td>Solana</td><td>Belge özeti, imza, karne ve ödeme durumu</td></tr>
+</table>
+<div class="g2">
+<div class="card"><div class="t">MİMARİ: DÖRT KATMAN</div><ol><li>Arayüz: üretici ve tedarikçi paneli, mobil onay</li><li>Uygulama servisleri: teklif, sipariş, karne, risk, asistan</li><li>Entegrasyon</li><li>Solana kanıt katmanı</li></ol></div>
+<div class="card"><div class="t">ROLLER VE GÜVENLİK</div><ul><li><b>Satın alma:</b> talep, teklif, sipariş</li><li><b>Kalite:</b> giriş kontrolü, itiraz</li><li><b>Finans:</b> ödeme, erken tahsilat onayı</li><li><b>Yönetici:</b> limit ve çift onay kuralları</li></ul><p class="note">KVKK uyumu, rol bazlı erişim, denetim izi, ana ağa geçmeden önce bağımsız güvenlik denetimi.</p></div>
+</div>
+
+<h2>6. Neden Solana?</h2>
+<ol>
+<li><b>Değiştirilemez ortak kayıt:</b> Karne birden fazla şirket arasında paylaşılıyor. Hiçbir tarafın, platformun kendisinin de, geçmişi sonradan değiştirememesi gerekiyor.</li>
+<li><b>Düşük işlem maliyeti:</b> Her teslimatı, imzayı ve kalite sonucunu ayrı ayrı kaydedebiliyoruz. B2B'deki yüksek işlem sayısı için bu şart.</li>
+<li><b>Hız:</b> Kayıt saniyeler içinde kesinleşiyor, kullanıcı beklemiyor.</li>
+<li><b>Programlanabilir kurallar:</b> Sipariş, fon kilidi, karne ve uyuşmazlık kuralları akıllı sözleşmelerle otomatik uygulanıyor.</li>
+<li><b>Hazır ekosistem:</b> Stablecoin (USDC), cüzdan ve geliştirici araçları olgun; izin verilen ülkelerde doğrudan dijital ödeme açılabiliyor.</li>
+<li><b>Doğrulanabilirlik:</b> Belgenin özeti tarayıcıda SHA-256 ile hesaplanıyor; belgede tek bir harf değişse eşleşme bozuluyor.</li>
+</ol>
+<div class="box"><b>Gizlilik ve mevzuat:</b> Ticari veri zincire yazılmıyor, yalnızca özeti ve imzaları yazılıyor. Türkiye'de kripto ile ödeme yasak olduğu için para lisanslı ödeme kuruluşunda TL olarak tutuluyor. Solana burada kanıt katmanı olarak çalışıyor.</div>
+
+<h2>7. Şirketler neden bizi tercih etsin?</h2>
+<div class="g2" style="grid-template-columns:1fr 1fr 1fr">
+<div class="card"><div class="t">ÜRETİCİ</div><ul><li>Doğru tedarikçiye daha hızlı ulaşıyor</li><li>Riski ve fiyat artışını sipariş öncesi görüyor</li><li>Teklifleri gerçek toplam maliyetle karşılaştırıyor</li><li>Anlaşmazlıkta parası güvende</li><li>Mevcut ERP'sini değiştirmeden kullanıyor</li></ul></div>
+<div class="card"><div class="t">TEDARİKÇİ</div><ul><li>Katılım ücretsiz</li><li>İyi performansı kayıt altına alınıyor ve yeni müşterilere taşınıyor</li><li>Teslimde %40'a kadar avans, vadesinden önce tahsilat</li><li>Seviye rozetiyle görünür oluyor</li></ul></div>
+<div class="card"><div class="t">FİNANS KURULUŞU</div><ul><li>Doğrulanmış teslimat verisine dayanarak daha az riskle finansman verebiliyor</li></ul></div>
+</div>
+
+<h2>8. Bizi rakiplerden ayıran özellikler</h2>
+<table>
+<tr><th style="width:27%">Yetkinlik</th><th>SRM yazılımları (SAP Ariba vb.)</th><th>Solana ödeme güvencesi projeleri</th><th>Solana itibar projeleri</th><th class="hl">SolChain B2B</th></tr>
+<tr><td>Taşınabilir karne</td><td>Şirket içi</td><td>Yok</td><td>Genel</td><td class="hl">Var, seviyeli</td></tr>
+<tr><td>Kalite profili ve beyan uyumu</td><td>Kısmen</td><td>Yok</td><td>Yok</td><td class="hl">Var</td></tr>
+<tr><td>Koşullu ödeme</td><td>Yok</td><td>USDC ile</td><td>Yok</td><td class="hl">Fiat ve stablecoin</td></tr>
+<tr><td>Endekse bağlı avans</td><td>Yok</td><td>Yok</td><td>Yok</td><td class="hl">Var</td></tr>
+<tr><td>Alıcı endeksi</td><td>Yok</td><td>Yok</td><td>Kısmen</td><td class="hl">Var</td></tr>
+<tr><td>Vade ve teslim şekli karşılaştırması</td><td>Kısmen</td><td>Yok</td><td>Yok</td><td class="hl">Var</td></tr>
+<tr><td>Yapay zekâ asistanı ve malzeme keşfi</td><td>Kısmen</td><td>Yok</td><td>Yok</td><td class="hl">Var</td></tr>
+<tr><td>Risk erken uyarı ve finansman</td><td>Kısmen</td><td>Yok</td><td>Yok</td><td class="hl">Var</td></tr>
+</table>
+<p>Kısacası: parçalar piyasada ayrı ayrı var, ama kimliği, karneyi, riski, ödemeyi ve finansmanı <b>tek döngüde</b> birleştiren başka bir çözüm görmedik.</p>
+
+<div class="sec">
+<h2>9. Hedeflenen sonuçlar</h2>
+<p>Rakamları uydurmuyoruz. Başlangıç değerlerini pilot üreticiden alıp pilot boyunca ölçeceğiz.</p>
+<table>
+<tr><th>Gösterge</th><th style="width:25%">Beklenen yön</th></tr>
+<tr><td>Zamanında ve eksiksiz teslim (OTIF)</td><td class="hl">Artış</td></tr>
+<tr><td>Gelen malzemede hata oranı (milyonda hata, PPM)</td><td class="hl">Düşüş</td></tr>
+<tr><td>Ortalama tahsilat süresi</td><td class="hl">Kısalma</td></tr>
+<tr><td>İtiraz çözüm süresi</td><td class="hl">Kısalma</td></tr>
+<tr><td>Tedarikçi değerlendirmesine harcanan süre</td><td class="hl">Azalma</td></tr>
+<tr><td>Erken uyarıyla önlenen aksama</td><td class="hl">Ölçülecek</td></tr>
+</table>
+</div>
+
+<h2>10. İş modeli ve yol haritası</h2>
+<div class="g2">
+<div class="card"><div class="t">GELİR KANALLARI</div><ol><li>Üreticiye yıllık abonelik</li><li>Güvenceli ödemeyle tamamlanan siparişten düşük işlem ücreti</li><li>Finansman ortaklarıyla gelir paylaşımı</li><li>Risk ve piyasa veri paketi</li><li>Tedarikçi premium paketi; temel kayıt ücretsiz</li></ol></div>
+<div class="card"><div class="t">İLK HEDEF MÜŞTERİ</div><p>Organize sanayi bölgelerinde, ISO 9001 sertifikalı, düzenli metal ve plastik ham madde alan orta ölçekli üreticiler.</p><p class="note">Fiyatlandırma ve birim ekonomi pilot verileriyle belirlenecek.</p></div>
+</div>
+<table>
+<tr><th style="width:14%">Dönem</th><th>Odak</th><th style="width:24%">Çıkış ölçütü</th></tr>
+<tr><td class="hl">Şimdi</td><td>Prototip ve doğrulama görüşmeleri</td><td>Niyet beyanları</td></tr>
+<tr><td class="hl">0–6 ay</td><td>Pilot: bir çapa üretici, 15 tedarikçi, ERP ve ödeme kuruluşu entegrasyonu</td><td>Ölçülen iyileşme</td></tr>
+<tr><td class="hl">6–12 ay</td><td>Ağ: yeni üreticiler ve kategoriler, güvenlik denetimi, ana ağa geçiş</td><td>Paylaşılan karneler</td></tr>
+<tr><td class="hl">12–24 ay</td><td>Finansman: banka ve faktoring ortaklıkları</td><td>Finans ortaklığı</td></tr>
+</table>
+
+<div class="sec">
+<h2>11. Risklerimiz ve önlemlerimiz</h2>
+<table>
+<tr><th style="width:30%">Risk</th><th>Önlem</th></tr>
+<tr><td class="hl">Ağ etkisinin oluşmaması</td><td>Çapa üretici modeli, ücretsiz tedarikçi erişimi, avans teşviki</td></tr>
+<tr><td class="hl">Hatalı veri girişi</td><td>Çift imza, ERP ve e-belgeden otomatik veri, laboratuvar hakemliği</td></tr>
+<tr><td class="hl">Karne şişirme</td><td>En az 4 farklı alıcı şartı, karşılıklı puanlama tespiti</td></tr>
+<tr><td class="hl">Platform dışına kaçış</td><td>Karne, avans ve finansman yalnızca platformdaki siparişte işliyor</td></tr>
+<tr><td class="hl">Ödeme mevzuatı</td><td>Lisanslı ödeme kuruluşu üzerinden TL; stablecoin yalnızca izin verilen ülkelerde</td></tr>
+<tr><td class="hl">Ticari bilgi sızıntısı</td><td>Zincirde yalnızca özet; anonim endeks için en az 5 firma şartı</td></tr>
+<tr><td class="hl">Yanlış malzeme önerisi</td><td>Kaynak gösteren öneri, mühendis onayı, numune testi</td></tr>
+<tr><td class="hl">Akıllı sözleşme güvenliği</td><td>Ana ağa geçmeden önce bağımsız güvenlik denetimi</td></tr>
+</table>
+</div>
+
+<div class="box dark"><b>Kapanış mesajı:</b> “Güveni her siparişte yeniden kurmak yerine bir kez kayda geçirelim ve finansmana dönüştürelim.”</div>
+
+<p class="foot">SolChain B2B · Proje ayrıntı dosyası · Canlı prototip: claude.ai/artifact/Sa6qoh3SRg1W44dXjL9y9j · İletişim: [Ad Soyad] · [e-posta] · [telefon]</p>
+</body></html>

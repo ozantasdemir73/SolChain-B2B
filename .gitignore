@@ -1,0 +1,26 @@
+# İşletim sistemi
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editör
+.vscode/
+.idea/
+*.swp
+
+# Geçici ve yedek dosyalar
+*.bak
+*.bak.html
+*.tmp
+~$*
+
+# Ortam ve gizli bilgiler
+.env
+.env.*
+*.key
+
+# Bağımlılıklar ve derleme çıktıları (ileride Solana programı eklendiğinde)
+node_modules/
+target/
+.anchor/
+test-ledger/

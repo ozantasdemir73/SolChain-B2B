@@ -1,0 +1,21 @@
+{
+  "v": 5,
+  "createdOnFiles": {"v": 1, "at": "2026-11-25T12:00:00Z"},
+  "lists": "css",
+  "format": {"v": 1, "shared": ["project/deck.css"]},
+  "title": "SolChain B2B · Cumartesi Sunumu",
+  "cover": "acilis",
+  "order": ["acilis", "kapak", "isim", "sorunlar", "herkes", "cozum", "guven", "seviye", "yapayzeka", "demo", "solana", "fark", "kapanis"],
+  "sections": {
+    "s1": {"description": "Sahne, kapak ve isim", "start": "acilis"},
+    "s2": {"description": "Sorun ve dönüm noktası", "start": "sorunlar"},
+    "s3": {"description": "Çözüm: yolculuk, çift taraflı güven, seviyeler ve yapay zekâ", "start": "cozum"},
+    "s4": {"description": "Demo, Solana, fark ve kapanış", "start": "demo"}
+  },
+  "faces": {
+    "newsreader": {"family": "Newsreader", "href": "https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400..700;1,400..700&display=swap"},
+    "inter": {"family": "Inter", "href": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"},
+    "jetbrains-mono": {"family": "JetBrains Mono", "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"}
+  },
+  "designSystems": []
+}

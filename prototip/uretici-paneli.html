@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SolChain B2B Üretici Paneli</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: kurumsal uygulama kabuğu; solda koyu gezinme, üstte durum çubuğu, sağda görünüm alanı; tedarikçi profili sağdan açılan çekmece */
+:root{
+  --bg:#f2f4f6; --surface:#ffffff; --raised:#f8fafb; --fg:#101a20; --muted:#55636d; --faint:#8a97a2; --line:#d8dfe4; --soft:#e9eef1; --grid:#e4e9ed;
+  --nav:#0f1c22; --nav-fg:#c7d3da; --nav-mut:#7f919c; --nav-act:#1b2f37;
+  --brand:#0d6b6e; --brand-soft:#dbeeed; --accent:#b3650f; --accent-soft:#f6e9d8;
+  --s1:#2a78d6; --s2:#eb6834;
+  --ok:#137a32; --ok-soft:#e0f1e4; --bad:#b8352b; --bad-soft:#f8e1de; --warn:#94600a; --warn-soft:#f5ebd6;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",Roboto,Arial,sans-serif;
+  --mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c1216; --surface:#141c21; --raised:#18222a; --fg:#e3eaee; --muted:#9fb0ba; --faint:#6f808b; --line:#26323a; --soft:#1d2830; --grid:#212d35;
+  --nav:#080d10; --nav-fg:#c7d3da; --nav-mut:#6f808b; --nav-act:#16252c;
+  --brand:#5fc4c4; --brand-soft:#123232; --accent:#e5a35a; --accent-soft:#36271a;
+  --s1:#3987e5; --s2:#d95926;
+  --ok:#5fcb7c; --ok-soft:#163222; --bad:#ee7b70; --bad-soft:#3a1d1a; --warn:#e3b05a; --warn-soft:#342a17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1216; --surface:#141c21; --raised:#18222a; --fg:#e3eaee; --muted:#9fb0ba; --faint:#6f808b; --line:#26323a; --soft:#1d2830; --grid:#212d35;
+  --nav:#080d10; --nav-fg:#c7d3da; --nav-mut:#6f808b; --nav-act:#16252c;
+  --brand:#5fc4c4; --brand-soft:#123232; --accent:#e5a35a; --accent-soft:#36271a;
+  --s1:#3987e5; --s2:#d95926;
+  --ok:#5fcb7c; --ok-soft:#163222; --bad:#ee7b70; --bad-soft:#3a1d1a; --warn:#e3b05a; --warn-soft:#342a17; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--nav)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--mono)}
+.app{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100%}
+@media (max-width:900px){.app{grid-template-columns:1fr}}
+/* gezinme */
+.side{background:var(--nav);color:var(--nav-fg);display:flex;flex-direction:column;gap:18px;padding:18px 12px 18px max(12px,env(safe-area-inset-left,0px));position:sticky;top:0;height:100vh;overflow-y:auto}
+@media (max-width:900px){.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:10px max(12px,env(safe-area-inset-right,0px)) 10px max(12px,env(safe-area-inset-left,0px))}}
+.brand{display:flex;align-items:center;gap:10px;padding:0 6px}
+.brand svg{width:30px;height:30px;flex:none}
+.brand b{font-family:var(--display);font-weight:800;font-size:17px;color:#fff}
+.brand b span{color:#5fc4c4}
+.brand small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--nav-mut);letter-spacing:.05em}
+.navg{display:flex;flex-direction:column;gap:2px}
+@media (max-width:900px){.navg{flex-direction:row;flex-wrap:wrap}}
+.navg .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--nav-mut);padding:10px 10px 4px}
+@media (max-width:900px){.navg .lbl{display:none}}
+.navg a{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--nav-fg);text-decoration:none;padding:8px 10px;border-radius:7px;font-size:13.5px}
+.navg a:hover{background:var(--nav-act)}
+.navg a[aria-current="page"]{background:var(--nav-act);color:#fff;box-shadow:inset 3px 0 0 #5fc4c4}
+.navg a .ct{font-family:var(--mono);font-size:11px;background:#5fc4c4;color:#0f1c22;border-radius:9px;padding:0 6px}
+.sidefoot{margin-top:auto;font-size:11.5px;color:var(--nav-mut);padding:0 8px;display:flex;flex-direction:column;gap:6px}
+@media (max-width:900px){.sidefoot{display:none}}
+.sidefoot .net{display:flex;align-items:center;gap:6px;color:var(--nav-fg)}
+.dot{width:8px;height:8px;border-radius:50%;background:#5fcb7c;box-shadow:0 0 0 3px rgba(95,203,124,.2)}
+/* üst çubuk */
+.main{min-width:0;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;background:var(--surface);border-bottom:1px solid var(--line);padding:10px max(20px,env(safe-area-inset-right,0px)) 10px 20px;position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.crumb{font-size:13px;color:var(--muted)}
+.crumb b{color:var(--fg)}
+.topr{margin-left:auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11.5px;padding:4px 9px;border:1px solid var(--line);border-radius:999px;background:var(--raised);color:var(--muted)}
+.user{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);line-height:1.3}
+.user b{display:block;color:var(--fg);font-size:12.5px}
+.av{width:32px;height:32px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-weight:700;font-size:12px}
+.view{padding:22px max(20px,env(safe-area-inset-right,0px)) 60px 20px;display:flex;flex-direction:column;gap:18px;max-width:1320px;width:100%}
+@media (max-width:900px){.view{padding-left:max(16px,env(safe-area-inset-left,0px))}}
+/* tipografi ve bloklar */
+h1{font-family:var(--display);font-weight:800;font-size:clamp(22px,2.6vw,28px);line-height:1.15;margin:0}
+h2{font-family:var(--display);font-weight:700;font-size:15.5px;margin:0}
+h3{font-family:var(--display);font-weight:700;font-size:14px;margin:0}
+p{margin:0}
+.vh{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end;justify-content:space-between}
+.vh p{color:var(--muted);max-width:80ch;margin-top:4px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ph{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;justify-content:space-between}
+.foot,.note{font-size:12px;color:var(--muted)}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.g21{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px}
+.g12{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:16px}
+@media (max-width:1100px){.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){.g2,.g3,.g21,.g12{grid-template-columns:1fr}}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:600px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi span{font-size:12px;color:var(--muted)}
+.kpi b{font-family:var(--display);font-weight:800;font-size:24px;font-variant-numeric:tabular-nums;line-height:1.2}
+.kpi small{font-size:12px;color:var(--muted)}
+.btn{cursor:pointer;border-radius:7px;padding:8px 13px;border:1px solid var(--line);background:var(--surface);font-size:13.5px;white-space:nowrap}
+.btn:hover{background:var(--raised)}
+.btn.pri{background:var(--fg);color:var(--surface);border-color:var(--fg)}
+.btn.br{background:var(--brand);color:#fff;border-color:var(--brand)}
+.btn.ok{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.btn.bad{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.btn.sm{padding:5px 10px;font-size:12.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}.pill.bad{background:var(--bad-soft);color:var(--bad)}.pill.warn{background:var(--warn-soft);color:var(--warn)}.pill.br{background:var(--brand-soft);color:var(--brand)}.pill.neu{background:var(--soft);color:var(--muted)}
+.tag{font-family:var(--mono);font-size:10.5px;padding:2px 6px;border-radius:4px;background:var(--soft);color:var(--muted);white-space:nowrap}
+.tblw{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--raised);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.mono{white-space:nowrap}
+.rowlink{cursor:pointer}
+.rowlink:hover td{background:var(--raised)}
+.rowlink.sel td{background:var(--brand-soft)}
+.track{height:7px;border-radius:4px;background:var(--soft);position:relative;overflow:hidden;min-width:60px}
+.track i{position:absolute;left:0;top:0;bottom:0;background:var(--s1);border-radius:0 4px 4px 0}
+.crow{display:grid;grid-template-columns:minmax(0,1.4fr) 38px minmax(0,1.3fr) 48px;gap:10px;align-items:center;font-size:13px}
+.crow .w{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+.crow .v{font-family:var(--mono);font-size:12.5px;text-align:right}
+.list{display:flex;flex-direction:column}
+.li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.li:last-child{border-bottom:0}
+.li .ic{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;font-size:13px;font-weight:700}
+.ic.warn{background:var(--warn-soft);color:var(--warn)}.ic.br{background:var(--brand-soft);color:var(--brand)}.ic.bad{background:var(--bad-soft);color:var(--bad)}.ic.ok{background:var(--ok-soft);color:var(--ok)}
+.li b{display:block;font-size:13.5px;font-weight:600}
+.li span{font-size:12.5px;color:var(--muted)}
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:var(--fg);color:var(--surface);font-size:12px;line-height:1.45;padding:6px 9px;border-radius:6px;white-space:nowrap;transform:translate(-50%,calc(-100% - 10px));z-index:5}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--muted)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.swl{display:inline-block;width:14px;border-top:2px dashed var(--faint);margin-right:5px;vertical-align:3px}
+/* form */
+.wiz{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px}
+@media (max-width:860px){.wiz{grid-template-columns:1fr}}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+@media (max-width:860px){.steps{flex-direction:row;flex-wrap:wrap}}
+.steps button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:1px solid transparent;border-radius:8px;padding:8px 10px;cursor:pointer;font-size:13.5px;color:var(--muted)}
+.steps button[aria-current="step"]{background:var(--surface);border-color:var(--line);color:var(--fg);font-weight:600}
+.steps .sn{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:11px;border:1.5px solid var(--line);flex:none}
+.steps button.done .sn{background:var(--ok);border-color:var(--ok);color:#fff}
+.fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px}
+@media (max-width:700px){.fgrid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted)}
+.field b{color:var(--fg);font-weight:600}
+.field input[type=number],.field input[type=text],.field select{padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--fg);font-size:13.5px}
+.field input[type=range]{accent-color:var(--accent)}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:7px;padding:6px 10px;cursor:pointer;font-size:13px;color:var(--fg);background:var(--surface)}
+.opt input{accent-color:var(--brand);margin:0}
+.opt.on{border-color:var(--brand);background:var(--brand-soft)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;flex-wrap:wrap}
+.seg button{border:0;background:var(--surface);padding:6px 11px;cursor:pointer;border-right:1px solid var(--line);font-size:13px}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--surface)}
+.ptable input{width:110px;padding:5px 7px;border:1px solid var(--line);border-radius:6px;background:var(--surface);font-size:12.5px}
+.ptable input.w{width:56px}
+.summ{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.summ div{padding:9px 12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
+.summ span{display:block;font-size:11.5px;color:var(--muted)}
+.summ b{font-size:13.5px;font-weight:600;overflow-wrap:anywhere}
+/* teklifler */
+.offer{display:grid;grid-template-columns:28px minmax(0,1fr) 190px;gap:12px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--surface)}
+.offer.best{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+@media (max-width:760px){.offer{grid-template-columns:24px minmax(0,1fr)}.offer .orr{grid-column:2}}
+.offer .rk{font-family:var(--display);font-weight:800;font-size:20px;color:var(--muted)}
+.offer .nm{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-weight:600;font-size:14.5px}
+.offer .nm small{font-weight:400;color:var(--muted);font-size:12px}
+.offer .why{font-size:12.5px;color:var(--muted);margin-top:3px}
+.ogrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:8px}
+@media (max-width:1100px){.ogrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ogrid div{background:var(--raised);border-radius:6px;padding:6px 8px;min-width:0}
+.ogrid span{display:block;font-size:11px;color:var(--muted)}
+.ogrid b{font-family:var(--mono);font-weight:500;font-size:12.5px;overflow-wrap:anywhere}
+.orr{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.msc{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.msc b{display:block;font-family:var(--display);font-size:22px;color:var(--fg)}
+.elim{font-size:12.5px;color:var(--muted);padding:10px 12px;border:1px dashed var(--line);border-radius:8px}
+.elim b{color:var(--bad)}
+/* sipariş */
+.tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.tl li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;padding:8px 0;position:relative}
+.tl li::before{content:"";position:absolute;left:11px;top:30px;bottom:-6px;width:2px;background:var(--line)}
+.tl li:last-child::before{display:none}
+.tl .d{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11px;border:2px solid var(--line);background:var(--surface);color:var(--muted);z-index:1}
+.tl li.done .d{background:var(--ok);border-color:var(--ok);color:#fff}
+.tl li.cur .d{border-color:var(--accent);color:var(--accent)}
+.tl li.pend{opacity:.6}
+.tl b{font-size:13.5px;display:block}
+.tl span{font-size:12px;color:var(--muted)}
+.tl code{font-family:var(--mono);font-size:11.5px;color:var(--brand);cursor:pointer;text-decoration:underline;text-underline-offset:2px;background:none;border:0;padding:0}
+.money{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mb{border:1px solid var(--line);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.mb span{font-size:11.5px;color:var(--muted)}
+.mb b{font-family:var(--mono);font-weight:500;font-size:13px;overflow-wrap:anywhere}
+.callout{background:var(--brand-soft);border-radius:8px;padding:10px 12px;font-size:13px}
+.callout b{color:var(--brand)}
+textarea{width:100%;min-height:200px;resize:vertical;font-family:var(--mono);font-size:12.5px;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--raised)}
+.verdict{border-radius:8px;padding:9px 12px;font-weight:600;font-size:13px}
+.verdict.ok{background:var(--ok-soft);color:var(--ok)}.verdict.bad{background:var(--bad-soft);color:var(--bad)}.verdict.neu{background:var(--soft);color:var(--muted)}
+code.h{font-family:var(--mono);font-size:11.5px;overflow-wrap:anywhere}
+/* çekmece */
+.scrim{position:fixed;inset:0;background:rgba(8,13,16,.45);z-index:50}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(760px,100%);background:var(--bg);z-index:51;overflow-y:auto;box-shadow:-10px 0 30px rgba(0,0,0,.18);padding:calc(16px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) calc(30px + env(safe-area-inset-bottom,0px)) 18px;display:flex;flex-direction:column;gap:14px}
+.dh{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:3px 8px;border-radius:6px;border:1px solid var(--line);background:var(--surface)}
+.toast{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--surface);border-radius:8px;padding:10px 14px;font-size:13px;z-index:60;max-width:min(420px,calc(100% - 36px));box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.toast code{font-family:var(--mono);font-size:11.5px;opacity:.8}
+.proto{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><svg viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="11" width="18" height="12" rx="6" fill="none" stroke="#fff" stroke-width="3"/><rect x="13" y="11" width="18" height="12" rx="6" fill="none" stroke="#5fc4c4" stroke-width="3"/></svg><div><b>SolChain <span>B2B</span></b><small>Üretici paneli</small></div></div>
+    <nav class="navg" id="nav" aria-label="Ana gezinme"></nav>
+    <div class="sidefoot"><span class="net"><span class="dot"></span>Solana ağına bağlı</span><span>Ödeme yolu: lisanslı ödeme kuruluşu (TRY)</span><span class="proto">Prototip · örnek veriler</span></div>
+  </aside>
+  <div class="main">
+    <header class="top">
+      <div class="crumb" id="crumb"></div>
+      <div class="topr"><span class="chip"><span class="dot"></span><span id="slot">Slot –</span></span><div class="user"><span class="av">SA</span><span><b>Satın Alma Müdürü</b>Örnek Üretici A.Ş. · Kocaeli</span></div></div>
+    </header>
+    <main class="view" id="view"></main>
+  </div>
+</div>
+<div id="drawerRoot"></div>
+<div id="toastRoot"></div>
+
+<script>
+(function(){
+'use strict';
+/* ================= yardımcılar ================= */
+function el(id){return document.getElementById(id)}
+function fmt(v,d){d=d||0;return new Intl.NumberFormat('tr-TR',{minimumFractionDigits:d,maximumFractionDigits:d}).format(v)}
+function tl(v){return fmt(Math.round(v))+' ₺'}
+function tlk(v){return v>=1e6?fmt(v/1e6,2)+' mn ₺':fmt(Math.round(v))+' ₺'}
+function pc(v,d){return v==null?'–':'%'+fmt(v,d==null?0:d)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function fdate(d){return d.toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'})}
+function fdt(d){return fdate(d)+' '+d.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'})}
+function addDays(d,n){return new Date(d.getTime()+n*864e5)}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+var B58='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+function b58(r,n){var s='';for(var i=0;i<n;i++)s+=B58[Math.floor(r()*58)];return s}
+function short(a){return a.slice(0,4)+'…'+a.slice(-4)}
+function ror(x,n){return (x>>>n)|(x<<(32-n))}
+var K=new Uint32Array('428a2f98 71374491 b5c0fbcf e9b5dba5 3956c25b 59f111f1 923f82a4 ab1c5ed5 d807aa98 12835b01 243185be 550c7dc3 72be5d74 80deb1fe 9bdc06a7 c19bf174 e49b69c1 efbe4786 0fc19dc6 240ca1cc 2de92c6f 4a7484aa 5cb0a9dc 76f988da 983e5152 a831c66d b00327c8 bf597fc7 c6e00bf3 d5a79147 06ca6351 14292967 27b70a85 2e1b2138 4d2c6dfc 53380d13 650a7354 766a0abb 81c2c92e 92722c85 a2bfe8a1 a81a664b c24b8b70 c76c51a3 d192e819 d6990624 f40e3585 106aa070 19a4c116 1e376c08 2748774c 34b0bcb5 391c0cb3 4ed8aa4a 5b9cca4f 682e6ff3 748f82ee 78a5636f 84c87814 8cc70208 90befffa a4506ceb bef9a3f7 c67178f2'.split(' ').map(function(h){return parseInt(h,16)}));
+function sha256(str){var by=new TextEncoder().encode(str),l=by.length,n=((l+9+63)>>6)<<6,m=new Uint8Array(n);m.set(by);m[l]=0x80;var dv=new DataView(m.buffer),bits=l*8;dv.setUint32(n-4,bits>>>0);dv.setUint32(n-8,Math.floor(bits/4294967296));var H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19],w=new Uint32Array(64);
+  for(var i=0;i<n;i+=64){for(var t=0;t<16;t++)w[t]=dv.getUint32(i+t*4);for(t=16;t<64;t++){var s0=ror(w[t-15],7)^ror(w[t-15],18)^(w[t-15]>>>3),s1=ror(w[t-2],17)^ror(w[t-2],19)^(w[t-2]>>>10);w[t]=(w[t-16]+s0+w[t-7]+s1)>>>0}
+  var a=H[0],b=H[1],c=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7];
+  for(t=0;t<64;t++){var S1=ror(e,6)^ror(e,11)^ror(e,25),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[t]+w[t])>>>0,S0=ror(a,2)^ror(a,13)^ror(a,22),mj=(a&b)^(a&c)^(b&c),t2=(S0+mj)>>>0;h=g;g=f;f=e;e=(d+t1)>>>0;d=c;c=b;b=a;a=(t1+t2)>>>0}
+  H=[H[0]+a,H[1]+b,H[2]+c,H[3]+d,H[4]+e,H[5]+f,H[6]+g,H[7]+h].map(function(x){return x>>>0})}
+  return H.map(function(x){return x.toString(16).padStart(8,'0')}).join('')}
+var TX=rng(424242);
+var TODAY=new Date(2026,10,24,10,30);
+
+/* ================= ana veri ================= */
+var CATS={
+ metal:{name:'Metal',mat:'Soğuk haddelenmiş sac · DC01, 1,00 mm',base:36000,sfx:'Çelik',certs:['ISO 9001','EN 10204 3.1 muayene belgesi','IATF 16949'],
+  params:[['Kalınlık','0,95 – 1,05 mm','EN 10131',30],['Yüzey kusuru','Kusur yok','Görsel muayene',20],['Çekme dayanımı','270 – 410 MPa','ISO 6892-1',20],['Akma dayanımı','≤ 280 MPa','ISO 6892-1',15],['Kopma uzaması','≥ %28','ISO 6892-1',15]]},
+ plastik:{name:'Plastik',mat:'HDPE granül · enjeksiyon kalitesi',base:58000,sfx:'Polimer',certs:['ISO 9001','Malzeme teknik föyü','REACH uygunluk beyanı'],
+  params:[['Eriyik akış hızı','0,25 – 0,35 g/10 dk','ISO 1133',30],['Nem','≤ %0,05','Karl Fischer',20],['Yoğunluk','0,949 – 0,955 g/cm³','ISO 1183',15],['Sarılık indeksi','≤ 2,0','Spektrofotometre',15],['Kül içeriği','≤ %0,02','ISO 3451-1',20]]},
+ kimya:{name:'Kimya',mat:'Endüstriyel boya · metal yüzey',base:165000,sfx:'Kimya',certs:['ISO 9001','ISO 14001','Ürün teknik föyü'],
+  params:[['Renk farkı','ΔE ≤ 1,0','CIELAB',25],['Viskozite','90 – 100 KU','Krebs',15],['Yapışma','Sınıf 0 – 1','ISO 2409',20],['Parlaklık','85 ± 5 GU','ISO 2813',15],['Korozyon dayanımı','≥ 500 saat','ISO 9227',25]]},
+ tekstil:{name:'Tekstil',mat:'Pamuklu süprem örme kumaş',base:210000,sfx:'Tekstil',certs:['ISO 9001','OEKO-TEX Standard 100','Boyahane test raporu'],
+  params:[['Gramaj','171 – 189 g/m²','ISO 3801',20],['Boyutsal değişim','≤ %5','ISO 5077',20],['Renk farkı','ΔE ≤ 1,0','CIELAB',25],['Boncuklanma','≥ 3 derece','ISO 12945-2',15],['Yıkama haslığı','≥ 4 derece','ISO 105-C06',20]]},
+ gida:{name:'Gıda',mat:'Ekmeklik buğday unu',base:14500,sfx:'Un Sanayi',certs:['ISO 22000','Gıda işletmesi kayıt belgesi','Pestisit analiz raporu'],
+  params:[['Nem','≤ %14,5','ISO 712',20],['Protein','≥ %11,5 KM','ISO 20483',25],['Kül','≤ %0,65 KM','ISO 2171',15],['Yaş gluten','≥ %28','ISO 21415',25],['Küf ve maya','Uygun','ISO 21527',15]]}
+};
+var CATK=['metal','plastik','kimya','tekstil','gida'];
+var TERMS={EXW:'İşyerinde teslim (tedarikçi kapısı)',FCA:'Taşıyıcıya teslim',FOB:'Gemide teslim (yükleme limanı)',CIF:'Masraflar, sigorta ve navlun (varış limanı)',DAP:'Belirlenen yerde teslim (üretici kapısı)',DDP:'Gümrük vergileri ödenmiş teslim (üretici kapısı)'};
+var GUAR={kosullu:{n:'Koşullu ödeme',d:'Emanet hesabında bloke, teslim ve kalite kabulüyle aktarım',adj:-.005},teminat:{n:'Banka teminat mektubu',d:'Vadeli ödeme, bankanın teminatı ile',adj:0,buyer:.0025},akreditif:{n:'Teyitli akreditif',d:'Gayrikabili rücu, belge karşılığı ödeme',adj:0,buyerFlat:.006},acik:{n:'Açık hesap',d:'Güvencesiz vadeli ödeme',adj:.01}};
+var BAG={tek:{n:'Tek sipariş',d:0},aylik:{n:'Aylık bağlantı',d:.015},alti:{n:'6 aylık bağlantı',d:.035},yil:{n:'1 yıllık bağlantı',d:.05}};
+var SUPS=[
+ {id:'A',name:'Tedarikçi A',loc:'Kocaeli, Türkiye',imp:false,del:48,otif:92,ppm:1150,decl:99,saha:96,lost:0,cert:'ok',tests:2,war:24,cap:120,shifts:3,capAct:104,refV:3,refE:1,rnd:true,pm:1.04,m:.028,lead:10,guar:['kosullu','teminat','akreditif','acik'],vmax:120,bag:true,comp:[100,95,100,100,96],since:2023,seed:11},
+ {id:'B',name:'Tedarikçi B',loc:'Bursa, Türkiye',imp:false,del:36,otif:86,ppm:2400,decl:97,saha:90,lost:1,cert:'ok',tests:1,war:12,cap:80,shifts:2,capAct:71,refV:2,refE:0,rnd:false,pm:1.00,m:.030,lead:12,guar:['kosullu','teminat','acik'],vmax:90,bag:true,comp:[90,100,95,100,85],since:2024,seed:23},
+ {id:'C',name:'Tedarikçi C',loc:'İzmir, Türkiye',imp:false,del:30,otif:83,ppm:3100,decl:64,saha:78,lost:1,cert:'soon',tests:0,war:12,cap:150,shifts:3,capAct:96,refV:0,refE:4,rnd:false,pm:.975,m:.032,lead:9,guar:['kosullu','acik'],vmax:60,bag:false,comp:[92,88,100,95,90],since:2024,seed:37},
+ {id:'D',name:'Tedarikçi D',loc:'Konya, Türkiye',imp:false,del:28,otif:80,ppm:2900,decl:95,saha:85,lost:1,cert:'expired',tests:0,war:6,cap:100,shifts:2,capAct:82,refV:1,refE:2,rnd:false,pm:.94,m:.030,lead:8,guar:['kosullu','acik'],vmax:120,bag:false,comp:[95,90,92,100,88],since:2024,seed:41},
+ {id:'E',name:'Tedarikçi E',loc:'Almanya · AB',imp:true,del:14,otif:93,ppm:800,decl:99,saha:97,lost:0,cert:'ok',tests:3,war:36,cap:200,shifts:3,capAct:160,refV:2,refE:2,rnd:true,pm:1.02,m:.015,lead:21,guar:['akreditif','teminat','kosullu'],vmax:120,bag:true,comp:[98,100,97,100,94],since:2025,seed:53},
+ {id:'F',name:'Tedarikçi F',loc:'Manisa, Türkiye',imp:false,del:3,otif:100,ppm:0,decl:100,saha:null,lost:0,cert:'ok',tests:1,war:12,cap:60,shifts:1,capAct:20,refV:0,refE:2,rnd:false,pm:.97,m:.030,lead:11,guar:['kosullu'],vmax:60,bag:false,comp:[100,100,100,100,100],since:2026,seed:67}
+];
+function supName(s,cat){return s.name+' '+CATS[cat].sfx+(s.imp?' GmbH':s.id==='A'?' A.Ş.':' Ltd.')}
+function supById(id){return SUPS.filter(function(s){return s.id===id})[0]}
+function compFor(s,cat){var i=CATK.indexOf(cat),c=s.comp;return c.map(function(_,j){return c[(j+i)%5]})}
+function yet(s){return s.cert==='ok'?100:s.cert==='soon'?80:0}
+function iqcOf(s,cat,weights){var c=compFor(s,cat),ws=0,v=0;weights.forEach(function(w,j){ws+=w;v+=w*c[j]});return v/ws}
+function kaliteOf(s,cat,weights){var q=iqcOf(s,cat,weights);return s.saha==null?q:.8*q+.2*s.saha}
+function idxOf(s,cat,weights){if(s.del<5)return null;return .3*s.otif+.3*kaliteOf(s,cat,weights)+.15*s.decl+.15*yet(s)+.1*Math.max(0,100-30*s.lost)}
+function tierOf(ix){if(ix==null)return 0;return ix>=85?.40:ix>=70?.25:.10}
+function defWeights(cat){return CATS[cat].params.map(function(p){return p[3]})}
+function addrOf(seed){return b58(rng(seed),44)}
+
+/* ================= dijital kimlik, risk, piyasa ================= */
+var SUPX={
+ A:{mach:['Soğuk haddeleme hattı ×2','Boyuna dilme hattı','Kalite laboratuvarı (çekme cihazı, spektrometre)'],exp:'Otomotiv ve beyaz eşya sacı',act:34,tax:'ok',sgk:'ok',notices:[],buyers:14,einv:100,region:'Marmara'},
+ B:{mach:['Soğuk haddeleme hattı','Boyuna dilme hattı'],exp:'Genel imalat ve mobilya',act:61,tax:'ok',sgk:'ok',notices:[['Üretim','Dilme hattında planlı bakım 5–9 Aralık; kapasite %30 düşük','tedarikçi bildirimi']],buyers:9,einv:98,region:'Marmara'},
+ C:{mach:['Haddeleme hattı','Dilme hattı ×2'],exp:'İnşaat ve genel imalat',act:112,tax:'ok',sgk:'yap',notices:[],buyers:3,einv:91,region:'Ege'},
+ D:{mach:['Haddeleme hattı'],exp:'Genel imalat',act:204,tax:'ok',sgk:'ok',notices:[['Uyum','ISO 9001 belgesinin süresi doldu; yenileme denetimi bekleniyor','belgelendirme kaydı']],buyers:4,einv:96,region:'İç Anadolu'},
+ E:{mach:['Tandem soğuk haddeleme hattı','Sürekli tavlama hattı','Akrediteli iç laboratuvar'],exp:'Otomotiv sacı, ihracat',act:20,tax:'ok',sgk:'na',notices:[['Lojistik','Kuzey Avrupa limanlarında yoğunluk; sevkiyatlarda +3 gün beklenen gecikme','tedarikçi bildirimi']],buyers:6,einv:null,region:'Almanya'},
+ F:{mach:['Haddeleme hattı (tek vardiya)'],exp:'Küçük partiler, hızlı teslim',act:15,tax:'ok',sgk:'ok',notices:[],buyers:2,einv:100,region:'Ege'}
+};
+function levelOf(s,cat){var x=SUPX[s.id],ix=idxOf(s,cat||'metal',defWeights(cat||'metal'));
+  if(s.cert==='expired')return {n:'Askıda',c:'bad',d:'Zorunlu belge süresi dolduğu için seviye askıya alındı'};
+  if(s.del>=40&&ix!=null&&ix>=90&&x.buyers>=10)return {n:'Platinum',c:'br',d:'40+ teslimat, endeks 90+, 10+ farklı alıcı, bağımsız denetim'};
+  if(s.del>=20&&ix!=null&&ix>=85&&x.buyers>=5)return {n:'Gold',c:'ok',d:'20+ teslimat, endeks 85+, 5+ farklı alıcı'};
+  if(s.del>=10&&ix!=null&&ix>=70)return {n:'Silver',c:'neu',d:'10+ teslimat, endeks 70+, belgeler geçerli'};
+  return {n:'Verified',c:'neu',d:'Firma kimliği ve temel belgeler doğrulandı'}}
+function riskOf(s){var x=SUPX[s.id],r=[];
+  if(x.act>90)r.push(['warn','Faaliyet belgesi '+x.act+' gün önce alınmış; sipariş öncesi güncel belge istenir','belge']);
+  if(x.sgk==='yap')r.push(['warn','SGK borcu yapılandırılmış (resmî kayıt)','finans']);
+  x.notices.forEach(function(n){r.push([n[0]==='Uyum'?'bad':'warn',n[0]+': '+n[1],'bildirim'])});
+  if(s.capAct/s.cap<.7)r.push(['warn','Gerçekleşen kapasite beyanın %'+Math.round(100*s.capAct/s.cap)+'\'ü','kapasite']);
+  if(x.buyers<4&&s.del>=5)r.push(['warn','Teslimatlar az sayıda alıcıda yoğunlaşıyor ('+x.buyers+' alıcı); karne düşük ağırlıkla değerlendirilir','bütünlük']);
+  if(s.decl<80)r.push(['bad','Beyan–ölçüm uyumu %'+s.decl,'kalite']);
+  return r}
+var MKT={metal:[33.1,33.4,33.2,33.6,33.9,34.0,34.2,34.1,34.6,35.2,35.9,36.4],plastik:[61.0,60.4,60.8,60.1,59.6,59.9,59.2,58.8,58.5,58.9,58.2,57.8],kimya:[158,159,161,160,162,163,163,164,165,165,166,167],tekstil:[205,207,206,208,209,210,209,211,210,212,213,214],gida:[13.6,13.8,13.9,14.0,14.1,14.0,14.2,14.3,14.4,14.4,14.5,14.6]};
+var MONTHS=['Ara','Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas'];
+function mktChange(cat){var v=MKT[cat];return 100*(v[11]/v[8]-1)}
+function riskAlerts(){var out=[];
+  SUPS.forEach(function(s){riskOf(s).forEach(function(r){out.push([r[0],supName(s,'metal'),r[1],s.id,r[2]])})});
+  var tot=0,by={};st.orders.filter(function(o){return o.cat==='metal'}).forEach(function(o){tot+=o.total;by[o.sup]=(by[o.sup]||0)+o.total});
+  Object.keys(by).forEach(function(k){var p=100*by[k]/tot;if(p>=45)out.unshift(['warn','Tek kaynak bağımlılığı','Metal alımlarınızın %'+Math.round(p)+'\'i '+supName(supById(k),'metal')+' üzerinde; ikinci bir onaylı tedarikçi önerilir',k,'bağımlılık'])});
+  var ch=mktChange('metal');if(Math.abs(ch)>=4)out.unshift(['warn','Fiyat hareketi · DC01 sac','Ağdaki teklif endeksi son 3 ayda %'+fmt(ch,1)+' '+(ch>0?'yükseldi':'düştü')+'; bağlantı revizyon bandı ±%5',null,'piyasa']);
+  return out}
+
+/* ================= durum ================= */
+var st={route:'genel',slot:352611204,rfq:null,rfqStep:0,rfqPublished:false,prio:'dengeli',orders:[],txs:[],selOrder:null,drawer:null,kCat:'metal',verifyOrder:null,poSeq:149,toastT:null,docEdit:null};
+function newRfq(){return {no:'RFQ-2026-0'+(312+st.orders.length),cat:'metal',qty:40,deadline:21,weights:defWeights('metal'),certs:[true,true,false],vades:[0,30,60,90,120],vade:60,c:.035,guar:'kosullu',bag:'tek',terms:['EXW','DAP','CIF','DDP'],place:'Kocaeli · Gebze OSB tesisi',receiver:'Mal kabul sorumlusu · Depo'}}
+st.rfq=newRfq();
+
+/* ================= teklif hesabı ================= */
+function offerFor(s,q){
+  var cat=CATS[q.cat],V=q.vade,mo=V/30,base=cat.base*s.pm,nom=base*Math.pow(1+s.m,mo),g=GUAR[q.guar],disc=(q.bag!=='tek'&&s.bag)?BAG[q.bag].d:0;
+  var avail=s.imp?['FOB','CIF','DAP','DDP']:['EXW','DAP'],acc=avail.filter(function(t){return q.terms.indexOf(t)>-1});
+  var best=null;
+  acc.forEach(function(t){
+    var adder=0,buyer=0;
+    if(!s.imp){if(t==='DAP')adder=.017*cat.base;if(t==='EXW')buyer=.021*cat.base}
+    else{if(t==='CIF')adder=.064*cat.base;if(t==='DAP'||t==='DDP')adder=.08*cat.base;if(t==='FOB')buyer=.072*cat.base+.03*nom;if(t==='CIF')buyer=.008*cat.base+.03*nom;if(t==='DAP')buyer=.03*nom;if(t==='DDP')adder+=.03*nom}
+    var unit=nom*(1+g.adj)*(1-disc)+adder,pv=unit/Math.pow(1+q.c,mo),gc=(g.buyer?g.buyer*mo*unit:0)+(g.buyerFlat?g.buyerFlat*unit:0),landed=pv+buyer+gc;
+    var o={term:t,unit:unit,pv:pv,buyer:buyer,gc:gc,landed:landed,nom:nom,disc:disc};
+    if(!best||o.landed<best.landed)best=o});
+  return best;
+}
+function evaluate(q){
+  var cat=CATS[q.cat],ok=[],out=[];
+  SUPS.forEach(function(s){var reasons=[];
+    var needCert=q.certs.some(function(c,i){return c}),o=offerFor(s,q);
+    if(needCert&&s.cert==='expired')reasons.push(cat.certs[0]+' belgesinin süresi dolmuş');
+    if(s.cap<q.qty)reasons.push('aylık kapasite '+s.cap+' ton');
+    if(s.lead>q.deadline)reasons.push('teslim süresi '+s.lead+' gün');
+    if(s.vmax<q.vade)reasons.push(q.vade+' gün vade sunmuyor');
+    if(s.guar.indexOf(q.guar)<0)reasons.push(GUAR[q.guar].n+' kabul etmiyor');
+    if(!o)reasons.push('kabul ettiğiniz teslim koşullarını sunmuyor');
+    if(reasons.length)out.push({s:s,r:reasons});else ok.push({s:s,o:o,ix:idxOf(s,q.cat,q.weights)})});
+  var P={dengeli:[.45,.35,.10,.10],kalite:[.65,.20,.05,.10],maliyet:[.30,.55,.10,.05]}[st.prio];
+  var minL=Math.min.apply(null,ok.map(function(x){return x.o.landed})),minT=Math.min.apply(null,ok.map(function(x){return x.s.lead}));
+  ok.forEach(function(x){x.cs=100*minL/x.o.landed;x.ts=100*minT/x.s.lead;x.gs=100*Math.min(1,x.s.war/24);x.score=x.ix==null?null:P[0]*x.ix+P[1]*x.cs+P[2]*x.ts+P[3]*x.gs});
+  ok.sort(function(a,b){if(a.score==null)return 1;if(b.score==null)return -1;return b.score-a.score});
+  return {ok:ok,out:out,P:P};
+}
+
+/* ================= zincir ve siparişler ================= */
+function tx(order,ix,who,note,time){st.slot+=Math.floor(60+TX()*1400);var t={sig:b58(TX,88),ix:ix,order:order.id,who:who,note:note,slot:st.slot,time:time||new Date(TODAY)};st.txs.unshift(t);order.log.push(t);return t}
+function termsText(o){var s=supById(o.sup);return ['SATIN ALMA SİPARİŞİ · '+o.id,'Alıcı: Örnek Üretici A.Ş. (Kocaeli, Türkiye)','Tedarikçi: '+supName(s,o.cat)+' ('+s.loc+')','Malzeme: '+CATS[o.cat].mat,'Miktar: '+o.qty+' ton','Birim fiyat: '+tl(o.unit)+' / ton','Toplam: '+tl(o.total),'Ödeme: '+(o.vade?o.vade+' gün vade':'Peşin')+' · '+GUAR[o.guar].n,'Teslim: '+o.term+' · '+TERMS[o.term],'Teslim yeri: '+o.place,'Teslim alacak: '+o.receiver,'Garanti: '+s.war+' ay','Kalite şartları: '+CATS[o.cat].params.map(function(p){return p[0]+' '+p[1]}).join('; ')].join('\n')}
+var STEPS=[
+ ['sign','Koşullar iki tarafça mühürlendi','Tedarikçi onayı'],
+ ['fund','Ödeme güvencesi kuruldu',''],
+ ['ship','Sevkiyat ve teslim noktası',''],
+ ['recv','Mal kabul',''],
+ ['iqc','Giriş kalite kontrolü',''],
+ ['settle','Mutabakat ve karne',''],
+ ['field','Saha izleme (garanti süresi)','']];
+function createOrder(sid,q,time){
+  var s=supById(sid),o=offerFor(s,q),ix=idxOf(s,q.cat,q.weights),id='SC-2026-0'+(st.poSeq++);
+  var ord={id:id,sup:sid,cat:q.cat,qty:q.qty,unit:o.unit,total:o.unit*q.qty,vade:q.vade,guar:q.guar,term:o.term,place:q.place,receiver:q.receiver,bag:q.bag,adv:q.guar==='kosullu'?tierOf(ix):0,
+    stage:0,late:false,dispute:null,verdict:null,iqc:null,field:[],funds:{locked:0,paid:0,refund:0},log:[],created:time||new Date(TODAY),eta:addDays(time||TODAY,s.lead),hashes:{}};
+  ord.hashes.terms=sha256(termsText(ord));
+  st.orders.unshift(ord);
+  if(SUPX[sid].act>90){tx(ord,'verify_activity_certificate','Ticaret odası doğrulayıcı','Güncel faaliyet belgesi talep edildi ve oda kaydından doğrulandı (önceki belge '+SUPX[sid].act+' günlüktü)',time);SUPX[sid].act=0}
+  tx(ord,'create_order','Alıcı','Sipariş koşulları ve teslim şartı ('+ord.term+') mühürlendi',time);
+  return ord;
+}
+function advance(o,action,time){
+  var s=supById(o.sup),t=time||new Date(TODAY);
+  if(o.stage===0){tx(o,'sign_order','Tedarikçi','Tedarikçi aynı koşulları imzaladı',t);o.stage=1;return}
+  if(o.stage===1){
+    if(o.guar==='kosullu'){o.funds.locked=o.total;tx(o,'attest_funding','Ödeme kuruluşu',tl(o.total)+' emanet hesabında bloke edildi',t)}
+    else if(o.guar==='teminat')tx(o,'attest_guarantee','Banka','Teminat mektubu kaydedildi: '+tl(o.total)+', vade '+o.vade+' gün',t);
+    else if(o.guar==='akreditif')tx(o,'attest_letter_of_credit','Banka','Teyitli akreditif açıldı: '+tl(o.total),t);
+    else tx(o,'confirm_open_account','Alıcı','Açık hesap: '+o.vade+' gün vadeli ödeme taahhüdü',t);
+    o.stage=2;return}
+  if(o.stage===2){o.late=action==='late';o.hashes.ship=sha256('SEVK '+o.id+' '+o.term);
+    var adv=o.total*o.adv,pt={EXW:'tedarikçi kapısında taşıyıcıya',FCA:'taşıyıcıya',FOB:'yükleme limanında gemiye',CIF:'yükleme limanında gemiye',DAP:'üretici kapısına',DDP:'üretici kapısına'}[o.term];
+    tx(o,'record_shipment','Tedarikçi + e-Belge doğrulayıcı','Sevkiyat kaydı: '+o.term+' gereği teslim noktası '+pt+(o.late?' · termin 3 gün aşıldı':' · zamanında'),t);
+    if(adv>0){o.funds.locked-=adv;o.funds.paid+=adv;tx(o,'release_advance','Program','Avans %'+Math.round(o.adv*100)+': '+tl(adv)+' tedarikçiye aktarma talimatı',t)}
+    if(o.guar==='akreditif')tx(o,'present_documents','Banka','Akreditif belgeleri (fatura, konşimento, analiz sertifikası) özetleriyle eşleşti',t);
+    o.stage=3;return}
+  if(o.stage===3){tx(o,'confirm_receipt',o.receiver,'Mal kabul: '+o.qty+' ton teslim alındı · '+o.place,t);o.stage=4;return}
+  if(o.stage===4){
+    if(action==='dispute'&&!o.dispute){o.dispute='open';tx(o,'open_dispute','Alıcı','Giriş kalite kontrolünde '+CATS[o.cat].params[0][0].toLowerCase()+' şart dışı bildirildi; kalan tutar donduruldu',t);return}
+    if(o.dispute==='open'){o.verdict=action;o.dispute='closed';tx(o,'resolve_dispute','Hakem laboratuvar','Hakem kararı: '+(action==='buyer'?'parti şartname dışı, alıcı haklı':'parti uygun, tedarikçi haklı'),t);o.iqc=action==='buyer'?'red':'kabul';o.stage=5;return}
+    o.iqc='kabul';tx(o,'accept_delivery','Alıcı','Giriş kalite kontrolü: kabul',t);o.stage=5;return}
+  if(o.stage===5){var rest=o.total-o.funds.paid-o.funds.refund;
+    if(o.guar==='kosullu'){if(o.iqc==='red'){o.funds.refund+=o.funds.locked}else{o.funds.paid+=o.funds.locked}o.funds.locked=0}
+    else if(o.iqc!=='red')o.funds.paid=o.total;
+    tx(o,'settle_order','Mutabakat servisi',o.iqc==='red'?'Kalan tutar alıcıya iade edildi; tedarikçi karnesine kaybedilen itiraz işlendi':'Kalan '+tl(rest)+' '+(o.vade?'vade tarihinde':'')+' tedarikçiye aktarılmak üzere talimatlandı; karneler güncellendi',t);
+    o.stage=6;return}
+  if(o.stage===6&&action){o.field.push({ok:action==='pos',at:new Date(t)});tx(o,'record_field_feedback','Alıcı','Saha geri bildirimi: '+(action==='pos'?'olumlu, kullanımda sorun yok':'olumsuz, kullanımda kusur bildirildi'),t)}
+}
+/* örnek geçmiş */
+(function seed(){
+  var q1=Object.assign(newRfq(),{cat:'metal',qty:30,vade:60,guar:'kosullu',terms:['DAP']});
+  var o1=createOrder('A',q1,new Date(2026,8,2,9,20));[1,2,3].forEach(function(i){advance(o1,null,addDays(o1.created,i*4))});advance(o1,null,addDays(o1.created,13));advance(o1,null,addDays(o1.created,14));advance(o1,null,addDays(o1.created,15));advance(o1,'pos',addDays(o1.created,60));
+  var q2=Object.assign(newRfq(),{cat:'plastik',qty:25,vade:30,guar:'kosullu',terms:['DAP']});
+  var o2=createOrder('A',q2,new Date(2026,10,6,11,5));advance(o2,null,addDays(o2.created,.2));advance(o2,null,addDays(o2.created,.5));advance(o2,null,addDays(o2.created,9));advance(o2,null,addDays(o2.created,10));
+  var q3=Object.assign(newRfq(),{cat:'metal',qty:30,vade:60,guar:'kosullu',terms:['DAP']});
+  var o3=createOrder('B',q3,new Date(2026,10,12,14,40));advance(o3,null,addDays(o3.created,.3));advance(o3,null,addDays(o3.created,.6));advance(o3,null,addDays(o3.created,11));
+  var q4=Object.assign(newRfq(),{cat:'metal',qty:60,vade:90,guar:'akreditif',terms:['CIF']});
+  var o4=createOrder('E',q4,new Date(2026,10,18,10,0));advance(o4,null,addDays(o4.created,1));advance(o4,null,addDays(o4.created,2));
+})();
+var BUYER={pays:58,onTime:53,delay:3.2,disputes:6,unjust:1};
+var BAGLANTI={sup:'A',cat:'metal',total:360,used:222,disc:5,end:new Date(2027,7,31)};
+
+/* ================= grafikler ================= */
+var NS='http://www.w3.org/2000/svg';
+function svg(w,h,label){var s=document.createElementNS(NS,'svg');s.setAttribute('viewBox','0 0 '+w+' '+h);s.setAttribute('role','img');if(label)s.setAttribute('aria-label',label);return s}
+function nd(s,t,a,txt){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;s.appendChild(e);return e}
+function tipOn(box,node,html,x,y,W){var tip=box.querySelector('.tip');node.addEventListener('mouseenter',function(){var sc=box.querySelector('svg').getBoundingClientRect().width/W;tip.innerHTML=html;tip.style.left=(x*sc)+'px';tip.style.top=(y*sc)+'px';tip.hidden=false});node.addEventListener('mouseleave',function(){tip.hidden=true})}
+function lineChart(box,pts,o){
+  o=o||{};var W=o.w||560,H=o.h||200,L=40,R=14,T=12,B=26,iw=W-L-R,ih=H-T-B,lo=o.lo!=null?o.lo:0,hi=o.hi!=null?o.hi:100,s=svg(W,H,o.label);
+  box.innerHTML='<div class="tip" hidden></div>';box.appendChild(s);
+  function x(i){return L+(pts.length<2?iw/2:iw*i/(pts.length-1))}function y(v){return T+ih*(1-(v-lo)/(hi-lo))}
+  (o.ticks||[lo,(lo+hi)/2,hi]).forEach(function(t){nd(s,'line',{x1:L,x2:W-R,y1:y(t),y2:y(t),stroke:'var(--grid)','stroke-width':1});nd(s,'text',{x:L-6,y:y(t)+4,'text-anchor':'end','font-size':11,fill:'var(--muted)','font-family':'var(--mono)'},(o.pre||'')+fmt(t)+(o.suf||''))});
+  if(o.target!=null){nd(s,'line',{x1:L,x2:W-R,y1:y(o.target),y2:y(o.target),stroke:'var(--faint)','stroke-width':1.2,'stroke-dasharray':'5 4'});nd(s,'text',{x:L+6,y:y(o.target)-5,'text-anchor':'start','font-size':10.5,fill:'var(--muted)','font-family':'var(--body)'},o.targetLabel||'Hedef')}
+  var d=pts.map(function(p,i){return (i?'L':'M')+x(i)+','+y(p.v)}).join(' ');
+  nd(s,'path',{d:d+' L'+x(pts.length-1)+','+y(lo)+' L'+x(0)+','+y(lo)+' Z',fill:'var(--s1)','fill-opacity':.08});
+  nd(s,'path',{d:d,fill:'none',stroke:'var(--s1)','stroke-width':2,'stroke-linejoin':'round'});
+  pts.forEach(function(p,i){if(i%(o.every||1)===0||i===pts.length-1)nd(s,'text',{x:x(i),y:H-8,'text-anchor':'middle','font-size':10.5,fill:'var(--muted)','font-family':'var(--body)'},p.l);
+    var hit=nd(s,'rect',{x:x(i)-iw/Math.max(2,pts.length)/2,y:T,width:iw/Math.max(2,pts.length),height:ih,fill:'transparent'});tipOn(box,hit,'<b>'+p.l+'</b> · '+(o.pre||'')+fmt(p.v,o.dec||0)+(o.suf||''),x(i),y(p.v),W)});
+  var lp=pts[pts.length-1];nd(s,'circle',{cx:x(pts.length-1),cy:y(lp.v),r:4.5,fill:'var(--s1)',stroke:'var(--surface)','stroke-width':2});
+  nd(s,'text',{x:x(pts.length-1)-8,y:y(lp.v)-9,'text-anchor':'end','font-size':12,fill:'var(--fg)','font-family':'var(--mono)'},(o.pre||'')+fmt(lp.v,o.dec||0)+(o.suf||''));
+}
+function radar(box,labels,series,target){
+  var W=480,H=330,cx=240,cy=165,R=96,n=labels.length,s=svg(W,H,'Parametre uygunluk radarı');box.innerHTML='<div class="tip" hidden></div>';box.appendChild(s);
+  function p(i,v){var a=-Math.PI/2+i*2*Math.PI/n;return [cx+Math.cos(a)*R*v/100,cy+Math.sin(a)*R*v/100]}
+  [25,50,75,100].forEach(function(v){nd(s,'polygon',{points:labels.map(function(_,i){return p(i,v).join(',')}).join(' '),fill:'none',stroke:'var(--grid)','stroke-width':1});nd(s,'text',{x:cx+4,y:cy-R*v/100-3,'font-size':9.5,fill:'var(--faint)','font-family':'var(--mono)'},'%'+v)});
+  labels.forEach(function(l,i){var e=p(i,100);nd(s,'line',{x1:cx,y1:cy,x2:e[0],y2:e[1],stroke:'var(--grid)','stroke-width':1});var q=p(i,118),an=Math.abs(q[0]-cx)<8?'middle':q[0]>cx?'start':'end';nd(s,'text',{x:q[0],y:q[1]+4,'text-anchor':an,'font-size':14,fill:'var(--fg)','font-family':'var(--body)'},l)});
+  if(target)nd(s,'polygon',{points:labels.map(function(_,i){return p(i,target).join(',')}).join(' '),fill:'none',stroke:'var(--faint)','stroke-width':1.3,'stroke-dasharray':'5 4'});
+  series.slice().reverse().forEach(function(se,k){nd(s,'polygon',{points:se.v.map(function(v,i){return p(i,v).join(',')}).join(' '),fill:se.fill?se.c:'none','fill-opacity':se.fill?.14:0,stroke:se.c,'stroke-width':2,'stroke-linejoin':'round'})});
+  series.forEach(function(se){se.v.forEach(function(v,i){var q=p(i,v);nd(s,'circle',{cx:q[0],cy:q[1],r:4,fill:se.c,stroke:'var(--surface)','stroke-width':2});var h=nd(s,'circle',{cx:q[0],cy:q[1],r:12,fill:'transparent'});tipOn(box,h,'<b>'+esc(se.n)+'</b> · '+esc(labels[i])+': %'+fmt(v),q[0],q[1],W)})});
+}
+function crow(l,w,v,c){return '<div class="crow"><span>'+l+'</span><span class="w">'+w+'</span><div class="track"><i style="width:'+Math.max(0,Math.min(100,v||0))+'%'+(c?';background:'+c:'')+'"></i></div><span class="v">'+(v==null?'–':fmt(v,1))+'</span></div>'}
+function trendOf(s){var r=rng(s.seed*3),out=[],m=['Ara','Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas'];for(var i=0;i<12;i++){var v=Math.max(55,Math.min(100,s.otif+(r()-.5)*14+(i-6)*.4));out.push({l:m[i],v:Math.round(v)})}out[11].v=s.otif;return out}
+
+/* ================= kabuk ================= */
+var NAV=[['Genel','genel','Genel bakış'],['Satın alma','asistan','Satın alma asistanı'],['Satın alma','rfq','Teklif talebi'],['Satın alma','teklifler','Teklifler ve eşleşme'],['Satın alma','siparisler','Siparişler'],['Ağ','tedarikciler','Tedarikçiler'],['Ağ','karneler','Karneler'],['Ağ','risk','Risk merkezi'],['Ağ','piyasa','Piyasa istihbaratı'],['Finans','odemeler','Ödemeler ve finansman'],['Kayıt','zincir','Zincir kayıtları'],['Yönetim','entegrasyon','Entegrasyonlar ve roller']];
+function renderNav(){var h='',g='';var open=st.orders.filter(function(o){return o.stage<6}).length;
+  NAV.forEach(function(n){if(n[0]!==g){h+='<div class="lbl">'+n[0]+'</div>';g=n[0]}h+='<a href="#'+n[1]+'"'+(st.route===n[1]?' aria-current="page"':'')+'><span>'+n[2]+'</span>'+(n[1]==='siparisler'&&open?'<span class="ct">'+open+'</span>':'')+'</a>'});
+  el('nav').innerHTML=h;var cur=NAV.filter(function(n){return n[1]===st.route})[0];el('crumb').innerHTML=cur[0]+' / <b>'+cur[2]+'</b>'}
+function toast(msg,sig){var r=el('toastRoot');r.innerHTML='<div class="toast" role="status">'+msg+(sig?'<br><code>tx '+sig.slice(0,10)+'…'+sig.slice(-6)+' · zincire yazıldı</code>':'')+'</div>';clearTimeout(st.toastT);st.toastT=setTimeout(function(){r.innerHTML=''},3600)}
+function go(r){if(location.hash==='#'+r)route();else location.hash=r}
+function route(){var h=location.hash.slice(1);st.route=NAV.some(function(n){return n[1]===h})?h:'genel';renderNav();render();window.scrollTo(0,0)}
+function render(){var v=st.route,f={genel:vGenel,asistan:vAsistan,rfq:vRfq,teklifler:vTeklif,siparisler:vSiparis,tedarikciler:vTed,karneler:vKarne,risk:vRisk,piyasa:vPiyasa,odemeler:vOdeme,zincir:vZincir,entegrasyon:vEnteg}[v];el('view').innerHTML='';f(el('view'));renderNav();el('slot').textContent='Slot '+fmt(st.slot)}
+
+/* ================= Genel bakış ================= */
+function vGenel(V){
+  var open=st.orders.filter(function(o){return o.stage<6}),locked=st.orders.reduce(function(a,o){return a+o.funds.locked},0),waitIqc=st.orders.filter(function(o){return o.stage===4});
+  var bIdx=60*BUYER.onTime/BUYER.pays+25*(1-BUYER.delay/30)+15*(1-BUYER.unjust/BUYER.disputes);
+  var avg=SUPS.filter(function(s){return s.del>=5&&s.cert!=='expired'}).map(function(s){return idxOf(s,'metal',defWeights('metal'))}),avgI=avg.reduce(function(a,b){return a+b},0)/avg.length;
+  V.innerHTML='<div class="vh"><div><div class="eyebrow">Hoş geldiniz</div><h1>Genel bakış</h1><p>Açık siparişleriniz, kilitli tutarlarınız ve tedarikçi ağınızın durumu. Tüm göstergeler Solana üzerindeki kayıtlardan hesaplanır.</p></div><div class="acts"><button class="btn br" id="gNew">+ Yeni teklif talebi</button></div></div>'+
+  '<div class="kpis">'+
+   '<div class="kpi"><span>Açık sipariş</span><b>'+open.length+'</b><small>'+waitIqc.length+' parti kalite kontrolü bekliyor</small></div>'+
+   '<div class="kpi"><span>Emanet hesabında kilitli</span><b>'+tlk(locked)+'</b><small>Koşullu ödeme ile</small></div>'+
+   '<div class="kpi"><span>Tedarikçi OTIF · 90 gün</span><b>%88,6</b><small>Hedef %90</small></div>'+
+   '<div class="kpi"><span>Ortalama tedarikçi endeksi</span><b>'+fmt(avgI,1)+'</b><small>Metal · aktif tedarikçiler</small></div>'+
+   '<div class="kpi"><span>Firmanızın ödeme endeksi</span><b>'+fmt(bIdx,1)+'</b><small>Tedarikçilerin gördüğü değer</small></div></div>'+
+  '<div class="g3"><section class="panel"><div class="ph"><h2>SolChain Güven Skoru</h2><span class="pill br">İki taraflı</span></div><div id="gTrust"></div></section>'+
+  '<section class="panel"><div class="ph"><h2>Risk erken uyarı</h2><a class="foot" href="#risk">Risk merkezi →</a></div><div class="list" id="gRisk"></div></section>'+
+  '<section class="panel"><div class="ph"><h2>Piyasa · DC01 sac</h2><a class="foot" href="#piyasa">Piyasa istihbaratı →</a></div><div class="chart" id="gMkt"></div><p class="foot" id="gMktN"></p></section></div>'+
+  '<div class="g21"><section class="panel"><div class="ph"><h2>Tedarikçi teslim performansı · OTIF</h2><div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Tüm tedarikçiler, aylık</span><span><span class="swl"></span>Hedef %90</span></div></div><div class="chart" id="gOtif"></div></section>'+
+  '<section class="panel"><div class="ph"><h2>Yapılacaklar</h2><span class="foot">Sizi bekleyen adımlar</span></div><div class="list" id="gTodo"></div></section></div>'+
+  '<div class="g2"><section class="panel"><div class="ph"><h2>Son zincir kayıtları</h2><a class="foot" href="#zincir">Tümünü gör →</a></div><div class="list" id="gTx"></div></section>'+
+  '<section class="panel"><div class="ph"><h2>Aktif alım bağlantısı</h2><span class="pill br">−%'+BAGLANTI.disc+' iskonto</span></div><div id="gBag"></div></section></div>';
+  el('gNew').onclick=function(){st.rfq=newRfq();st.rfqStep=0;st.rfqPublished=false;go('rfq')};
+  var m=['Ara','Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas'],vals=[84,85,83,86,87,86,88,87,89,88,89,88.6];
+  lineChart(el('gOtif'),m.map(function(l,i){return {l:l,v:vals[i]}}),{lo:70,hi:100,ticks:[70,80,90,100],suf:'%',target:90,targetLabel:'Hedef %90',dec:1,label:'Aylık OTIF'});
+  var todo=[];
+  st.orders.forEach(function(o){var sn=supName(supById(o.sup),o.cat);if(o.stage===4)todo.push(['bad','!',o.id+' · kalite kontrolü bekliyor',sn+' · '+o.qty+' ton',o.id]);if(o.stage===3)todo.push(['br','↓',o.id+' · mal kabul bekliyor',o.term+' · '+o.place,o.id]);if(o.stage===6&&o.field.length===0)todo.push(['br','✓',o.id+' · saha geri bildirimi',sn+' · garanti süresinde',o.id])});
+  todo.push(['warn','!','Tedarikçi C · belge süresi doluyor','ISO 9001 belgesi 45 gün içinde sona eriyor',null]);
+  todo.push(['br','%','Alım bağlantısı %'+Math.round(100*BAGLANTI.used/BAGLANTI.total)+' kullanıldı',supName(supById('A'),'metal')+' · '+(BAGLANTI.total-BAGLANTI.used)+' ton kaldı',null]);
+  el('gTodo').innerHTML=todo.map(function(t){return '<div class="li"><span class="ic '+t[0]+'">'+t[1]+'</span><div><b>'+esc(t[2])+'</b><span>'+esc(t[3])+'</span></div>'+(t[4]?'<button class="btn sm" data-o="'+t[4]+'">Aç</button>':'<span></span>')+'</div>'}).join('');
+  el('gTodo').querySelectorAll('[data-o]').forEach(function(b){b.onclick=function(){st.selOrder=b.dataset.o;go('siparisler')}});
+  el('gTx').innerHTML=st.txs.slice(0,5).map(function(t){return '<div class="li"><span class="ic br">⛓</span><div><b>'+esc(t.note)+'</b><span>'+t.order+' · '+esc(t.who)+' · '+fdt(t.time)+'</span></div><span class="tag">'+t.ix+'</span></div>'}).join('');
+  var p=100*BAGLANTI.used/BAGLANTI.total;
+  el('gBag').innerHTML='<p><b>'+supName(supById('A'),'metal')+'</b> · DC01 sac · 1 yıllık bağlantı</p><div class="track" style="height:12px"><i style="width:'+p+'%"></i></div><div class="summ"><div><span>Taahhüt</span><b>'+BAGLANTI.total+' ton</b></div><div><span>Çekilen</span><b>'+BAGLANTI.used+' ton (%'+fmt(p,0)+')</b></div><div><span>Bitiş</span><b>'+fdate(BAGLANTI.end)+'</b></div></div><div class="callout"><b>Fiyat revizyon maddesi:</b> Birim fiyat ağdaki DC01 endeksine bağlıdır ve ±%5 bant içinde sabit kalır. Bandın aşılması veya fiyat artışı tedarikçi tarafından 30 gün önceden bildirilir; iki taraf onaylamadan yeni fiyat uygulanmaz.</div><p class="foot">Bağlantı zincire kaydedilmiştir. Her sipariş bağlantıdan düşülür; dönem sonunda taahhüde uyum firmanızın karnesine işlenir.</p>';
+  el('gTrust').innerHTML='<div class="summ"><div><span>Tedarikçi ağınız · ortalama</span><b style="font-family:var(--display);font-size:26px">'+fmt(avgI,1)+'</b></div><div><span>Firmanız · ödeme endeksi</span><b style="font-family:var(--display);font-size:26px">'+fmt(bIdx,1)+'</b></div></div><p class="foot">Güven iki yönlü ölçülür: tedarikçiler kalite, teslimat, kapasite ve belgeyle; üreticiler ödeme disiplini ve ticari uyumla. Yüksek alıcı endeksi tedarikçilerden daha iyi vade ve avans koşulları almanızı sağlar.</p>';
+  var ra=riskAlerts().slice(0,4);el('gRisk').innerHTML=ra.map(function(r){return '<div class="li"><span class="ic '+r[0]+'">!</span><div><b>'+esc(r[1])+'</b><span>'+esc(r[2])+'</span></div><span></span></div>'}).join('');
+  lineChart(el('gMkt'),MKT.metal.map(function(v,i){return {l:MONTHS[i],v:v}}),{lo:32,hi:38,ticks:[32,35,38],dec:1,suf:'b',label:'DC01 sac fiyat endeksi',every:3,w:420,h:190});
+  el('gMktN').textContent='Ağdaki anonim tekliflerden, bin TRY/ton. Son 3 ay: %'+fmt(mktChange('metal'),1)+'. Fiyatlar yükselirken alım bağlantısı fiyat riskini azaltabilir.';
+}
+
+/* ================= Teklif talebi ================= */
+var RSTEPS=['Malzeme ve miktar','Kalite şartnamesi','Ödeme koşulları','Teslim koşulları','Özet ve yayın'];
+function vRfq(V){
+  var q=st.rfq,cat=CATS[q.cat];
+  V.innerHTML='<div class="vh"><div><div class="eyebrow">'+q.no+'</div><h1>Teklif talebi</h1><p>İhtiyacınızı ve kısıtlarınızı tanımlayın. Yayınladığınızda talebin özeti zincire yazılır ve uygun tedarikçiler teklif verir.</p></div></div>'+
+   '<div class="wiz"><ol class="steps" id="rSteps"></ol><section class="panel" id="rBody"></section></div>';
+  el('rSteps').innerHTML=RSTEPS.map(function(s,i){return '<li><button data-i="'+i+'" class="'+(i<st.rfqStep?'done':'')+'"'+(i===st.rfqStep?' aria-current="step"':'')+'><span class="sn">'+(i<st.rfqStep?'✓':i+1)+'</span>'+s+'</button></li>'}).join('');
+  el('rSteps').querySelectorAll('button').forEach(function(b){b.onclick=function(){st.rfqStep=+b.dataset.i;render()}});
+  var B=el('rBody'),h='';
+  if(st.rfqStep===0){
+    h='<h2>Malzeme ve miktar</h2><div class="fgrid">'+
+     '<label class="field">Ham madde kategorisi<select id="fCat">'+CATK.map(function(k){return '<option value="'+k+'"'+(k===q.cat?' selected':'')+'>'+CATS[k].name+' · '+CATS[k].mat+'</option>'}).join('')+'</select></label>'+
+     '<label class="field">Miktar (ton)<input type="number" id="fQty" min="1" max="500" value="'+q.qty+'"></label>'+
+     '<label class="field">Azami teslim süresi: <b id="fDlV">'+q.deadline+' gün</b><input type="range" id="fDl" min="7" max="30" value="'+q.deadline+'"></label>'+
+     '<div class="field">Zorunlu belgeler<div class="opts">'+cat.certs.map(function(c,i){return '<label class="opt'+(q.certs[i]?' on':'')+'"><input type="checkbox" data-c="'+i+'"'+(q.certs[i]?' checked':'')+'>'+c+'</label>'}).join('')+'</div></div></div>'+
+     '<p class="foot">Kapasitesi miktarınızı, teslim süresi azami sürenizi karşılamayan ve zorunlu belgesi geçerli olmayan tedarikçiler otomatik elenir.</p>';
+  }else if(st.rfqStep===1){
+    h='<h2>Kalite şartnamesi</h2><p class="foot">'+cat.mat+' için şablon parametreleri. Şart değerlerini ve her parametrenin karnedeki ağırlığını firmanıza göre düzenleyin.</p><div class="tblw"><table class="ptable"><thead><tr><th>Parametre</th><th>Şart</th><th>Yöntem / standart</th><th class="n">Ağırlık (%)</th></tr></thead><tbody>'+
+     cat.params.map(function(p,i){return '<tr><td><b>'+p[0]+'</b></td><td><input type="text" value="'+esc(p[1])+'" aria-label="'+esc(p[0])+' şartı"></td><td>'+p[2]+'</td><td class="n"><input class="w" type="number" min="0" max="100" data-w="'+i+'" value="'+q.weights[i]+'" aria-label="'+esc(p[0])+' ağırlığı"></td></tr>'}).join('')+
+     '</tbody></table></div><p class="foot" id="wSum"></p><div class="callout"><b>Saha performansı:</b> Garanti süresince bildireceğiniz olumlu veya olumsuz geri bildirimler, tedarikçinin kalite puanının %20\'sini oluşturur.</div>';
+  }else if(st.rfqStep===2){
+    h='<h2>Ödeme koşulları</h2><div class="fgrid">'+
+     '<div class="field">Tercih ettiğiniz vade<div class="seg" id="fVade">'+[0,30,60,90,120].map(function(v){return '<button type="button" data-v="'+v+'" aria-pressed="'+(q.vade===v)+'">'+(v?v+' gün':'Peşin')+'</button>'}).join('')+'</div></div>'+
+     '<label class="field">Finansman maliyetiniz (aylık): <b id="fCV">%'+fmt(q.c*100,1)+'</b><input type="range" id="fC" min="1" max="6" step=".1" value="'+(q.c*100)+'"></label>'+
+     '<div class="field" style="grid-column:1/-1">Ödeme güvencesi<div class="opts">'+Object.keys(GUAR).map(function(k){return '<label class="opt'+(q.guar===k?' on':'')+'"><input type="radio" name="guar" value="'+k+'"'+(q.guar===k?' checked':'')+'><span><b>'+GUAR[k].n+'</b><br><span class="foot">'+GUAR[k].d+'</span></span></label>'}).join('')+'</div></div>'+
+     '<div class="field" style="grid-column:1/-1">Alım bağlantısı<div class="opts">'+Object.keys(BAG).map(function(k){return '<label class="opt'+(q.bag===k?' on':'')+'"><input type="radio" name="bag" value="'+k+'"'+(q.bag===k?' checked':'')+'>'+BAG[k].n+(BAG[k].d?' <span class="tag">−%'+fmt(BAG[k].d*100,1)+'</span>':'')+'</label>'}).join('')+'</div></div></div>'+
+     '<p class="foot">Teklifler, seçtiğiniz vadede ve finansman maliyetinizle bugünkü değere indirgenerek karşılaştırılır. Böylece farklı vadeli teklifler adil biçimde sıralanır.</p>';
+  }else if(st.rfqStep===3){
+    h='<h2>Teslim koşulları</h2><div class="field">Kabul ettiğiniz teslim koşulları (Incoterms® 2020)<div class="opts">'+Object.keys(TERMS).map(function(k){var on=q.terms.indexOf(k)>-1;return '<label class="opt'+(on?' on':'')+'"><input type="checkbox" data-t="'+k+'"'+(on?' checked':'')+'><span><b>'+k+'</b> · '+TERMS[k]+'</span></label>'}).join('')+'</div></div>'+
+     '<div class="fgrid"><label class="field">Teslim yeri<input type="text" id="fPlace" value="'+esc(q.place)+'"></label><label class="field">Teslim alacak yetkili<select id="fRecv">'+['Mal kabul sorumlusu · Depo','Kalite kontrol şefi','Lojistik sorumlusu · Gümrük'].map(function(r){return '<option'+(r===q.receiver?' selected':'')+'>'+r+'</option>'}).join('')+'</select></label></div>'+
+     '<div class="callout"><b>Teslim anı:</b> Seçilen koşul, sistemde malın "teslim edildi" sayıldığı noktayı belirler. Tedarikçi kapısında (EXW, FCA) taşıyıcıya teslim, limanda (FOB, CIF) gemiye yükleme, üretici kapısında (DAP, DDP) tesise varış esas alınır. OTIF ve avans bu ana göre hesaplanır.</div>';
+  }else{
+    var ev=evaluate(q);
+    h='<h2>Özet ve yayın</h2><div class="summ">'+[['Malzeme',cat.mat],['Miktar',q.qty+' ton'],['Azami teslim',q.deadline+' gün'],['Zorunlu belgeler',cat.certs.filter(function(_,i){return q.certs[i]}).join(', ')||'Yok'],['Vade',q.vade?q.vade+' gün':'Peşin'],['Güvence',GUAR[q.guar].n],['Bağlantı',BAG[q.bag].n],['Teslim',q.terms.join(' · ')],['Teslim yeri',q.place],['Teslim alacak',q.receiver]].map(function(x){return '<div><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>'}).join('')+'</div>'+
+     '<div class="callout"><b>Ön değerlendirme:</b> '+ev.ok.length+' tedarikçi kısıtlarınızı karşılıyor, '+ev.out.length+' tedarikçi eleniyor.</div>'+
+     (st.rfqPublished?'<div class="acts"><span class="pill ok">✓ Yayınlandı · zincire yazıldı</span><button class="btn br" id="toOffers">Teklifleri gör →</button></div>':'<div class="acts"><button class="btn br" id="pub">Talebi yayınla ve imzala</button></div>');
+  }
+  h+='<div class="acts" style="justify-content:space-between;border-top:1px solid var(--line);padding-top:12px">'+(st.rfqStep>0?'<button class="btn" id="rPrev">← Geri</button>':'<span></span>')+(st.rfqStep<4?'<button class="btn pri" id="rNext">Devam →</button>':'')+'</div>';
+  B.innerHTML=h;
+  function rr(){render()}
+  if(el('rPrev'))el('rPrev').onclick=function(){st.rfqStep--;rr()};
+  if(el('rNext'))el('rNext').onclick=function(){st.rfqStep++;rr()};
+  if(st.rfqStep===0){el('fCat').onchange=function(e){q.cat=e.target.value;q.weights=defWeights(q.cat);q.certs=[true,true,false];st.rfqPublished=false;rr()};
+    el('fQty').onchange=function(e){q.qty=Math.max(1,Math.min(500,Math.round(+e.target.value||q.qty)));st.rfqPublished=false};
+    el('fDl').oninput=function(e){q.deadline=+e.target.value;el('fDlV').textContent=q.deadline+' gün';st.rfqPublished=false};
+    B.querySelectorAll('[data-c]').forEach(function(c){c.onchange=function(){q.certs[+c.dataset.c]=c.checked;c.parentNode.classList.toggle('on',c.checked);st.rfqPublished=false}})}
+  if(st.rfqStep===1){function sum(){var t=q.weights.reduce(function(a,b){return a+b},0);el('wSum').innerHTML='Ağırlık toplamı: <b>%'+t+'</b>'+(t!==100?' · <span style="color:var(--warn)">toplam 100 olmalı; hesaplamada oransal olarak ölçeklenir</span>':'')}sum();
+    B.querySelectorAll('[data-w]').forEach(function(i){i.oninput=function(){q.weights[+i.dataset.w]=Math.max(0,+i.value||0);sum();st.rfqPublished=false}})}
+  if(st.rfqStep===2){el('fVade').querySelectorAll('button').forEach(function(b){b.onclick=function(){q.vade=+b.dataset.v;st.rfqPublished=false;rr()}});
+    el('fC').oninput=function(e){q.c=+e.target.value/100;el('fCV').textContent='%'+fmt(q.c*100,1);st.rfqPublished=false};
+    B.querySelectorAll('input[name=guar]').forEach(function(r){r.onchange=function(){q.guar=r.value;st.rfqPublished=false;rr()}});
+    B.querySelectorAll('input[name=bag]').forEach(function(r){r.onchange=function(){q.bag=r.value;st.rfqPublished=false;rr()}})}
+  if(st.rfqStep===3){B.querySelectorAll('[data-t]').forEach(function(c){c.onchange=function(){var k=c.dataset.t,i=q.terms.indexOf(k);if(c.checked&&i<0)q.terms.push(k);if(!c.checked&&i>-1)q.terms.splice(i,1);c.parentNode.classList.toggle('on',c.checked);st.rfqPublished=false}});
+    el('fPlace').onchange=function(e){q.place=e.target.value||q.place};el('fRecv').onchange=function(e){q.receiver=e.target.value}}
+  if(el('pub'))el('pub').onclick=function(){st.rfqPublished=true;st.slot+=420;var sig=b58(TX,88);st.txs.unshift({sig:sig,ix:'publish_rfq',order:q.no,who:'Alıcı',note:'Teklif talebi yayınlandı: '+cat.mat+', '+q.qty+' ton',slot:st.slot,time:new Date(TODAY)});toast('Teklif talebi yayınlandı.',sig);rr()};
+  if(el('toOffers'))el('toOffers').onclick=function(){go('teklifler')};
+}
+
+/* ================= Teklifler ================= */
+function vTeklif(V){
+  var q=st.rfq,cat=CATS[q.cat],ev=evaluate(q);
+  V.innerHTML='<div class="vh"><div><div class="eyebrow">'+q.no+' · '+(st.rfqPublished?'yayında':'taslak')+'</div><h1>Teklifler ve eşleşme</h1><p>'+cat.mat+' · '+q.qty+' ton · '+(q.vade?q.vade+' gün vade':'peşin')+' · '+GUAR[q.guar].n+' · '+q.terms.join('/')+'. Teklifler bugünkü değere ve üretici kapısında toplam maliyete indirgenmiştir.</p></div><div class="acts"><button class="btn" id="edit">Talebi düzenle</button></div></div>'+
+   '<section class="panel"><div class="ph"><h2>Sıralama önceliği</h2><div class="seg" id="prio">'+[['dengeli','Dengeli'],['kalite','Kalite'],['maliyet','Maliyet']].map(function(p){return '<button type="button" data-p="'+p[0]+'" aria-pressed="'+(st.prio===p[0])+'">'+p[1]+'</button>'}).join('')+'</div></div><p class="foot">Ağırlıklar: endeks %'+Math.round(ev.P[0]*100)+' · toplam maliyet %'+Math.round(ev.P[1]*100)+' · teslim süresi %'+Math.round(ev.P[2]*100)+' · garanti %'+Math.round(ev.P[3]*100)+'. Endeksler tedarikçilerin zincirdeki karne hesaplarından okunur.</p></section>'+
+   '<div id="offers" style="display:flex;flex-direction:column;gap:10px"></div><div class="elim" id="elim"></div>';
+  el('edit').onclick=function(){st.rfqStep=0;go('rfq')};
+  el('prio').querySelectorAll('button').forEach(function(b){b.onclick=function(){st.prio=b.dataset.p;render()}});
+  var box=el('offers');
+  if(!ev.ok.length)box.innerHTML='<div class="elim">Kısıtlarınızı karşılayan tedarikçi yok. Teslim süresini, vadeyi veya güvence türünü gevşetmeyi deneyin.</div>';
+  ev.ok.forEach(function(x,i){var s=x.s,o=x.o,d=document.createElement('div');d.className='offer'+(i===0&&x.score!=null?' best':'');
+    var pills=(x.ix==null?'<span class="pill neu">Endeks oluşmadı</span>':'<span class="pill '+(x.ix>=85?'ok':x.ix>=70?'warn':'bad')+'">Endeks '+fmt(x.ix,1)+'</span>')+(i===0&&x.score!=null?'<span class="pill br">En iyi eşleşme</span>':'')+(s.cert==='soon'?'<span class="pill warn">! Belge 45 gün içinde doluyor</span>':'')+(s.decl<80?'<span class="pill bad">Beyan uyumu %'+s.decl+'</span>':'')+(s.capAct/s.cap<.7?'<span class="pill warn">Gerçekleşen kapasite beyanın %'+Math.round(100*s.capAct/s.cap)+'\'ü</span>':'')+(s.rnd?'<span class="pill neu">Ar-Ge birimi</span>':'')+(s.imp?'<span class="pill neu">İthalat</span>':'');
+    var lv=levelOf(s,q.cat);pills+='<span class="pill '+lv.c+'">SolChain '+lv.n+'</span>'+(SUPX[s.id].act>90?'<span class="pill warn">Faaliyet belgesi sipariş öncesi güncellenecek</span>':'')+(SUPX[s.id].notices.length?'<span class="pill warn">'+SUPX[s.id].notices.length+' risk bildirimi</span>':'');
+    var why=x.ix==null?'Yalnızca '+s.del+' teslimat kaydı var; deneme siparişi olarak değerlendirilir, avans verilmez.':'OTIF %'+s.otif+' · kalite %'+fmt(kaliteOf(s,q.cat,q.weights),0)+' (saha %'+(s.saha==null?'–':s.saha)+') · beyan uyumu %'+s.decl+' · PPM '+fmt(s.ppm)+' · '+s.shifts+' vardiya';
+    d.innerHTML='<span class="rk">'+(i+1)+'</span><div style="min-width:0"><div class="nm">'+esc(supName(s,q.cat))+' <small>'+esc(s.loc)+'</small> '+pills+'</div><div class="why">'+why+'</div>'+
+     '<div class="ogrid"><div><span>Teklif fiyatı ('+o.term+')</span><b>'+tl(o.unit)+'/t</b></div><div><span>Bugünkü değer</span><b>'+tl(o.pv)+'/t</b></div><div><span>Kapıda toplam maliyet</span><b>'+tl(o.landed)+'/t</b></div><div><span>Teslim · garanti</span><b>'+s.lead+' gün · '+s.war+' ay</b></div><div><span>Sipariş toplamı</span><b>'+tlk(o.landed*q.qty)+'</b></div></div></div>';
+    var r=document.createElement('div');r.className='orr';
+    r.innerHTML='<div class="msc">Eşleşme skoru<b>'+(x.score==null?'–':fmt(x.score,1))+'</b></div>'+(x.score==null?'':'<div class="track"><i style="width:'+Math.min(100,x.score)+'%"></i></div>');
+    var b1=document.createElement('button');b1.className='btn sm';b1.textContent='Tedarikçi profili';b1.onclick=function(){openSup(s.id,q.cat)};
+    var b2=document.createElement('button');b2.className='btn sm '+(i===0?'br':'pri');b2.textContent='Sipariş oluştur';b2.disabled=!st.rfqPublished;b2.title=st.rfqPublished?'':'Önce talebi yayınlayın';
+    b2.onclick=function(){var ord=createOrder(s.id,q);st.selOrder=ord.id;toast(ord.id+' oluşturuldu. Koşullar mühürlendi, tedarikçi onayı bekleniyor.',ord.log[0].sig);st.rfq=newRfq();st.rfqStep=0;st.rfqPublished=false;go('siparisler')};
+    r.appendChild(b1);r.appendChild(b2);d.appendChild(r);box.appendChild(d)});
+  el('elim').innerHTML=(ev.out.length?'<b>Elenenler</b> · '+ev.out.map(function(x){return esc(supName(x.s,q.cat))+' ('+x.r.join(', ')+')'}).join(' · '):'Elenen tedarikçi yok.')+(st.rfqPublished?'':'<br><span style="color:var(--warn)">Talep henüz yayınlanmadı. Sipariş oluşturmak için talebi yayınlayın.</span>');
+}
+
+/* ================= Tedarikçi profili (çekmece) ================= */
+function openSup(id,cat){st.drawer={id:id,cat:cat||st.kCat};drawSup()}
+function closeDrawer(){st.drawer=null;el('drawerRoot').innerHTML=''}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&st.drawer)closeDrawer()});
+function drawSup(){
+  var s=supById(st.drawer.id),cat=st.drawer.cat,C=CATS[cat],w=defWeights(cat),ix=idxOf(s,cat,w),comp=compFor(s,cat),R=el('drawerRoot');
+  var certs=C.certs.map(function(c,i){var exp=i===0&&s.cert==='soon'?new Date(2027,0,8):i===0&&s.cert==='expired'?new Date(2026,9,1):new Date(2027,4+i*3,15),stt=exp<TODAY?'bad':(exp-TODAY)/864e5<=60?'warn':'ok';return '<tr><td>'+c+(s.imp&&i===0?' <span class="tag">uluslararası</span>':'')+'</td><td>'+fdate(exp)+'</td><td><span class="pill '+stt+'">'+(stt==='ok'?'✓ Geçerli':stt==='warn'?'! 60 gün içinde doluyor':'✕ Süresi dolmuş')+'</span></td></tr>'}).join('');
+  R.innerHTML='<div class="scrim" id="scrim"></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Tedarikçi profili">'+
+   '<div class="dh"><div><div class="eyebrow">Tedarikçi profili · '+C.name+'</div><h1>'+esc(supName(s,cat))+'</h1><p class="foot">'+esc(s.loc)+' · Ağda '+s.since+'\'ten beri · '+s.del+' doğrulanmış teslimat · Karne hesabı <span class="mono">'+short(addrOf(9000+s.seed))+'</span></p></div><button class="btn" id="dClose" aria-label="Kapat">✕</button></div>'+
+   '<div class="acts">'+(ix==null?'<span class="pill neu">Endeks oluşmadı</span>':'<span class="pill '+(ix>=85?'ok':ix>=70?'warn':'bad')+'">Endeks '+fmt(ix,1)+'</span><span class="pill br">Avans kademesi %'+Math.round(tierOf(ix)*100)+'</span>')+(s.rnd?'<span class="badge">Ar-Ge birimi doğrulandı</span>':'')+'<span class="badge">'+s.shifts+' vardiya</span><span class="badge">Garanti '+s.war+' ay</span></div>'+
+   '<div class="g2"><section class="panel"><div class="ph"><h2>Kalite profili</h2><div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Parti uygunluğu</span><span><span class="swl"></span>Hedef %90</span></div></div><div class="chart" id="dRadar"></div><p class="foot">Son 20 partide şartnameyi sağlama oranı. Giriş kontrolü ölçümleri iki tarafın imzasıyla kaydedilmiştir.</p></section>'+
+   '<section class="panel"><div class="ph"><h2>Karne bileşenleri</h2></div><div style="display:flex;flex-direction:column;gap:9px">'+crow('OTIF','%30',s.otif)+crow('Kalite (giriş %80 + saha %20)','%30',kaliteOf(s,cat,w))+crow('Beyan–ölçüm uyumu','%15',s.decl)+crow('Yeterlilik (belgeler)','%15',yet(s))+crow('Uyuşmazlık geçmişi','%10',Math.max(0,100-30*s.lost))+'</div>'+
+   '<div class="summ"><div><span>Gelen malzeme PPM</span><b>'+fmt(s.ppm)+'</b></div><div><span>Saha performansı</span><b>'+(s.saha==null?'Veri yok':'%'+s.saha)+'</b></div><div><span>Kaybedilen itiraz</span><b>'+s.lost+'</b></div></div></section></div>'+
+   (function(){var x=SUPX[s.id],lv=levelOf(s,cat),rk=riskOf(s);
+     return '<div class="g2"><section class="panel"><div class="ph"><h2>Dijital tedarikçi kimliği</h2><span class="pill '+lv.c+'">SolChain '+lv.n+'</span></div><p class="foot">'+esc(lv.d)+'. Seviye ücretle alınamaz; yalnızca doğrulanmış performansla yükselir.</p>'+
+      '<div class="summ"><div><span>Uzmanlık</span><b>'+esc(x.exp)+'</b></div><div><span>Bölge</span><b>'+esc(x.region)+'</b></div><div><span>Farklı alıcı sayısı</span><b>'+x.buyers+'</b></div></div>'+
+      '<div><span class="foot">Makine ve üretim altyapısı</span><ul style="margin:6px 0 0;padding-left:18px;font-size:13px">'+x.mach.map(function(m){return '<li>'+esc(m)+'</li>'}).join('')+'</ul></div></section>'+
+      '<section class="panel"><div class="ph"><h2>Süreklilik ve finansal sağlık</h2>'+(rk.length?'<span class="pill warn">'+rk.length+' sinyal</span>':'<span class="pill ok">Sinyal yok</span>')+'</div>'+
+      '<div class="summ"><div><span>Faaliyet belgesi</span><b>'+(x.act>90?'<span style="color:var(--warn)">'+x.act+' gün önce</span>':x.act+' gün önce · güncel')+'</b></div><div><span>Vergi borcu durumu</span><b>'+(x.tax==='ok'?'Borcu yok':'Borcu var')+'</b></div><div><span>SGK borcu durumu</span><b>'+(x.sgk==='ok'?'Borcu yok':x.sgk==='yap'?'Yapılandırılmış':'Yurt dışı · muaf')+'</b></div><div><span>e-Fatura eşleşmesi</span><b>'+(x.einv==null?'Ticari fatura + CMR':'%'+x.einv+' teslimat')+'</b></div></div>'+
+      '<div class="list">'+(rk.length?rk.map(function(r){return '<div class="li"><span class="ic '+r[0]+'">!</span><div><b>'+esc(r[1])+'</b><span>Kaynak: '+esc(r[2])+' · tedarikçinin açıklama ve itiraz hakkı vardır</span></div><span></span></div>'}).join(''):'<p class="foot">Açık risk sinyali yok.</p>')+'</div></section></div>'})()+
+   '<section class="panel"><div class="ph"><h2>OTIF · son 12 ay</h2></div><div class="chart" id="dOtif"></div></section>'+
+   '<section class="panel"><div class="ph"><h2>Yeterlilik</h2></div><div class="tblw"><table><thead><tr><th>Belge</th><th>Geçerlilik</th><th>Durum</th></tr></thead><tbody>'+certs+'</tbody></table></div>'+
+   '<div class="summ"><div><span>Özel test raporları</span><b>'+(s.tests?s.tests+' akrediteli rapor':'Yok')+'</b></div><div><span>Beyan edilen kapasite</span><b>'+s.cap+' ton/ay · '+s.shifts+' vardiya</b></div><div><span>Gerçekleşen ortalama</span><b>'+s.capAct+' ton/ay (%'+Math.round(100*s.capAct/s.cap)+')</b></div><div><span>Ar-Ge / Ür-Ge</span><b>'+(s.rnd?'Var · belge doğrulandı':'Bildirilmedi')+'</b></div></div></section>'+
+   '<div class="g2"><section class="panel"><div class="ph"><h2>Referanslar</h2></div><div class="list">'+(s.refV?Array.from({length:s.refV}).map(function(_,i){return '<div class="li"><span class="ic ok">✓</span><div><b>'+['Otomotiv yan sanayi üreticisi','Beyaz eşya üreticisi','Makine imalatçısı'][i%3]+'</b><span>Platformda doğrulanmış referans · imzalı</span></div><span></span></div>'}).join(''):'<p class="foot">Platformda doğrulanmış referans yok.</p>')+(s.refE?'<div class="li"><span class="ic warn">i</span><div><b>'+s.refE+' dış referans mektubu</b><span>Belge olarak eklendi · doğrulanmadı, puanlanmaz</span></div><span></span></div>':'')+'</div></section>'+
+   '<section class="panel"><div class="ph"><h2>Ticari koşullar</h2></div><div class="summ"><div><span>Azami vade</span><b>'+s.vmax+' gün</b></div><div><span>Aylık vade farkı</span><b>%'+fmt(s.m*100,1)+'</b></div><div><span>Teslim koşulları</span><b>'+(s.imp?'FOB · CIF · DAP · DDP':'EXW · DAP')+'</b></div><div><span>Kabul ettiği güvenceler</span><b>'+s.guar.map(function(g){return GUAR[g].n}).join(', ')+'</b></div><div><span>Alım bağlantısı</span><b>'+(s.bag?'Kabul ediyor':'Kabul etmiyor')+'</b></div></div></section></div>'+
+   '</aside>';
+  el('dClose').onclick=closeDrawer;el('scrim').onclick=closeDrawer;el('dClose').focus();
+  radar(el('dRadar'),C.params.map(function(p){return p[0]}),[{n:supName(s,cat),v:comp,c:'var(--s1)',fill:true}],90);
+  lineChart(el('dOtif'),trendOf(s),{lo:50,hi:100,ticks:[50,75,100],suf:'%',target:90,targetLabel:'Hedef %90',label:'Aylık OTIF',every:2});
+}
+
+/* ================= Siparişler ================= */
+function stageInfo(o){var g=o.guar;return [
+  ['Koşullar mühürlendi','Alıcı ve tedarikçi imzası'],
+  [g==='kosullu'?'Tutar emanet hesabında bloke':g==='teminat'?'Teminat mektubu kaydedildi':g==='akreditif'?'Akreditif açıldı':'Açık hesap taahhüdü','Ödeme güvencesi'],
+  ['Sevkiyat · '+o.term,'Teslim noktası: '+TERMS[o.term]],
+  ['Mal kabul','Teslim alan: '+o.receiver],
+  ['Giriş kalite kontrolü',o.dispute?'İtiraz ve hakem süreci':'Kabul veya itiraz'],
+  ['Mutabakat ve karne','Kalan tutar ve karne güncellemesi'],
+  ['Saha izleme','Garanti süresince geri bildirim']]}
+function vSiparis(V){
+  if(!st.selOrder||!st.orders.some(function(o){return o.id===st.selOrder}))st.selOrder=st.orders[0].id;
+  V.innerHTML='<div class="vh"><div><div class="eyebrow">Satın alma</div><h1>Siparişler</h1><p>Her adım Solana üzerinde imzalı bir kayıttır. Sizden beklenen adımları buradan tamamlayın; tedarikçi, banka ve laboratuvar adımları bu prototipte simüle edilir.</p></div></div>'+
+   '<section class="panel"><div class="tblw"><table><thead><tr><th>Sipariş</th><th>Tedarikçi</th><th>Malzeme</th><th class="n">Tutar</th><th>Ödeme</th><th>Teslim</th><th>Durum</th></tr></thead><tbody id="oList"></tbody></table></div></section>'+
+   '<div class="g12"><section class="panel" id="oTl"></section><section class="panel" id="oDet"></section></div>';
+  el('oList').innerHTML=st.orders.map(function(o){var s=supById(o.sup),si=stageInfo(o),stt=o.stage>=6?(o.iqc==='red'?['bad','İade ile kapandı']:['ok','Kapandı · saha izleme']):o.stage===4&&o.dispute==='open'?['bad','İtirazda']:[o.stage===4||o.stage===3?'warn':'br',si[o.stage][0]];
+    return '<tr class="rowlink'+(o.id===st.selOrder?' sel':'')+'" data-o="'+o.id+'" tabindex="0"><td class="mono">'+o.id+'</td><td>'+esc(supName(s,o.cat))+'</td><td>'+CATS[o.cat].name+' · '+o.qty+' t</td><td class="n">'+tlk(o.total)+'</td><td>'+(o.vade?o.vade+' gün':'Peşin')+' · '+GUAR[o.guar].n+'</td><td>'+o.term+'</td><td><span class="pill '+stt[0]+'">'+esc(stt[1])+'</span></td></tr>'}).join('');
+  el('oList').querySelectorAll('tr').forEach(function(tr){function f(){st.selOrder=tr.dataset.o;render()}tr.onclick=f;tr.onkeydown=function(e){if(e.key==='Enter')f()}});
+  var o=st.orders.filter(function(x){return x.id===st.selOrder})[0],s=supById(o.sup),si=stageInfo(o);
+  var h='<div class="ph"><h2>'+o.id+' · yaşam döngüsü</h2><span class="foot">'+fdate(o.created)+'</span></div><ol class="tl">';
+  si.forEach(function(x,i){var t=o.log.filter(function(l){return stageOfIx(l.ix)===i}).slice(-1)[0];
+    h+='<li class="'+(i<o.stage||(i===6&&o.field.length)?'done':i===o.stage?'cur':'pend')+'"><span class="d">'+(i<o.stage||(i===6&&o.field.length)?'✓':i+1)+'</span><div><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span>'+(t?'<br><span>'+fdt(t.time)+' · '+esc(t.who)+' · </span><button class="tl-tx" data-sig="'+t.sig+'" style="background:none;border:0;padding:0;cursor:pointer"><code>tx '+t.sig.slice(0,8)+'…</code></button>':'')+'</div></li>'});
+  h+='</ol>';el('oTl').innerHTML=h;
+  el('oTl').querySelectorAll('[data-sig]').forEach(function(b){b.onclick=function(){st.verifyOrder=o.id;go('zincir')}});
+  var acts='',msg='';
+  if(o.stage===0){msg='Koşullar sizin imzanızla mühürlendi. Tedarikçinin aynı koşulları imzalaması bekleniyor.';acts='<button class="btn" data-a="next">Tedarikçi onayını simüle et</button>'}
+  else if(o.stage===1){msg={kosullu:'Tutarın emanet hesabında bloke edilmesi için ödeme kuruluşuna talimat verin. Para tedarikçiye ancak koşullar sağlanınca aktarılır.',teminat:'Bankanızın teminat mektubunu sisteme kaydedin.',akreditif:'Bankanızın açtığı teyitli akreditifi kaydedin.',acik:'Açık hesap taahhüdünüzü onaylayın.'}[o.guar];acts='<button class="btn br" data-a="next">'+{kosullu:'Tutarı bloke et',teminat:'Teminat mektubunu kaydet',akreditif:'Akreditifi kaydet',acik:'Taahhüdü onayla'}[o.guar]+'</button>'}
+  else if(o.stage===2){msg='Tedarikçi üretim ve sevkiyat aşamasında. Tahmini teslim: '+fdate(o.eta)+'.';acts='<button class="btn" data-a="ontime">Sevkiyatı simüle et (zamanında)</button><button class="btn" data-a="late">Sevkiyatı simüle et (gecikmeli)</button>'}
+  else if(o.stage===3){msg='Malzeme '+(o.term==='DAP'||o.term==='DDP'?'tesisinize ulaştı':'teslim noktasında; taşımayı siz organize ediyorsunuz')+'. '+o.receiver+' olarak teslim alındığını imzalayın.';acts='<button class="btn br" data-a="next">Teslim aldım · imzala</button>'}
+  else if(o.stage===4&&o.dispute!=='open'){msg='Giriş kalite kontrolünü yapın ve sonucu kaydedin. Sonuçlar tedarikçinin karnesine işlenir.';acts='<button class="btn ok" data-a="accept">Kalite kabulü</button><button class="btn bad" data-a="dispute">İtiraz aç</button>'}
+  else if(o.stage===4){msg='Numune akrediteli hakem laboratuvarda. Karar zincire laboratuvarın imzasıyla yazılacak. Taraflar karara karşı bir kez bağımsız ekspertizle yeniden inceleme talep edebilir.';acts='<button class="btn" data-a="supplier">Karar: tedarikçi haklı</button><button class="btn" data-a="buyer">Karar: alıcı haklı</button>'}
+  else if(o.stage===5){msg='Mutabakat: kalan tutar ödeme koşuluna göre aktarılır ve karneler güncellenir.';acts='<button class="btn br" data-a="next">Mutabakatı onayla</button>'}
+  else{msg='Ürün garanti süresinde ('+s.war+' ay). Kullanımdaki performansı bildirin; bu bildirim tedarikçinin saha performansı puanına işlenir.'+(o.field.length?' Bildirilen: '+o.field.map(function(f){return (f.ok?'olumlu':'olumsuz')+' ('+fdate(f.at)+')'}).join(', ')+'.':'');acts='<button class="btn ok" data-a="pos">Olumlu geri bildirim</button><button class="btn bad" data-a="neg">Olumsuz geri bildirim</button>'}
+  var fl=o.guar==='kosullu'?'<div class="money"><div class="mb"><span>Emanet hesabında</span><b>'+tl(o.funds.locked)+'</b></div><div class="mb"><span>Tedarikçiye aktarılan</span><b>'+tl(o.funds.paid)+'</b></div><div class="mb"><span>Size iade</span><b>'+tl(o.funds.refund)+'</b></div></div>':'<div class="callout"><b>'+GUAR[o.guar].n+':</b> '+GUAR[o.guar].d+'. Ödeme '+(o.vade?'vade tarihinde':'teslimde')+' güvence koşullarına göre yapılır; avans uygulanmaz.</div>';
+  el('oDet').innerHTML='<div class="ph"><h2>Sipariş ayrıntısı</h2><button class="btn sm" id="oSup">Tedarikçi profili</button></div>'+
+   '<div class="summ">'+[['Tedarikçi',supName(s,o.cat)],['Malzeme',CATS[o.cat].mat],['Miktar · birim fiyat',o.qty+' ton · '+tl(o.unit)],['Toplam',tl(o.total)],['Ödeme',(o.vade?o.vade+' gün':'Peşin')+' · '+GUAR[o.guar].n],['Avans',o.adv?'%'+Math.round(o.adv*100)+' sevkiyatta':'Uygulanmaz'],['Teslim',o.term+' · '+o.place],['Teslim alacak',o.receiver]].map(function(x){return '<div><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>'}).join('')+'</div>'+
+   fl+'<div class="callout" style="background:var(--raised)">'+esc(msg)+'</div><div class="acts">'+acts+'</div>'+
+   '<div class="foot">Koşul özeti (SHA-256): <code class="h">'+o.hashes.terms+'</code></div>';
+  el('oSup').onclick=function(){openSup(o.sup,o.cat)};
+  el('oDet').querySelectorAll('[data-a]').forEach(function(b){b.onclick=function(){var a=b.dataset.a,before=o.log.length;
+    if(a==='accept')advance(o,null);else if(a==='next')advance(o,null);else advance(o,a);
+    var t=o.log[o.log.length-1];if(o.log.length>before)toast(t.note,t.sig);render()}});
+}
+function stageOfIx(ix){return {verify_activity_certificate:0,create_order:0,sign_order:0,attest_funding:1,attest_guarantee:1,attest_letter_of_credit:1,confirm_open_account:1,record_shipment:2,release_advance:2,present_documents:2,confirm_receipt:3,accept_delivery:4,open_dispute:4,resolve_dispute:4,settle_order:5,record_field_feedback:6}[ix]}
+
+/* ================= Tedarikçiler ================= */
+function vTed(V){
+  var cat=st.kCat,w=defWeights(cat);
+  V.innerHTML='<div class="vh"><div><div class="eyebrow">Ağ</div><h1>Tedarikçiler</h1><p>Ağdaki tedarikçilerin doğrulanmış profilleri. Profiller tedarikçiye aittir ve her üretici aynı kayıtları görür.</p></div><div class="seg" id="tCat">'+CATK.map(function(k){return '<button type="button" data-k="'+k+'" aria-pressed="'+(k===cat)+'">'+CATS[k].name+'</button>'}).join('')+'</div></div>'+
+   '<div class="g3" id="tGrid"></div>';
+  el('tCat').querySelectorAll('button').forEach(function(b){b.onclick=function(){st.kCat=b.dataset.k;render()}});
+  el('tGrid').innerHTML=SUPS.map(function(s){var ix=idxOf(s,cat,w);return '<section class="panel"><div class="ph"><h2>'+esc(supName(s,cat))+'</h2>'+(ix==null?'<span class="pill neu">Yeni</span>':'<span class="pill '+(ix>=85?'ok':ix>=70?'warn':'bad')+'">'+fmt(ix,1)+'</span>')+'</div><p class="foot">'+esc(s.loc)+' · '+s.del+' teslimat · '+s.shifts+' vardiya · garanti '+s.war+' ay</p>'+
+    '<div style="display:flex;flex-direction:column;gap:7px">'+crow('OTIF','',s.otif)+crow('Kalite','',kaliteOf(s,cat,w))+crow('Beyan uyumu','',s.decl)+'</div><div class="acts">'+(s.cert==='expired'?'<span class="pill bad">✕ Belge süresi dolmuş</span>':s.cert==='soon'?'<span class="pill warn">! Belge doluyor</span>':'<span class="pill ok">✓ Belgeler geçerli</span>')+(s.rnd?'<span class="pill neu">Ar-Ge</span>':'')+'<button class="btn sm" data-s="'+s.id+'" style="margin-left:auto">Profili aç</button></div></section>'}).join('');
+  el('tGrid').querySelectorAll('[data-s]').forEach(function(b){b.onclick=function(){openSup(b.dataset.s,cat)}});
+}
+
+/* ================= Karneler ================= */
+function vKarne(V){
+  var cat=st.kCat,w=defWeights(cat),bIdx=60*BUYER.onTime/BUYER.pays+25*(1-BUYER.delay/30)+15*(1-BUYER.unjust/BUYER.disputes);
+  var rows=SUPS.map(function(s){return {s:s,ix:idxOf(s,cat,w)}}).sort(function(a,b){if(a.ix==null)return 1;if(b.ix==null)return -1;return b.ix-a.ix});
+  V.innerHTML='<div class="vh"><div><div class="eyebrow">Ağ</div><h1>Karneler</h1><p>Firmanızın tedarikçilere görünen ödeme karnesi ve tedarikçilerinizin karşılaştırmalı karneleri.</p></div><div class="seg" id="kCat">'+CATK.map(function(k){return '<button type="button" data-k="'+k+'" aria-pressed="'+(k===cat)+'">'+CATS[k].name+'</button>'}).join('')+'</div></div>'+
+  '<div class="g12"><section class="panel"><div class="ph"><h2>Firmanızın karnesi</h2><span class="pill br">Alıcı endeksi</span></div><div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:var(--display);font-weight:800;font-size:46px;line-height:1">'+fmt(bIdx,1)+'</span><span class="foot">Örnek Üretici A.Ş.</span></div>'+
+   '<div style="display:flex;flex-direction:column;gap:9px">'+crow('Vadesinde ödeme oranı','%60',100*BUYER.onTime/BUYER.pays)+crow('Gecikme günü puanı','%25',100*(1-BUYER.delay/30))+crow('Haklı itiraz oranı','%15',100*(1-BUYER.unjust/BUYER.disputes))+'</div>'+
+   '<p class="foot">'+BUYER.pays+' ödeme · '+BUYER.onTime+' vadesinde · ortalama gecikme '+fmt(BUYER.delay,1)+' gün · '+BUYER.disputes+' itirazdan '+BUYER.unjust+' haksız. Bu karne teklif vermeden önce tedarikçilere görünür; yüksek endeks daha uygun teklif almanızı sağlar.</p></section>'+
+  '<section class="panel"><div class="ph"><h2>Tedarikçi karşılaştırması · '+CATS[cat].name+'</h2><span class="foot">Sıralama endekse göre</span></div><div class="tblw"><table><thead><tr><th>Tedarikçi</th><th class="n">Endeks</th><th class="n">OTIF</th><th class="n">Kalite</th><th class="n">Saha</th><th class="n">Beyan</th><th class="n">PPM</th><th>Belgeler</th></tr></thead><tbody>'+
+   rows.map(function(r){var s=r.s;return '<tr class="rowlink" data-s="'+s.id+'" tabindex="0"><td><b>'+esc(supName(s,cat))+'</b><br><span class="foot">'+esc(s.loc)+'</span></td><td class="n"><b>'+(r.ix==null?'–':fmt(r.ix,1))+'</b></td><td class="n">%'+s.otif+'</td><td class="n">%'+fmt(kaliteOf(s,cat,w),0)+'</td><td class="n">'+(s.saha==null?'–':'%'+s.saha)+'</td><td class="n">%'+s.decl+'</td><td class="n">'+fmt(s.ppm)+'</td><td>'+(s.cert==='expired'?'<span class="pill bad">Süresi dolmuş</span>':s.cert==='soon'?'<span class="pill warn">Doluyor</span>':'<span class="pill ok">Geçerli</span>')+'</td></tr>'}).join('')+
+   '</tbody></table></div><p class="foot">Satıra tıklayarak tedarikçi profilini açın.</p></section></div>';
+  el('kCat').querySelectorAll('button').forEach(function(b){b.onclick=function(){st.kCat=b.dataset.k;render()}});
+  V.querySelectorAll('tr[data-s]').forEach(function(tr){function f(){openSup(tr.dataset.s,cat)}tr.onclick=f;tr.onkeydown=function(e){if(e.key==='Enter')f()}});
+}
+
+/* ================= Ödemeler ================= */
+function vOdeme(V){
+  var locked=st.orders.reduce(function(a,o){return a+o.funds.locked},0),paid=st.orders.reduce(function(a,o){return a+o.funds.paid},0),guars=st.orders.filter(function(o){return o.guar!=='kosullu'&&o.stage<6});
+  V.innerHTML='<div class="vh"><div><div class="eyebrow">Finans</div><h1>Ödemeler</h1><p>Kilitli tutarlar, ödeme takvimi ve ödeme güvenceleri. Ülkenizin mevzuatına göre ödeme yolu otomatik seçilir.</p></div></div>'+
+   '<div class="kpis"><div class="kpi"><span>Emanet hesabında kilitli</span><b>'+tlk(locked)+'</b><small>Koşullu ödeme</small></div><div class="kpi"><span>Bu çeyrek aktarılan</span><b>'+tlk(paid)+'</b><small>Koşullar sağlanarak</small></div><div class="kpi"><span>Aktif güvence aracı</span><b>'+guars.length+'</b><small>Teminat mektubu, akreditif</small></div><div class="kpi"><span>Vadesinde ödeme</span><b>%'+fmt(100*BUYER.onTime/BUYER.pays,1)+'</b><small>Son 12 ay</small></div><div class="kpi"><span>Ödeme yolu</span><b style="font-size:16px">TRY · ödeme kuruluşu</b><small>Türkiye mevzuatı</small></div></div>'+
+   '<div class="g21"><section class="panel"><div class="ph"><h2>Sipariş bazında fon durumu</h2></div><div class="tblw"><table><thead><tr><th>Sipariş</th><th>Güvence</th><th class="n">Toplam</th><th class="n">Kilitli</th><th class="n">Aktarılan</th><th class="n">İade</th><th>Vade</th></tr></thead><tbody>'+
+   st.orders.map(function(o){return '<tr><td class="mono">'+o.id+'</td><td>'+GUAR[o.guar].n+'</td><td class="n">'+tlk(o.total)+'</td><td class="n">'+(o.funds.locked?tlk(o.funds.locked):'–')+'</td><td class="n">'+(o.funds.paid?tlk(o.funds.paid):'–')+'</td><td class="n">'+(o.funds.refund?tlk(o.funds.refund):'–')+'</td><td>'+(o.vade?o.vade+' gün':'Peşin')+'</td></tr>'}).join('')+
+   '</tbody></table></div></section>'+
+   '<section class="panel"><div class="ph"><h2>Ödeme yolları</h2></div><div class="list">'+
+    '<div class="li"><span class="ic ok">₺</span><div><b>Lisanslı ödeme kuruluşu · TRY</b><span>Aktif · Türkiye\'de kripto varlıkla ödeme yapılamadığı için varsayılan yol. Solana koşulları ve kanıtları tutar.</span></div><span class="pill ok">Aktif</span></div>'+
+    '<div class="li"><span class="ic br">◎</span><div><b>Stablecoin · Solana kasa hesabı</b><span>Mevzuatın izin verdiği ülkelerde ve sınır ötesi ticarette açılır.</span></div><span class="pill neu">Bölgenizde kapalı</span></div>'+
+    '<div class="li"><span class="ic br">B</span><div><b>Banka güvenceleri</b><span>Teminat mektubu ve teyitli akreditif; banka onayı zincire kaydedilir.</span></div><span class="pill ok">Aktif</span></div></div></section></div>'+
+   '<section class="panel"><div class="ph"><h2>Ödeme güvencesi araçları</h2></div>'+(guars.length?'<div class="tblw"><table><thead><tr><th>Sipariş</th><th>Araç</th><th>Banka</th><th class="n">Tutar</th><th>Durum</th></tr></thead><tbody>'+guars.map(function(o){return '<tr><td class="mono">'+o.id+'</td><td>'+GUAR[o.guar].n+'</td><td>Örnek Bankası A.Ş.</td><td class="n">'+tlk(o.total)+'</td><td><span class="pill '+(o.stage>=2?'ok':'warn')+'">'+(o.stage>=2?'Kayıtlı · zincirde':'Kayıt bekliyor')+'</span></td></tr>'}).join('')+'</tbody></table></div>':'<p class="foot">Aktif güvence aracı yok.</p>')+'</section>'+
+   '<div class="g21"><section class="panel"><div class="ph"><h2>Tedarik finansmanı · erken tahsilat talepleri</h2><span class="pill br">İş ortağı banka</span></div><div class="tblw"><table><thead><tr><th>Sipariş</th><th>Tedarikçi</th><th class="n">Alacak</th><th>Vade</th><th class="n">İskonto</th><th>Durum</th></tr></thead><tbody id="finRows"></tbody></table></div><p class="foot">Tedarikçi, onaylanmış alacağını vadesinden önce iş ortağı bankadan tahsil eder; siz vadede bankaya ödersiniz. Onayınız zincire kaydedilir. Oranlar örnektir.</p></section>'+
+   '<section class="panel"><div class="ph"><h2>Alıcı finansmanı</h2></div><div class="summ"><div><span>Vadeli alım limiti</span><b>5.000.000 ₺</b></div><div><span>Kullanılan</span><b>1.200.000 ₺</b></div><div><span>Dayanak</span><b>Ödeme endeksi '+fmt(60*BUYER.onTime/BUYER.pays+25*(1-BUYER.delay/30)+15*(1-BUYER.unjust/BUYER.disputes),1)+'</b></div></div><p class="foot">Limit, iş ortağı finans kuruluşunun kendi değerlendirmesiyle belirlenir; SolChain B2B doğrulanmış ödeme geçmişinizi sizin onayınızla paylaşır. SolChain bir banka veya ödeme kuruluşu değildir; finansman lisanslı iş ortakları üzerinden sunulur.</p></section></div>';
+  st.fin=st.fin||{};
+  var fr=st.orders.filter(function(o){return o.stage>=5&&o.vade>0&&o.iqc!=='red'});
+  el('finRows').innerHTML=fr.length?fr.map(function(o){var s=supById(o.sup),rec=o.total*(1-o.adv),due=addDays(o.created,s.lead+o.vade),mo=Math.max(.5,(due-TODAY)/(30*864e5)),disc=rec*.024*mo,stt=st.fin[o.id];
+    return '<tr><td class="mono">'+o.id+'</td><td>'+esc(supName(s,o.cat))+'</td><td class="n">'+tlk(rec)+'</td><td>'+fdate(due)+'</td><td class="n">'+tl(disc)+'</td><td>'+(stt?'<span class="pill ok">Onaylandı · banka ödedi</span>':'<button class="btn sm br" data-f="'+o.id+'">Onayla</button>')+'</td></tr>'}).join(''):'<tr><td colspan="6" class="foot">Vadesi bekleyen onaylı alacak yok. Bir siparişi mutabakata kadar ilerlettiğinizde burada görünür.</td></tr>';
+  V.querySelectorAll('[data-f]').forEach(function(b){b.onclick=function(){var o=st.orders.filter(function(x){return x.id===b.dataset.f})[0];st.fin[o.id]=true;var t=tx(o,'approve_early_payment','Alıcı','Erken tahsilat onaylandı; iş ortağı banka tedarikçiye ödeme yaptı');toast('Erken tahsilat onaylandı.',t.sig);render()}});
+}
+
+/* ================= Zincir kayıtları ================= */
+function vZincir(V){
+  var oid=st.verifyOrder||st.orders[0].id,o=st.orders.filter(function(x){return x.id===oid})[0]||st.orders[0],txt=st.docEdit!=null&&st.docEdit.id===o.id?st.docEdit.t:termsText(o);
+  V.innerHTML='<div class="vh"><div><div class="eyebrow">Kayıt</div><h1>Zincir kayıtları</h1><p>Firmanızla ilgili tüm Solana işlemleri. Her kayıt ilgili tarafın imzasını taşır ve sonradan değiştirilemez.</p></div><span class="chip">Program '+short(addrOf(777))+'</span></div>'+
+   '<div class="g21"><section class="panel"><div class="ph"><h2>İşlemler</h2><span class="foot">'+st.txs.length+' kayıt</span></div><div class="tblw"><table><thead><tr><th>Zaman</th><th>Kayıt</th><th>Talimat</th><th>İmzalayan</th><th>İmza</th></tr></thead><tbody>'+
+   st.txs.slice(0,40).map(function(t){return '<tr><td>'+fdt(t.time)+'</td><td><span class="mono">'+t.order+'</span><br><span class="foot">'+esc(t.note)+'</span></td><td><span class="tag">'+t.ix+'</span></td><td>'+esc(t.who)+'</td><td class="mono" style="font-size:11.5px">'+t.sig.slice(0,8)+'…'+t.sig.slice(-4)+'<br><span class="foot">slot '+fmt(t.slot)+'</span></td></tr>'}).join('')+'</tbody></table></div></section>'+
+   '<section class="panel"><div class="ph"><h2>Belge doğrulama</h2></div><p class="foot">Belgenin yalnızca SHA-256 özeti zincirdedir. Metinde tek bir karakter değişirse özet tutmaz.</p>'+
+   '<label class="field">Sipariş<select id="vOrd">'+st.orders.map(function(x){return '<option value="'+x.id+'"'+(x.id===o.id?' selected':'')+'>'+x.id+' · sipariş koşulları</option>'}).join('')+'</select></label>'+
+   '<textarea id="vTxt" spellcheck="false" aria-label="Belge metni">'+esc(txt)+'</textarea><div class="foot">Hesaplanan: <code class="h" id="vCalc"></code></div><div class="foot">Zincirdeki: <code class="h">'+o.hashes.terms+'</code></div><div id="vRes"></div><div class="acts"><button class="btn sm" id="vReset">Orijinale dön</button></div></section></div>';
+  function chk(){var v=el('vTxt').value,h=sha256(v),r=el('vRes');el('vCalc').textContent=h;if(h===o.hashes.terms){r.className='verdict ok';r.textContent='✓ Belge zincirdeki kayıtla birebir eşleşiyor.'}else{r.className='verdict bad';r.textContent='✕ Eşleşmiyor: belge kaydedildikten sonra değiştirilmiş.'}}
+  el('vTxt').oninput=function(e){st.docEdit={id:o.id,t:e.target.value};chk()};
+  el('vOrd').onchange=function(e){st.verifyOrder=e.target.value;st.docEdit=null;render()};
+  el('vReset').onclick=function(){st.docEdit=null;render()};chk();
+}
+
+/* ================= Satın alma asistanı ve Malzeme Danışmanı ================= */
+var MATCASES=[
+ {k:/bahçe|dış mekân|dış mekan|mobilya|iskelet/i,cat:'metal',title:'Dış mekânda kullanılan metal mobilya iskeleti',warn:null,rows:[['DC01 sac + toz boya',true,'Düşük maliyet, kolay şekillendirme','Koruma tamamen boyaya bağlı',100,5],['Galvanizli sac DX51D Z275',false,'Uzun korozyon direnci','Kaynak öncesi yüzey hazırlığı',112,3],['Alüminyum 5754',false,'Hafif, paslanmaz','Daha pahalı, farklı kaynak yöntemi',145,1]]},
+ {k:/ambalaj|kap |kapak|kutu|gıda/i,cat:'plastik',title:'Gıda ambalajı kabı',warn:'Gıda ile temas eden ürün: malzeme değişikliği için gıda temas mevzuatına uygunluk belgesi ve uzman onayı gerekir.',rows:[['HDPE',true,'Kimyasal dayanım, darbe direnci','Opak; yüksek sıcaklıkta sınırlı',100,4],['PP (polipropilen)',false,'Daha yüksek ısı dayanımı','Düşük sıcaklıkta kırılganlık',96,3],['PET',false,'Şeffaflık, iyi bariyer','Isı dayanımı düşük, farklı kalıp',108,2]]},
+ {k:/boya|kaplama|tekne|deniz|korozyon/i,cat:'kimya',title:'Deniz ortamındaki çelik yüzey kaplaması',warn:null,rows:[['Alkid esaslı boya',true,'Düşük maliyet, kolay uygulama','Deniz ortamında sınırlı ömür',100,4],['Epoksi astar + poliüretan son kat',false,'Yüksek korozyon ve UV dayanımı','İki katman, daha uzun kürlenme',138,3],['Polyester toz boya',false,'Çözücüsüz, dayanıklı yüzey','Fırın gerektirir, sahada uygulanamaz',115,2]]}];
+function parseReq(t){var q=newRfq(),lc=t.toLocaleLowerCase('tr'),m;
+  if(/plastik|hdpe|granül|polimer/.test(lc))q.cat='plastik';else if(/boya|kimya/.test(lc))q.cat='kimya';else if(/kumaş|tekstil/.test(lc))q.cat='tekstil';else if(/ un |buğday|unu/.test(' '+lc+' '))q.cat='gida';else q.cat='metal';
+  q.weights=defWeights(q.cat);
+  if((m=lc.match(/(\d+[.,]?\d*)\s*ton/)))q.qty=Math.max(1,Math.round(parseFloat(m[1].replace(',','.'))));
+  if((m=lc.match(/(\d+)\s*gün\s*vade/))||(m=lc.match(/vade\S*\s*(\d+)/))){var v=+m[1];q.vade=[0,30,60,90,120].reduce(function(a,b){return Math.abs(b-v)<Math.abs(a-v)?b:a})}
+  if(/peşin/.test(lc))q.vade=0;
+  if((m=lc.match(/teslim\S*\s*(?:süre\S*\s*)?(\d+)\s*gün/))||(m=lc.match(/(\d+)\s*gün\s*içinde/)))q.deadline=Math.max(7,Math.min(30,+m[1]));
+  var prio=/ucuz|maliyet|en uygun fiyat/.test(lc)?'maliyet':/kalite/.test(lc)?'kalite':'dengeli';
+  return {q:q,prio:prio}}
+function vAsistan(V){
+  st.asst=st.asst||{tab:'satin',q:'Bu ay 100 ton plastik ham maddeye ihtiyacım var. Teslimat 21 gün, ödeme vadesi 60 gün; kaliteye uygun en avantajlı üç firmayı bul.',res:null,m:'Dış mekânda kullanılan metal bahçe mobilyası iskeleti',mres:null};
+  var A=st.asst;
+  V.innerHTML='<div class="vh"><div><div class="eyebrow">Yapay zekâ destekli</div><h1>Satın alma asistanı</h1><p>İhtiyacınızı kendi cümlelerinizle yazın; asistan teklif talebini hazırlar, ağdaki doğrulanmış tedarikçileri karşılaştırır ve gerekçesiyle önerir. Puanlar yapay zekâ ile değil, zincirdeki kayıtlardan hesaplanır.</p></div><div class="seg" id="aTab"><button type="button" data-t="satin" aria-pressed="'+(A.tab==='satin')+'">Satın alma</button><button type="button" data-t="malzeme" aria-pressed="'+(A.tab==='malzeme')+'">Malzeme Danışmanı</button></div></div><div id="aBody" style="display:flex;flex-direction:column;gap:16px"></div>';
+  el('aTab').querySelectorAll('button').forEach(function(b){b.onclick=function(){A.tab=b.dataset.t;render()}});
+  var B=el('aBody');
+  if(A.tab==='satin'){
+    B.innerHTML='<section class="panel"><label class="field">İhtiyacınızı yazın<textarea id="aQ" style="min-height:90px;font-family:var(--body);font-size:14px">'+esc(A.q)+'</textarea></label><div class="acts"><button class="btn br" id="aRun">Analiz et</button><span class="foot">Örnek: “40 ton DC01 sac, 14 gün içinde, peşin, en uygun fiyat”</span></div></section><div id="aRes" style="display:flex;flex-direction:column;gap:16px"></div>';
+    el('aRun').onclick=function(){A.q=el('aQ').value;A.res=parseReq(A.q);render()};
+    if(!A.res)A.res=parseReq(A.q);
+    var q=A.res.q,cat=CATS[q.cat];st.prio=A.res.prio;var ev=evaluate(q),R=el('aRes');
+    var chips=[['Kategori',cat.name+' · '+cat.mat],['Miktar',q.qty+' ton'],['Teslim',q.deadline+' gün içinde'],['Vade',q.vade?q.vade+' gün':'Peşin'],['Öncelik',{dengeli:'Dengeli',kalite:'Kalite',maliyet:'Maliyet'}[A.res.prio]],['Güvence',GUAR[q.guar].n]];
+    var ok=ev.ok.filter(function(x){return x.score!=null}),top=ok.slice(0,3);
+    var h='<section class="panel"><div class="ph"><h2>Anladığım ihtiyaç</h2><button class="btn sm" id="aToRfq">Teklif talebine dönüştür →</button></div><div class="summ">'+chips.map(function(c){return '<div><span>'+c[0]+'</span><b>'+esc(c[1])+'</b></div>'}).join('')+'</div></section>';
+    if(!top.length)h+='<div class="elim">Bu kısıtlarla uygun tedarikçi bulunamadı. Teslim süresini veya vadeyi esnetmeyi deneyin.</div>';
+    else{var avg=ok.reduce(function(a,x){return a+x.o.landed},0)/ok.length,best=top[0],sav=(avg-best.o.landed)*q.qty;
+      h+='<section class="panel"><div class="ph"><h2>Önerilen '+top.length+' tedarikçi</h2><span class="foot">'+ev.ok.length+' uygun · '+ev.out.length+' elendi</span></div><div class="g3">'+top.map(function(x,i){var s=x.s,lv=levelOf(s,q.cat);return '<div class="panel" style="padding:14px;'+(i===0?'border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)':'')+'"><div class="ph"><h3>'+(i+1)+'. '+esc(supName(s,q.cat))+'</h3><span class="pill '+lv.c+'">'+lv.n+'</span></div><div class="summ"><div><span>Endeks</span><b>'+fmt(x.ix,1)+'</b></div><div><span>Kapıda maliyet</span><b>'+tl(x.o.landed)+'/t</b></div><div><span>Teslim</span><b>'+s.lead+' gün</b></div></div><p class="foot">'+(i===0?'En yüksek eşleşme skoru. ':'')+'OTIF %'+s.otif+', kalite %'+fmt(kaliteOf(s,q.cat,q.weights),0)+', beyan uyumu %'+s.decl+(riskOf(s).length?'. Dikkat: '+esc(riskOf(s)[0][1]):'')+'.</p><button class="btn sm" data-p="'+s.id+'">Profili aç</button></div>'}).join('')+'</div>'+
+       '<div class="callout"><b>Tasarruf:</b> Önerilen ilk tedarikçi, uygun tekliflerin ortalamasına göre bu siparişte yaklaşık '+tl(Math.max(0,sav))+' daha avantajlı (kapıda toplam maliyet, bugünkü değerle).</div></section>';
+      var s0=best.s,rows=[0,30,60,90,120].filter(function(v){return v<=s0.vmax}).map(function(v){var o=offerFor(s0,Object.assign({},q,{vade:v}));return {v:v,o:o}}).filter(function(r){return r.o});
+      var bestV=rows.reduce(function(a,b){return b.o.landed<a.o.landed?b:a});
+      h+='<section class="panel"><div class="ph"><h2>Vade analizi · '+esc(supName(s0,q.cat))+'</h2><span class="foot">Finansman maliyetiniz aylık %'+fmt(q.c*100,1)+'</span></div><div class="tblw"><table><thead><tr><th>Vade</th><th class="n">Teklif fiyatı</th><th class="n">Bugünkü değer</th><th class="n">Kapıda maliyet</th><th></th></tr></thead><tbody>'+rows.map(function(r){return '<tr><td>'+(r.v?r.v+' gün':'Peşin')+'</td><td class="n">'+tl(r.o.unit)+'</td><td class="n">'+tl(r.o.pv)+'</td><td class="n">'+tl(r.o.landed)+'</td><td>'+(r===bestV?'<span class="pill ok">En avantajlı</span>':'')+'</td></tr>'}).join('')+'</tbody></table></div><p class="foot">'+(bestV.v?bestV.v+' gün vadeli alım':'Peşin alım')+' finansman maliyetiniz dikkate alındığında en düşük toplam maliyeti veriyor.</p></section>';}
+    R.innerHTML=h;
+    el('aToRfq').onclick=function(){st.rfq=q;st.rfqStep=4;st.rfqPublished=false;go('rfq')};
+    R.querySelectorAll('[data-p]').forEach(function(b){b.onclick=function(){openSup(b.dataset.p,q.cat)}});
+  }else{
+    B.innerHTML='<section class="panel"><label class="field">Üreteceğiniz ürünü ve kullanım koşullarını tanımlayın<input type="text" id="mQ" value="'+esc(A.m)+'"></label><div class="acts"><button class="btn br" id="mRun">Alternatifleri göster</button><span class="foot">Örnekler: “gıda ambalajı kabı”, “deniz ortamında çelik kaplama”</span></div></section><div id="mRes"></div>';
+    el('mRun').onclick=function(){A.m=el('mQ').value;render()};
+    var c=MATCASES.filter(function(x){return x.k.test(A.m)})[0],R2=el('mRes');
+    if(!c){R2.innerHTML='<div class="elim">Bu ürün için yeterli doğrulanmış veri yok. Danışman veri olmayan konuda öneri üretmez; ürün tanımını ham madde grubuyla birlikte yazmayı deneyin.</div>';return}
+    R2.innerHTML='<section class="panel"><div class="ph"><h2>'+esc(c.title)+'</h2><span class="pill br">'+CATS[c.cat].name+'</span></div>'+(c.warn?'<div class="callout" style="background:var(--warn-soft)"><b style="color:var(--warn)">Uyarı:</b> '+esc(c.warn)+'</div>':'')+
+      '<div class="tblw"><table><thead><tr><th>Alternatif</th><th>Avantaj</th><th>Dikkat edilecek</th><th class="n">Göreli maliyet</th><th class="n">Ağda</th><th></th></tr></thead><tbody>'+c.rows.map(function(r){return '<tr><td><b>'+esc(r[0])+'</b>'+(r[1]?' <span class="tag">mevcut</span>':'')+'</td><td>'+esc(r[2])+'</td><td>'+esc(r[3])+'</td><td class="n"><div style="display:flex;gap:8px;align-items:center;justify-content:flex-end"><div class="track" style="width:80px"><i style="width:'+(100*r[4]/150)+'%'+(r[1]?';background:var(--faint)':'')+'"></i></div>'+r[4]+'</div></td><td class="n">'+r[5]+' tedarikçi</td><td><button class="btn sm" data-c="'+c.cat+'">Talep oluştur</button></td></tr>'}).join('')+'</tbody></table></div>'+
+      '<p class="foot">Kaynaklar: SolChain sektör şablonları, ilgili standartlar ve ağdaki tedarikçilerin zincirde kayıtlı kalite verileri. Göreli maliyetler örnektir. Malzeme değişikliği için ürün mühendisi onayı ve numune testi önerilir.</p></section>';
+    R2.querySelectorAll('[data-c]').forEach(function(b){b.onclick=function(){st.rfq=newRfq();st.rfq.cat=b.dataset.c;st.rfq.weights=defWeights(b.dataset.c);st.rfqStep=0;st.rfqPublished=false;go('rfq')}});
+  }
+}
+
+/* ================= Risk merkezi ================= */
+function vRisk(V){
+  var al=riskAlerts(),bad=al.filter(function(a){return a[0]==='bad'}).length;
+  V.innerHTML='<div class="vh"><div><div class="eyebrow">Ağ</div><h1>Risk merkezi</h1><p>Tedarik zincirinizdeki riskleri önceden görün: performans düşüşü, kapasite aşımı, belge süresi, finansal ve üretim bildirimleri, tek kaynak bağımlılığı ve fiyat hareketleri.</p></div></div>'+
+   '<div class="kpis"><div class="kpi"><span>Kritik</span><b>'+bad+'</b><small>Hemen aksiyon</small></div><div class="kpi"><span>Uyarı</span><b>'+(al.length-bad)+'</b><small>İzlenmeli</small></div><div class="kpi"><span>İzlenen tedarikçi</span><b>'+SUPS.length+'</b><small>Metal kategorisi</small></div><div class="kpi"><span>Güncel olmayan faaliyet belgesi</span><b>'+SUPS.filter(function(s){return SUPX[s.id].act>90}).length+'</b><small>90 günden eski</small></div><div class="kpi"><span>Açık bildirim</span><b>'+SUPS.reduce(function(a,s){return a+SUPX[s.id].notices.length},0)+'</b><small>Tedarikçi ve resmî kaynak</small></div></div>'+
+   '<section class="panel"><div class="ph"><h2>Uyarılar</h2><span class="foot">Olumsuz bilgi yalnızca resmî kaynaktan veya tedarikçinin kendi bildiriminden gelir; tedarikçinin açıklama hakkı vardır.</span></div><div class="tblw"><table><thead><tr><th>Düzey</th><th>Kaynak</th><th>Konu</th><th>Tür</th><th></th></tr></thead><tbody>'+
+   al.map(function(a,i){return '<tr><td><span class="pill '+a[0]+'">'+(a[0]==='bad'?'Kritik':'Uyarı')+'</span></td><td>'+esc(a[1])+'</td><td>'+esc(a[2])+'</td><td><span class="tag">'+a[4]+'</span></td><td>'+(a[4]==='belge'?'<button class="btn sm br" data-act="'+a[3]+'">Güncel belge iste</button>':a[3]?'<button class="btn sm" data-sp="'+a[3]+'">Profili aç</button>':'<a class="btn sm" href="#piyasa" style="text-decoration:none">Piyasayı gör</a>')+'</td></tr>'}).join('')+'</tbody></table></div></section>'+
+   '<section class="panel"><div class="ph"><h2>Tedarikçi süreklilik tablosu</h2></div><div class="tblw"><table><thead><tr><th>Tedarikçi</th><th>Seviye</th><th class="n">Faaliyet belgesi</th><th>Vergi</th><th>SGK</th><th class="n">Bildirim</th><th class="n">Farklı alıcı</th><th class="n">Kapasite kullanımı</th></tr></thead><tbody>'+
+   SUPS.map(function(s){var x=SUPX[s.id],lv=levelOf(s,'metal');return '<tr class="rowlink" data-sp="'+s.id+'"><td>'+esc(supName(s,'metal'))+'</td><td><span class="pill '+lv.c+'">'+lv.n+'</span></td><td class="n">'+(x.act>90?'<b style="color:var(--warn)">'+x.act+' gün</b>':x.act+' gün')+'</td><td>'+(x.tax==='ok'?'Borcu yok':'Borcu var')+'</td><td>'+(x.sgk==='ok'?'Borcu yok':x.sgk==='yap'?'Yapılandırılmış':'Muaf')+'</td><td class="n">'+x.notices.length+'</td><td class="n">'+x.buyers+'</td><td class="n">%'+Math.round(100*s.capAct/s.cap)+'</td></tr>'}).join('')+'</tbody></table></div>'+
+   '<p class="foot">Kurallar: faaliyet belgesi ilk kayıtta ve 90 günde bir yenilenir; ilk siparişte, yüksek tutarlı siparişte ve risk sinyalinden sonra güncel belge istenir. Sorununu erken bildiren tedarikçi, gizleyip sonradan tespit edilene göre daha az puan kaybeder.</p></section>';
+  V.querySelectorAll('[data-act]').forEach(function(b){b.onclick=function(){var id=b.dataset.act;SUPX[id].act=0;st.slot+=300;var sig=b58(TX,88);st.txs.unshift({sig:sig,ix:'verify_activity_certificate',order:supName(supById(id),'metal'),who:'Ticaret odası doğrulayıcı',note:'Güncel faaliyet belgesi alındı ve doğrulandı',slot:st.slot,time:new Date(TODAY)});toast('Güncel faaliyet belgesi doğrulandı.',sig);render()}});
+  V.querySelectorAll('[data-sp]').forEach(function(b){b.onclick=function(){openSup(b.dataset.sp,'metal')}});
+}
+
+/* ================= Piyasa istihbaratı ================= */
+function vPiyasa(V){
+  var cat=st.kCat,v=MKT[cat],ch=mktChange(cat),lo=Math.floor(Math.min.apply(null,v)*.97),hi=Math.ceil(Math.max.apply(null,v)*1.02),act=SUPS.filter(function(s){return s.cert!=='expired'}).length;
+  V.innerHTML='<div class="vh"><div><div class="eyebrow">Ağ</div><h1>Piyasa istihbaratı</h1><p>Ağdaki anonimleştirilmiş tekliflerden ve teslimatlardan üretilen sektör göstergeleri. Bir gösterge yalnızca en az 5 farklı firmanın verisi olduğunda yayınlanır.</p></div><div class="seg" id="pCat">'+CATK.map(function(k){return '<button type="button" data-k="'+k+'" aria-pressed="'+(k===cat)+'">'+CATS[k].name+'</button>'}).join('')+'</div></div>'+
+   '<div class="kpis"><div class="kpi"><span>Güncel fiyat endeksi</span><b>'+fmt(v[11],1)+' bin ₺</b><small>'+esc(CATS[cat].mat)+' · ton</small></div><div class="kpi"><span>Son 3 ay</span><b style="color:'+(ch>0?'var(--bad)':'var(--ok)')+'">'+(ch>0?'+':'−')+'%'+fmt(Math.abs(ch),1)+'</b><small>'+(ch>0?'Yükseliş':'Düşüş')+'</small></div><div class="kpi"><span>Aktif tedarikçi</span><b>'+act+'</b><small>Doğrulanmış, belgesi geçerli</small></div><div class="kpi"><span>Ortalama teslim süresi</span><b>12,4 gün</b><small>Son 90 gün</small></div><div class="kpi"><span>Ortalama vade farkı</span><b>%2,8 / ay</b><small>Ağdaki teklifler</small></div></div>'+
+   '<div class="g21"><section class="panel"><div class="ph"><h2>Fiyat endeksi · son 12 ay</h2><div class="legend"><span><span class="sw" style="background:var(--s1)"></span>Ağdaki teklif ortalaması, bin TRY/ton</span></div></div><div class="chart" id="pChart"></div></section>'+
+   '<section class="panel"><div class="ph"><h2>Öneriler</h2></div><div class="list">'+
+    (ch>4?'<div class="li"><span class="ic warn">↑</span><div><b>Fiyatlar yükseliyor</b><span>Alım bağlantısı veya fiyat revizyon bandı ile fiyat riskinizi sınırlayın.</span></div><span></span></div>':ch<-3?'<div class="li"><span class="ic ok">↓</span><div><b>Fiyatlar düşüyor</b><span>Kısa vadeli siparişler ve spot alım avantajlı olabilir.</span></div><span></span></div>':'<div class="li"><span class="ic br">→</span><div><b>Fiyatlar yatay</b><span>Mevcut bağlantı koşullarınız piyasa ile uyumlu.</span></div><span></span></div>')+
+    '<div class="li"><span class="ic br">%</span><div><b>Vade karşılaştırması</b><span>Finansman maliyetiniz ağ ortalamasının üzerindeyse uzun vade toplam maliyeti düşürür.</span></div><span></span></div>'+
+    '<div class="li"><span class="ic warn">!</span><div><b>Tedarik yoğunlaşması</b><span>Aktif kapasitenin yarısından fazlası Marmara bölgesinde.</span></div><span></span></div></div></section></div>'+
+   '<section class="panel"><div class="ph"><h2>Bölgesel tedarik görünümü</h2><span class="foot">Anonim, örnek veri</span></div><div class="tblw"><table><thead><tr><th>Bölge</th><th class="n">Aktif tedarikçi</th><th class="n">Ortalama teslim</th><th class="n">Fiyat (Marmara = 100)</th><th class="n">Ortalama endeks</th></tr></thead><tbody>'+
+   [['Marmara',38,11,100,88],['Ege',21,12,98,84],['İç Anadolu',14,14,96,82],['Akdeniz',9,13,99,85],['İthalat · AB',6,22,104,91]].map(function(r){return '<tr><td>'+r[0]+'</td><td class="n">'+r[1]+'</td><td class="n">'+r[2]+' gün</td><td class="n">'+r[3]+'</td><td class="n">'+r[4]+'</td></tr>'}).join('')+'</tbody></table></div></section>';
+  el('pCat').querySelectorAll('button').forEach(function(b){b.onclick=function(){st.kCat=b.dataset.k;render()}});
+  var step=(hi-lo)/2;lineChart(el('pChart'),v.map(function(x,i){return {l:MONTHS[i],v:x}}),{lo:lo,hi:hi,ticks:[lo,lo+step,hi],dec:1,label:'Fiyat endeksi',every:1});
+}
+
+/* ================= Entegrasyonlar ve roller ================= */
+function vEnteg(V){
+  st.integ=st.integ||{sap:'on',dyn:'off',logo:'off',efat:'on',psp:'on',bank:'on',lims:'test',oda:'on',api:'on'};
+  var I=[['sap','SAP S/4HANA','ERP','Satın alma talepleri içeri, siparişler ve mal kabul dışarı'],['dyn','Microsoft Dynamics 365','ERP','Aynı eşitleme şablonu'],['logo','Logo · Netsis · Mikro','ERP','Yerli ERP bağlayıcıları'],['efat','e-Fatura ve e-İrsaliye entegratörü','Belge','Teslim ve fatura kanıtı; karne bütünlüğü'],['psp','Lisanslı ödeme kuruluşu','Ödeme','Emanet hesabı, bloke ve aktarım'],['bank','İş ortağı banka','Finans','Teminat mektubu, akreditif, erken tahsilat'],['lims','Akrediteli laboratuvar (LIMS)','Kalite','Test sonuçları ve hakem kararları'],['oda','Ticaret odası ve sicil doğrulama','Uyum','Faaliyet belgesi ve resmî kayıt kontrolü'],['api','SolChain API ve webhook','Geliştirici','Kendi sistemleriniz için olay bildirimleri']];
+  var lbl={on:['ok','Bağlı'],off:['neu','Bağlı değil'],test:['warn','Test ortamı']};
+  V.innerHTML='<div class="vh"><div><div class="eyebrow">Yönetim</div><h1>Entegrasyonlar ve roller</h1><p>SolChain B2B mevcut sistemlerinizin içine yerleşir: aynı bilgiyi iki kez girmezsiniz. Kullanıcılar rollerine göre yalnızca kendi adımlarını imzalar.</p></div></div>'+
+   '<div class="g3">'+I.map(function(x){var s=lbl[st.integ[x[0]]];return '<section class="panel"><div class="ph"><h2>'+x[1]+'</h2><span class="pill '+s[0]+'">'+s[1]+'</span></div><span class="tag" style="align-self:flex-start">'+x[2]+'</span><p class="foot">'+x[3]+'</p><div class="acts">'+(st.integ[x[0]]==='on'?'<span class="foot">Son eşitleme '+fdt(new Date(TODAY.getTime()-36e5))+'</span>':'<button class="btn sm br" data-i="'+x[0]+'">Bağla</button>')+'</div></section>'}).join('')+'</div>'+
+   '<div class="g2"><section class="panel"><div class="ph"><h2>Veri akışı</h2></div><div class="tblw"><table><thead><tr><th>Olay</th><th>Yön</th><th>Sistem</th></tr></thead><tbody>'+
+   [['Satın alma talebi','ERP → SolChain','ERP'],['Sipariş ve koşullar','SolChain → ERP','ERP'],['Sevk belgesi','Entegratör → SolChain','e-İrsaliye'],['Mal kabul ve kalite','SolChain → ERP, LIMS','ERP, laboratuvar'],['Fatura','Entegratör ↔ SolChain','e-Fatura'],['Ödeme ve iade','Ödeme kuruluşu ↔ SolChain','Ödeme'],['Karne ve risk olayları','SolChain → webhook','API']].map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>'}).join('')+'</tbody></table></div></section>'+
+   '<section class="panel"><div class="ph"><h2>Roller ve yetkiler</h2></div><div class="tblw"><table><thead><tr><th>Rol</th><th>İmzalayabildiği adımlar</th></tr></thead><tbody>'+
+   [['Satın alma uzmanı','Teklif talebi, teklif karşılaştırma'],['Satın alma müdürü','Sipariş onayı (limit dahilinde), tedarikçi onayı'],['Kalite','Giriş kalite kontrolü, itiraz, saha geri bildirimi'],['Depo / mal kabul','Teslim alındı imzası'],['Finans','Ödeme güvencesi, erken tahsilat onayı'],['Yönetici','Kullanıcılar, limitler, entegrasyonlar']].map(function(r){return '<tr><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td></tr>'}).join('')+'</tbody></table></div><p class="foot">İmzalar firmaya ait çoklu imzalı hesaplar veya donanım güvenlik modülleri üzerinden atılır; kullanıcıların kripto cüzdan bilgisi gerekmez. Tüm işlemler denetim kaydı olarak saklanır.</p></section></div>';
+  V.querySelectorAll('[data-i]').forEach(function(b){b.onclick=function(){st.integ[b.dataset.i]='on';toast('Bağlantı kuruldu (prototip simülasyonu).');render()}});
+}
+
+window.addEventListener('hashchange',route);
+setInterval(function(){st.slot+=1;var s=el('slot');if(s)s.textContent='Slot '+fmt(st.slot)},450);
+route();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "v": 5,
+  "createdOnFiles": {"v": 1, "at": "2026-11-26T12:00:00Z"},
+  "lists": "css",
+  "format": {"v": 1, "shared": ["project/deck.css"]},
+  "title": "SolChain B2B · Sahne Sunumu",
+  "cover": "acilis",
+  "order": ["acilis", "kapak", "sorun", "donum", "yolculuk", "iki-yon", "seviye", "uyari", "yapayzeka", "demo", "solana", "fark", "model", "final"],
+  "sections": {
+    "s1": {"description": "Açılış: sahne üretici ve tedarikçinin", "start": "acilis"},
+    "s2": {"description": "Perde 1 · Sorun ve dönüm noktası", "start": "sorun"},
+    "s3": {"description": "Perde 2 · Çözüm: yolculuk, iki yönlü güven, seviyeler, erken uyarı, yapay zekâ", "start": "yolculuk"},
+    "s4": {"description": "Perde 3 · Kanıt: demo, Solana, fark ve iş modeli", "start": "demo"},
+    "s5": {"description": "Final", "start": "final"}
+  },
+  "faces": {
+    "newsreader": {"family": "Newsreader", "href": "https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400..700;1,400..700&display=swap"},
+    "inter": {"family": "Inter", "href": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"},
+    "jetbrains-mono": {"family": "JetBrains Mono", "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"}
+  },
+  "designSystems": []
+}

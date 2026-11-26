@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>SolChain B2B · Proje Tanıtım Dosyası</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="base.css">
+<style>
+.page>*{flex-shrink:0}
+.page{gap:4.4mm}
+.seal span{font-size:6.4pt;letter-spacing:-.03em}
+.band{background:var(--ink);color:#f3f5f7;margin:-18mm -17mm 0;padding:14mm 17mm 10mm;display:flex;flex-direction:column;gap:3.6mm}
+.band .row{display:flex;justify-content:space-between;align-items:center}
+.band .tag{font-family:var(--mono);font-size:7.8pt;letter-spacing:.1em;text-transform:uppercase;color:#aab4be;border:.7pt solid #3a4652;border-radius:1.5mm;padding:1.2mm 2.6mm}
+.band h1{color:#fff;font-size:24pt}
+.band .verbs{font-family:var(--display);font-weight:700;font-size:12.5pt;color:#6ccbcb;letter-spacing:.02em}
+.band p{color:#c3ccd4;font-size:10.4pt;max-width:168mm}
+h2{font-size:14.6pt}
+.sec{display:flex;flex-direction:column;gap:2.4mm}
+.body{font-size:9.6pt;max-width:none}
+.body.m{color:var(--muted)}
+.probs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.2mm 5mm}
+.probs div{font-size:8.8pt;color:var(--muted);padding-left:3mm;border-left:1.2pt solid var(--line)}
+.probs b{color:var(--ink);font-weight:600;display:block}
+.p5{display:grid;grid-template-columns:repeat(5,1fr);gap:3mm}
+.p5 div{border-top:1.6pt solid var(--brand);padding-top:2.2mm;font-size:8.5pt;color:var(--muted)}
+.p5 b{display:block;font-family:var(--display);font-size:9.8pt;color:var(--ink);margin-bottom:.8mm}
+.step{grid-template-columns:11mm 44mm 1fr;padding:2.2mm 4mm}
+.step .n{font-size:14pt}
+.step p{font-size:8.9pt}
+.side{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.side .card li{font-size:8.9pt}
+.t9{font-size:8.5pt}.t9 td,.t9 th{padding:1.5mm 2.2mm}
+.tg{display:inline-block;font-family:var(--mono);font-size:6.6pt;padding:.3mm 1.4mm;border-radius:1mm;margin-right:1mm}
+.tg.sc{background:#dcedee;color:#1f6a73}.tg.hc{background:#f5e6e2;color:#8f2f23}.tg.in{background:#eef1f4;color:#4f5c68}
+.lg{display:flex;flex-wrap:wrap;gap:1mm 4mm;font-size:7.6pt;color:var(--muted)}
+.lg i{display:inline-block;width:2.6mm;height:2.6mm;border-radius:.6mm;margin-right:1.2mm;vertical-align:-.3mm}
+.lg i.dash{height:0;width:4mm;border-top:1pt dashed #8a96a1;border-radius:0;vertical-align:.6mm}
+.lg i.dia{background:#eb6834;transform:rotate(45deg);width:2.2mm;height:2.2mm}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm}
+.g4 .card,.g3c .card{padding:3.2mm 3.4mm}.g4 .card p,.g3c .card p{font-size:8.5pt}
+.g3c{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm}
+.kpiline{display:flex;flex-wrap:wrap;gap:1.4mm 5mm;font-size:8.5pt;color:var(--muted)}
+.kpiline b{color:var(--ink)}
+.layers{display:grid;grid-template-columns:repeat(4,1fr);gap:2.6mm}
+.layers div{background:var(--soft);border-radius:2mm;padding:2.4mm 3mm;font-size:8.3pt;color:var(--muted)}
+.layers b{display:block;color:var(--ink);font-family:var(--display);font-size:9.4pt}
+.idx{font-family:var(--display);font-weight:800;font-size:22pt;line-height:1}
+.idgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2.4mm}
+.idgrid div{border:.7pt solid var(--line);border-radius:2mm;padding:2.4mm 3mm;font-size:8.3pt;color:var(--muted)}
+.idgrid b{display:block;color:var(--ink);font-size:9pt;margin-bottom:.6mm}
+.lvl{display:inline-block;font-family:var(--display);font-weight:700;font-size:8.6pt;padding:.4mm 2.2mm;border-radius:5mm}
+.lvl.pl{background:#d9ecec;color:#1f6a73}.lvl.go{background:#f3ead4;color:#7a5a12}.lvl.si{background:#e7ecef;color:#46555f}.lvl.ve{background:#eef1f4;color:#66757f}
+.arch{display:flex;flex-direction:column;gap:1.6mm}
+.arow{display:grid;grid-template-columns:30mm 1fr;border:.7pt solid var(--line);border-radius:2mm;overflow:hidden}
+.arow .an{background:var(--soft);padding:2mm 3mm;font-family:var(--display);font-weight:700;font-size:9pt}
+.arow.ch .an{background:var(--teal-soft);color:var(--teal)}
+.arow .ac{padding:2mm 3mm;font-size:8.4pt;color:var(--muted)}
+.query{background:var(--ink);border-radius:2.5mm;padding:4mm 4.6mm;color:#f3f5f7}
+.query .ql{font-family:var(--mono);font-size:7.4pt;letter-spacing:.08em;color:#6ccbcb}
+.query .qt{font-family:var(--display);font-weight:600;font-size:10.6pt;margin-top:1mm}
+/* form */
+.fsec{display:flex;flex-direction:column;gap:1.9mm}
+.fh{display:flex;align-items:baseline;gap:2.4mm;font-family:var(--display);font-weight:700;font-size:10.4pt;border-bottom:.8pt solid var(--ink);padding-bottom:1mm}
+.fh span{font-family:var(--mono);font-weight:500;font-size:8pt;color:var(--brand)}
+.frow{display:grid;grid-template-columns:44mm 1fr;gap:3mm;align-items:end;font-size:8.9pt}
+.frow:has(.boxes){align-items:start}
+.frow2{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+.boxes{display:flex;flex-wrap:wrap;gap:1.5mm 4.4mm;font-size:8.9pt}
+.line{border-bottom:.7pt solid var(--ink);height:5.4mm}
+.scale{display:grid;grid-template-columns:1fr repeat(5,8.5mm);font-size:8.6pt;border:.7pt solid var(--line);border-radius:2.5mm;overflow:hidden}
+.scale div{padding:1.3mm 2.6mm;border-bottom:.6pt solid var(--line);display:flex;align-items:center}
+.scale .h{font-family:var(--mono);font-size:7pt;color:var(--muted);background:var(--soft);justify-content:center}
+.scale .h.q{justify-content:flex-start}
+.scale .c{justify-content:center}
+.scale .c::before{content:"";width:3.1mm;height:3.1mm;border:.8pt solid var(--ink);border-radius:50%}
+.scale .last{border-bottom:0}
+.nps{display:grid;grid-template-columns:repeat(11,1fr);gap:1.4mm}
+.nps div{border:.7pt solid var(--ink);border-radius:1.2mm;text-align:center;font-family:var(--mono);font-size:8.4pt;padding:1.1mm 0}
+.npsl{display:flex;justify-content:space-between;font-size:7.6pt;color:var(--muted)}
+.sign{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6mm;margin-top:1mm}
+.sign div{border-top:.7pt solid var(--ink);padding-top:1.5mm;font-size:8.2pt;color:var(--muted)}
+.consent{font-size:8.5pt;display:flex;gap:2mm;align-items:flex-start}
+.consent::before{content:"";flex:none;width:3.2mm;height:3.2mm;border:.8pt solid var(--ink);border-radius:.6mm;margin-top:.4mm}
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="page">
+  <div class="band">
+    <div class="row"><div class="mini" style="color:#fff"><span class="seal" style="border-color:#e48a7c"><span style="color:#e48a7c">SC</span></span>SOLCHAIN B2B</div><span class="tag">Proje tanıtım dosyası · Kasım 2026</span></div>
+    <h1>Sanayinin dijital ticaret ve güven altyapısı</h1>
+    <p class="verbs">Bul · Doğrula · Karşılaştır · Güvenceye al · Yönet</p>
+    <p>Yapay zekâ, Solana blokzinciri, dijital ticari itibar ve lisanslı finans ortaklarıyla üreticileri ve ham madde tedarikçilerini tek bir güven ekosisteminde buluşturur.</p>
+  </div>
+  <div class="sec">
+    <div class="kicker">Projenin amacı</div>
+    <h2>Sanayide üreticiyi güçlendirmek, iyi tedarikçiyi görünür kılmak</h2>
+    <p class="body">SolChain B2B, üretim ve tedarik zincirindeki tek taraflı ve güvene dayanmayan ticaret düzenini; ana üreticilerin ve ham madde tedarikçilerinin birlikte kazandığı şeffaf, veriye dayalı ve adil bir ağa dönüştürür.</p>
+    <p class="body m">Üretici kalite, teslim ve ödeme koşullarını girer. Bu koşullar ve her teslimatın sonucu iki tarafın onayıyla Solana'ya kaydedilir; uyuşmazlıklar kanıtla çözülür, ödeme koşullar sağlandığında aktarılır. Her tedarikçinin doğrulanmış bir dijital kimliği ve karnesi olur; riskler önceden görülür, teklifler gerçek toplam maliyetle karşılaştırılır.</p>
+  </div>
+  <div class="sec">
+    <div class="kicker">Çözdüğü sorunlar</div>
+    <div class="probs">
+      <div><b>Kalite ve termin belirsizliği</b>Ham maddenin şartnameye uygun ve zamanında geleceği belirsiz.</div>
+      <div><b>Ödeme gecikmesi</b>Tahsilat belirsiz; işletme sermayesi bağlanır.</div>
+      <div><b>Görünmeyen başarı</b>Tedarikçi performansı yeni müşteriye kanıtlanamaz.</div>
+      <div><b>Geç fark edilen riskler</b>Tedarikçinin finansal veya üretim sorunu sipariş sonrası öğrenilir.</div>
+      <div><b>Zor teklif karşılaştırması</b>Farklı vade, güvence ve teslim koşulları kıyaslanamaz.</div>
+      <div><b>Elle yapılan değerlendirme</b>ISO 9001'in istediği tedarikçi değerlendirmesi dönemsel ve elle.</div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="kicker">Beş değer alanı</div>
+    <div class="p5">
+      <div><b>B2B ticaret ağı</b>Teklif, eşleşme ve sipariş tek akışta</div>
+      <div><b>Yapay zekâ satın alma asistanı</b>Malzeme, tedarikçi ve vade önerisi</div>
+      <div><b>Dijital ticari itibar</b>Doğrulanmış kimlik, karne, güven skoru</div>
+      <div><b>Ödeme güvencesi ve finansman</b>Lisanslı ortaklarla güvence ve erken tahsilat</div>
+      <div><b>Piyasa istihbaratı ve risk</b>Fiyat eğilimi ve erken uyarı</div>
+    </div>
+  </div>
+  <div class="pfoot"><span>SolChain B2B · Proje tanıtım dosyası</span><span>1</span></div>
+</section>
+
+<!-- 2 -->
+<section class="page">
+  <div class="phead"><span class="mini"><span class="seal"><span>SC</span></span>SOLCHAIN B2B</span><span>Nasıl çalışır</span></div>
+  <div class="sec">
+    <div class="kicker">Süreç</div>
+    <h2>Keşiften ödemeye yedi adım</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1<small>KEŞİF</small></div><h3>Satın alma asistanı</h3><p>İhtiyaç kendi cümleleriyle yazılır; malzeme alternatifleri ve uygun tedarikçiler önerilir.</p></div>
+      <div class="step"><div class="n">2<small>KAYIT</small></div><h3>Dijital kimlik ve belgeler</h3><p>Firma doğrulanır; sertifikalar, faaliyet belgesi, kapasite ve makine parkı kaydedilir.</p></div>
+      <div class="step"><div class="n">3<small>TEKLİF TALEBİ</small></div><h3>Üreticinin kısıtları</h3><p>Miktar, termin, kalite şartnamesi, vade, güvence, teslim koşulu ve bağlantı seçilir.</p></div>
+      <div class="step"><div class="n">4<small>EŞLEŞME</small></div><h3>Gerekçeli kısa liste</h3><p>Şartı sağlamayanlar elenir; kalanlar karne, toplam maliyet, risk ve teslim süresine göre sıralanır.</p></div>
+      <div class="step"><div class="n">5<small>SİPARİŞ</small></div><h3>Koşullar ve güvence</h3><p>Gerekirse güncel faaliyet belgesi doğrulanır; koşullar iki tarafça imzalanır, güvence kurulur.</p></div>
+      <div class="step"><div class="n">6<small>TESLİM</small></div><h3>Sevkiyat ve kalite kontrolü</h3><p>Teslim kanıtı kaydedilir, avans aktarılır; itirazda akrediteli laboratuvar ve bağımsız ekspertiz devrededir.</p></div>
+      <div class="step"><div class="n">7<small>MUTABAKAT</small></div><h3>Ödeme, karne, saha izleme</h3><p>Kalan tutar aktarılır, erken tahsilat açılır, karneler güncellenir; garanti süresince saha geri bildirimi toplanır.</p></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="kicker">Taraflar</div>
+    <h2>Her iki taraf için ne sunar?</h2>
+    <div class="side">
+      <div class="card" style="border-top:2pt solid var(--teal)"><span class="lbl">Üreticiler için</span>
+        <ul><li>Doğal dille satın alma ve gerekçeli tedarikçi önerisi</li><li>Vade ve teslim koşulu farklı teklifleri toplam maliyetle karşılaştırma</li><li>Tedarikçi risklerini ve fiyat hareketlerini önceden görme</li><li>Güvencede kalan avans, tarafsız hakemlik, vadeli alım finansmanı</li><li>Otomatik ve denetlenebilir ISO 9001 tedarikçi değerlendirmesi</li></ul></div>
+      <div class="card" style="border-top:2pt solid var(--brand)"><span class="lbl" style="color:var(--brand)">Tedarikçiler için</span>
+        <ul><li>Başarısını tüm sektöre kanıtlayan dijital kimlik ve karne</li><li>Verified, Silver, Gold, Platinum seviyeleriyle görünürlük</li><li>Karne yükseldikçe daha yüksek avans ve öncelikli listeleme</li><li>Onaylı alacağını vadesinden önce tahsil etme imkânı</li><li>Üreticinin ödeme disiplinini teklif öncesi görme; ücretsiz temel üyelik</li></ul></div>
+    </div>
+    <div class="kpiline"><span><b>Ölçülen göstergeler:</b></span><span><b>OTIF</b></span><span><b>PPM</b></span><span><b>Beyan–ölçüm uyumu</b></span><span><b>Saha performansı</b></span><span><b>Vadesinde ödeme</b></span><span><b>Ortalama tahsilat süresi</b></span></div>
+  </div>
+  <div class="pfoot"><span>SolChain B2B · Proje tanıtım dosyası</span><span>2</span></div>
+</section>
+
+<!-- 3 -->
+<section class="page">
+  <div class="phead"><span class="mini"><span class="seal"><span>SC</span></span>SOLCHAIN B2B</span><span>Güven altyapısı</span></div>
+  <div class="kicker">Dijital ticari itibar</div>
+  <h2>Tedarikçinin itibarı ölçülebilir ve taşınabilir bir dijital varlığa dönüşür</h2>
+  <div class="idgrid">
+    <div><b>Kimlik ve resmî kayıt</b>Ticaret sicili, faaliyet belgesi, vergi ve SGK durumu</div>
+    <div><b>Üretim altyapısı</b>Makine parkı, beyan ve gerçekleşen kapasite, vardiya düzeni</div>
+    <div><b>Kalite</b>Sertifikalar, akrediteli laboratuvar raporları, parametre uygunluğu</div>
+    <div><b>Performans</b>OTIF, PPM, beyan–ölçüm uyumu, saha geri bildirimi</div>
+    <div><b>Ticari güvenilirlik</b>Uyuşmazlık geçmişi, süreklilik ve finansal sağlık sinyalleri</div>
+    <div><b>Uzmanlık</b>Hizmet verilen sektörler, doğrulanmış referanslar, Ar-Ge birimi</div>
+  </div>
+  <div class="grid2" style="align-items:stretch">
+    <div class="card"><span class="lbl">SolChain Güven Skoru · iki taraflı</span>
+      <div class="tbl" style="border:0"><table class="t9"><tbody>
+        <tr><td style="width:34%"><b>Tedarikçi skoru</b></td><td>OTIF %30 · kalite (giriş %80 + saha %20) %30 · beyan uyumu %15 · yeterlilik %15 · uyuşmazlık %10</td></tr>
+        <tr><td><b>Üretici skoru</b></td><td>Vadesinde ödeme %60 · gecikme günü %25 · haklı itiraz %15; bağlantı taahhüdüne uyum izlenir</td></tr>
+        <tr><td><b>Kazanım</b></td><td>İyi tedarikçi daha yüksek avans, düzenli ödeyen üretici daha iyi vade ve fiyat görür</td></tr>
+      </tbody></table></div></div>
+    <div class="card"><span class="lbl">Karne bütünlüğü · şişirmeye karşı</span>
+      <ul style="font-size:8.6pt"><li>Teslimatlar e-Fatura ve e-İrsaliye kayıtlarıyla eşleştirilir</li><li>Puan, ödeme kuruluşundaki gerçek para hareketine bağlanır</li><li>Farklı alıcılardan gelen teslimatlar daha yüksek ağırlık taşır</li><li>KYB'de ortaklık yapısı incelenir; ilişkili taraf işlemleri ayrı işaretlenir</li><li>Olağandışı örüntüler denetim kuyruğuna düşer</li></ul></div>
+  </div>
+  <div class="kicker">SolChain Verified seviyeleri</div>
+  <div class="tbl"><table class="t9">
+    <thead><tr><th style="width:15%">Seviye</th><th style="width:47%">Kriter</th><th>Kazanım</th></tr></thead>
+    <tbody>
+      <tr><td><span class="lvl ve">Verified</span></td><td>Firma kimliği ve temel belgeler doğrulandı</td><td>Ağda görünürlük, teklif verebilme</td></tr>
+      <tr><td><span class="lvl si">Silver</span></td><td>10+ teslimat, endeks 70+, zorunlu belgeler geçerli</td><td>Eşleşmede rozet</td></tr>
+      <tr><td><span class="lvl go">Gold</span></td><td>20+ teslimat, endeks 85+, 5+ farklı alıcı</td><td>Öncelikli listeleme, en yüksek avans kademesi</td></tr>
+      <tr><td><span class="lvl pl">Platinum</span></td><td>40+ teslimat, endeks 90+, 10+ farklı alıcı, bağımsız denetim</td><td>Finansman ortaklarında tercihli koşullar</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Seviye ücretle alınamaz; yalnızca bağımsız ve denetlenebilir kriterlerle belirlenir. Performans düşerse seviye otomatik düşer, zorunlu belgenin süresi dolarsa askıya alınır.</p>
+  <div class="pfoot"><span>SolChain B2B · Proje tanıtım dosyası</span><span>3</span></div>
+</section>
+
+<!-- 4 -->
+<section class="page">
+  <div class="phead"><span class="mini"><span class="seal"><span>SC</span></span>SOLCHAIN B2B</span><span>Karne ve kalite profili</span></div>
+  <div class="kicker">Karne ve tedarikçi yeterliliği</div>
+  <h2>Kalite tek bir belgeyle değil, kanıt katmanlarıyla ölçülür</h2>
+  <div class="layers">
+    <div><b>Yeterlilik</b>Üretebilir mi? Sertifikalar, raporlar, kapasite</div>
+    <div><b>Performans</b>Teslim etti mi? OTIF, PPM, uygunluk, beyan uyumu</div>
+    <div><b>İlişki</b>Güvenilir mi? Uyuşmazlık, saha bildirimi, ödeme</div>
+    <div><b>Süreklilik</b>Yarın da teslim eder mi? Finansal ve üretim sinyalleri</div>
+  </div>
+  <div class="tbl"><table class="t9">
+    <thead><tr><th style="width:33%">Kriter</th><th style="width:39%">Nasıl doğrulanır</th><th>Karnedeki rolü</th></tr></thead>
+    <tbody>
+      <tr><td><b>Kalite ve uluslararası sertifikalar</b></td><td>Belge özeti zincirde; bitiş tarihi izlenir</td><td><span class="tg sc">Puanlı</span> Süresi dolan belge elenir</td></tr>
+      <tr><td><b>Akrediteli laboratuvar raporları</b></td><td>Laboratuvar imzası</td><td><span class="tg sc">Puanlı</span> Akreditasyonsuz rapor bilgi amaçlı</td></tr>
+      <tr><td><b>Garanti sonrası saha geri bildirimi</b></td><td>Üreticinin imzalı bildirimi; tedarikçinin itiraz hakkı</td><td><span class="tg sc">Puanlı</span> Kalite puanının %20'si</td></tr>
+      <tr><td><b>Faaliyet belgesi, vergi ve SGK durumu</b></td><td>Ticaret odası ve resmî kayıt; 90 günde bir yenilenir</td><td><span class="tg hc">Eşleşme</span> Güncel değilse sipariş öncesi istenir</td></tr>
+      <tr><td><b>Garanti süresi, kapasite, vardiya</b></td><td>Teklif beyanı; gerçekleşen hacimle karşılaştırma</td><td><span class="tg hc">Eşleşme</span> Sert kısıt ve uyarı</td></tr>
+      <tr><td><b>Referanslar, Ar-Ge, makine parkı</b></td><td>Platform içi imzalı referans; resmî belgeler</td><td><span class="tg in">Bilgi</span> Profilde gösterilir</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2" style="align-items:stretch">
+    <div class="card"><span class="lbl">Kalite profili · parametre uygunluğu</span><div id="radar"></div><div class="lg"><span><i style="background:#2a78d6"></i>Tedarikçi A</span><span><i style="background:#eb6834"></i>Tedarikçi B</span><span><i class="dash"></i>Hedef %90</span></div></div>
+    <div class="card"><span class="lbl">Karne bileşenleri · Tedarikçi A</span><div style="display:flex;align-items:baseline;gap:3mm"><span class="idx">90,1</span><span class="note">Endeks · Platinum · %40 avans</span></div><div id="bars"></div></div>
+  </div>
+  <p class="note">Sektör şablonları: kimya ve boya, plastik, metal, tekstil, gıda. Endeks yapay zekâ ile değil, zincirdeki kayıtlardan formülle hesaplanır. Grafik değerleri örnektir.</p>
+  <div class="pfoot"><span>SolChain B2B · Proje tanıtım dosyası</span><span>4</span></div>
+</section>
+
+<!-- 5 -->
+<section class="page" style="gap:3.6mm">
+  <div class="phead"><span class="mini"><span class="seal"><span>SC</span></span>SOLCHAIN B2B</span><span>Ticari ve teslim koşulları</span></div>
+  <div class="kicker">Ticari koşullar</div>
+  <h2>Teklif tek bir fiyat değil, karşılaştırılabilir bir fiyat matrisidir</h2>
+  <div class="grid2" style="align-items:stretch">
+    <div class="card"><span class="lbl">Vadeye göre fiyat · örnek</span><div id="vade"></div><div class="lg"><span><i style="background:#2a78d6"></i>Teklif fiyatı</span><span><i style="background:#eb6834"></i>Bugünkü değer</span></div></div>
+    <div class="card"><span class="lbl">Fiyat güvencesi ve alım bağlantısı</span>
+      <div class="tbl" style="border:0"><table class="t9"><tbody>
+        <tr><td style="width:36%"><b>Vade matrisi</b></td><td>Peşin fiyat + aylık vade farkından 30–120 gün otomatik</td></tr>
+        <tr><td><b>Alım bağlantısı</b></td><td>Aylık, 6 aylık, yıllık taahhüt ve iskonto; uyum karnelere işlenir</td></tr>
+        <tr><td><b>Fiyat revizyon maddesi</b></td><td>Fiyat ağ endeksine bağlı ±%5 bantta; artış 30 gün önceden bildirilir, iki taraf onaylamadan uygulanmaz</td></tr>
+        <tr><td><b>Toplam maliyet</b></td><td>Bugünkü değer + navlun, sigorta, gümrük, güvence maliyeti</td></tr>
+      </tbody></table></div></div>
+  </div>
+  <div class="kicker">Teslim koşulları</div>
+  <h2>Teslim koşulu siparişin parçasıdır ve "teslim" anını belirler</h2>
+  <div class="card"><span class="lbl">Masrafın ve riskin el değiştirdiği nokta · Incoterms® 2020</span><div id="inco"></div><div class="lg"><span><i style="background:#2a78d6"></i>Tedarikçinin üstlendiği taşıma masrafı</span><span><i class="dia"></i>Riskin geçtiği ve teslimin kaydedildiği an</span></div></div>
+  <div class="tbl"><table class="t9">
+    <thead><tr><th style="width:18%">Teslim yeri</th><th style="width:14%">Incoterms</th><th style="width:38%">Kanıt ve imzalayanlar</th><th>Kayıt anı</th></tr></thead>
+    <tbody>
+      <tr><td><b>Tedarikçi kapısı</b></td><td>EXW · FCA</td><td>Sevkiyat sorumlusu ve üreticinin taşıyıcısı</td><td>Taşıyıcıya teslim</td></tr>
+      <tr><td><b>Liman</b></td><td>FOB · CIF</td><td>Konşimento özeti; forwarder imzası</td><td>Gemiye yükleme</td></tr>
+      <tr><td><b>Üretici kapısı</b></td><td>DAP · DDP</td><td>Mal kabul sorumlusu; e-İrsaliye veya CMR</td><td>Tesise varış</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">OTIF ve avans seçilen koşulun teslim anına göre hesaplanır. Grafik varsayımı: vade farkı aylık %3, finansman maliyeti aylık %3,5.</p>
+  <div class="pfoot"><span>SolChain B2B · Proje tanıtım dosyası</span><span>5</span></div>
+</section>
+
+<!-- 6 -->
+<section class="page">
+  <div class="phead"><span class="mini"><span class="seal"><span>SC</span></span>SOLCHAIN B2B</span><span>Yapay zekâ</span></div>
+  <div class="kicker">Yapay zekâ destekli satın alma</div>
+  <h2>Satın alma asistanı ve Malzeme Danışmanı</h2>
+  <div class="grid2" style="align-items:stretch">
+    <div class="col" style="display:flex;flex-direction:column;gap:2.6mm">
+      <div class="query"><div class="ql">ÜRETİCİNİN İSTEĞİ</div><div class="qt">“Bu ay 100 ton plastik ham maddeye ihtiyacım var. Teslimat 21 gün, ödeme vadesi 60 gün; kaliteye uygun en avantajlı üç firmayı bul.”</div></div>
+      <div class="card"><span class="lbl">Asistanın cevabı</span>
+        <ul style="font-size:8.6pt"><li>İhtiyacı teklif talebine çevirir: kategori, miktar, termin, vade, öncelik</li><li>Elenenleri nedenleriyle gösterir; en uygun üç tedarikçiyi gerekçesiyle sıralar</li><li>Peşin ile 30–120 gün vadeyi bugünkü değerle karşılaştırır</li><li>Ortalama teklife göre tasarrufu ve tedarikçi risklerini belirtir</li><li>Tek tıkla teklif talebi olarak yayınlanır</li></ul></div>
+    </div>
+    <div class="col" style="display:flex;flex-direction:column;gap:2.6mm">
+      <div class="query"><div class="ql">MALZEME DANIŞMANI</div><div class="qt">“Dış mekânda kullanılan metal bahçe mobilyası iskeleti”</div></div>
+      <div class="tbl"><table class="t9">
+        <thead><tr><th style="width:44%">Alternatif</th><th style="width:36%">Not</th><th>Maliyet</th></tr></thead>
+        <tbody>
+          <tr><td><b>DC01 + toz boya</b> <span class="note">mevcut</span></td><td>Koruma boyaya bağlı</td><td>100</td></tr>
+          <tr><td><b>Galvanizli DX51D Z275</b></td><td>Uzun korozyon direnci</td><td>112</td></tr>
+          <tr><td><b>Alüminyum 5754</b></td><td>Hafif, paslanmaz</td><td>145</td></tr>
+        </tbody>
+      </table></div>
+      <div id="advCost"></div>
+    </div>
+  </div>
+  <div class="g4">
+    <div class="card fill"><span class="lbl">Kaynaklı öneri</span><p>Şablonlar, standartlar ve zincirdeki kalite verisi; veri yoksa öneri üretmez.</p></div>
+    <div class="card fill"><span class="lbl">Karar üreticide</span><p>Malzeme değişikliğinde mühendis onayı ve numune testi önerilir.</p></div>
+    <div class="card fill"><span class="lbl">Kritik ürünler</span><p>Gıda temaslı ve güvenlik kritik parçalarda uzmana yönlendirir.</p></div>
+    <div class="card fill"><span class="lbl">Gizlilik</span><p>Ürün ve ihtiyaç bilgisi firmaya özeldir, model eğitiminde kullanılmaz.</p></div>
+  </div>
+  <p class="note">Puanlar ve sıralama yapay zekâ ile değil, kayıtlardan formülle hesaplanır; yapay zekâ okur, yorumlar ve açıklar. Göreli maliyetler örnektir.</p>
+  <div class="pfoot"><span>SolChain B2B · Proje tanıtım dosyası</span><span>6</span></div>
+</section>
+
+<!-- 7 -->
+<section class="page">
+  <div class="phead"><span class="mini"><span class="seal"><span>SC</span></span>SOLCHAIN B2B</span><span>Risk ve piyasa</span></div>
+  <div class="kicker">Risk erken uyarı sistemi</div>
+  <h2>Geçmişi kaydetmekle kalmaz, gelecekteki tedarik riskini gösterir</h2>
+  <div class="tbl"><table class="t9">
+    <thead><tr><th style="width:30%">Sinyal</th><th style="width:30%">Kaynak</th><th>Aksiyon</th></tr></thead>
+    <tbody>
+      <tr><td><b>Teslimat performansı düşüşü</b></td><td>Platform kayıtları</td><td>Uyarı, alternatif tedarikçi önerisi</td></tr>
+      <tr><td><b>Kapasite üzerinde sipariş</b></td><td>Beyan ve açık siparişler</td><td>Sipariş öncesi uyarı</td></tr>
+      <tr><td><b>Belge süresi dolması</b></td><td>Belge kayıtları</td><td>60 gün önce bildirim; dolarsa eleme</td></tr>
+      <tr><td><b>Faaliyet belgesi güncelliği</b></td><td>Ticaret odası</td><td>90 günde bir; riskli durumda sipariş öncesi</td></tr>
+      <tr><td><b>Finansal sinyal</b></td><td>Resmî ilanlar, vergi ve SGK durumu</td><td>Avans sıfırlanır, koşullu ödeme zorunlu</td></tr>
+      <tr><td><b>Üretim ve lojistik bildirimi</b></td><td>Tedarikçinin bildirim yükümlülüğü</td><td>Açık siparişlere bildirim, termin güncellemesi</td></tr>
+      <tr><td><b>Tek kaynak bağımlılığı</b></td><td>Alıcının sipariş geçmişi</td><td>İkinci onaylı tedarikçi önerisi</td></tr>
+      <tr><td><b>Fiyat hareketi</b></td><td>Ağ fiyat endeksi</td><td>Bağlantı veya revizyon bandı önerisi</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Olumsuz bilgi yalnızca resmî kaynaktan veya tedarikçinin kendi bildiriminden gelir; tedarikçinin açıklama ve itiraz hakkı vardır. Sorununu erken bildiren tedarikçi, gizleyip sonradan tespit edilene göre daha az puan kaybeder.</p>
+  <div class="kicker">Piyasa istihbaratı</div>
+  <div class="grid2" style="align-items:stretch">
+    <div class="card"><span class="lbl">DC01 sac fiyat endeksi · son 12 ay · örnek</span><div id="mkt"></div><p class="note">Ağdaki anonim tekliflerden, bin TRY/ton.</p></div>
+    <div class="card"><span class="lbl">Üreticinin gördüğü göstergeler</span>
+      <ul style="font-size:8.6pt"><li>Ham madde bazında fiyat eğilimi ve vade farkı ortalaması</li><li>Bölgesel tedarikçi yoğunluğu ve ortalama teslim süresi</li><li>Alternatif malzeme maliyetleri</li><li>Tedarik yoğunlaşması ve risk bölgeleri</li></ul>
+      <p class="note">Bir gösterge yalnızca en az 5 farklı firmanın verisiyle yayınlanır; firma bazında bilgi paylaşılmaz.</p></div>
+  </div>
+  <div class="pfoot"><span>SolChain B2B · Proje tanıtım dosyası</span><span>7</span></div>
+</section>
+
+<!-- 8 -->
+<section class="page">
+  <div class="phead"><span class="mini"><span class="seal"><span>SC</span></span>SOLCHAIN B2B</span><span>Ödeme güvencesi ve finansman</span></div>
+  <div class="kicker">Ödeme güvencesi ve finansman</div>
+  <h2>Ticareti güvenceye alır, işletme sermayesini rahatlatır</h2>
+  <div class="grid2">
+    <div class="card"><span class="lbl">Koşullu ödeme · iki yol</span><p style="font-size:8.8pt;color:var(--muted)"><b style="color:var(--ink)">Fiat:</b> Türkiye gibi kripto varlıkla ödemenin yasak olduğu ülkelerde tutar, lisanslı ödeme kuruluşunda yerel para olarak bloke edilir; Solana koşulları kanıtlar. <b style="color:var(--ink)">Stablecoin:</b> mevzuatın izin verdiği yerlerde ve sınır ötesi ticarette USDC, programın yönettiği kasa hesabında kilitlenir.</p></div>
+    <div class="card"><span class="lbl">Banka güvenceleri</span><p style="font-size:8.8pt;color:var(--muted)">Teminat mektubu ve teyitli, gayrikabili rücu akreditif. Bankanın onayı ve akreditifin istediği belgeler (fatura, konşimento, analiz sertifikası) özetleriyle zincirde doğrulanır.</p></div>
+    <div class="card"><span class="lbl">Tedarik finansmanı · erken tahsilat</span><p style="font-size:8.8pt;color:var(--muted)">Kalite kabulü yapılmış, onaylı alacak iş ortağı bankaya sunulur; tedarikçi vadesinden önce tahsil eder, üretici vadede öder. Yüksek seviyeli tedarikçi daha iyi oran görür.</p></div>
+    <div class="card"><span class="lbl">Alıcı finansmanı · vadeli alım</span><p style="font-size:8.8pt;color:var(--muted)">Doğrulanmış ödeme geçmişi, üreticinin onayıyla finans ortağına paylaşılır; ortak kendi değerlendirmesiyle vadeli alım limiti tanımlar.</p></div>
+  </div>
+  <div class="callout"><b>İlke:</b> SolChain B2B bir banka veya ödeme kuruluşu değildir. Para akışı ve finansman, ilgili ülkenin mevzuatına göre lisanslı iş ortakları üzerinden yürür. Akıllı sözleşme tek başına mevzuattan bağımsızlık sağlamaz ve gerçek dünyadaki malın kalitesini bilemez; doğrulama zinciri teslim kanıtı, laboratuvar ve lisanslı kuruluş entegrasyonlarıyla kurulur.</div>
+  <div class="kicker">Uyuşmazlıkta son söz</div>
+  <div class="tbl"><table class="t9">
+    <thead><tr><th style="width:8%">Adım</th><th style="width:30%">Ne olur</th><th>Ayrıntı</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><b>İmzalı kanıtlar</b></td><td>Sipariş koşulları, sevk belgesi, analiz sertifikası ve giriş kontrolü iki tarafın imzasıyla kayıtlı</td></tr>
+      <tr><td>2</td><td><b>Akrediteli laboratuvar</b></td><td>Numuneyi inceler, kararını ve rapor özetini kendi imzasıyla zincire yazar; kalan tutar bu sürede donar</td></tr>
+      <tr><td>3</td><td><b>Yeniden inceleme hakkı</b></td><td>Taraflar karara karşı bir kez bağımsız ekspertizle yeniden inceleme talep edebilir</td></tr>
+      <tr><td>4</td><td><b>Sonuç</b></td><td>Ödeme veya iade karara göre yapılır; haksız çıkan tarafın karnesi etkilenir</td></tr>
+    </tbody>
+  </table></div>
+  <div class="pfoot"><span>SolChain B2B · Proje tanıtım dosyası</span><span>8</span></div>
+</section>
+
+<!-- 9 -->
+<section class="page">
+  <div class="phead"><span class="mini"><span class="seal"><span>SC</span></span>SOLCHAIN B2B</span><span>Uygulama hazırlığı</span></div>
+  <div class="kicker">Kurumsal uygulama</div>
+  <h2>Şirketin günlük operasyonunun içine yerleşir</h2>
+  <div class="arch">
+    <div class="arow"><div class="an">Uygulama</div><div class="ac">Üretici ve tedarikçi panelleri, satın alma asistanı, risk merkezi, piyasa istihbaratı, laboratuvar ve banka arayüzleri</div></div>
+    <div class="arow"><div class="an">Yapay zekâ</div><div class="ac">Doğal dil talep analizi, teklif ve belge okuma, malzeme önerisi, risk sinyali tespiti, gerekçe üretimi</div></div>
+    <div class="arow"><div class="an">Entegrasyon</div><div class="ac">SAP, Microsoft Dynamics, Logo, Netsis, Mikro · e-Fatura ve e-İrsaliye · ödeme kuruluşu ve banka · laboratuvar LIMS · ticaret odası doğrulama · API ve webhook</div></div>
+    <div class="arow"><div class="an">Veri</div><div class="ac">Şifreli belge deposu, fiyat ve miktar, endeks ve risk hesaplama, zincir indeksleyici; erişim kontrolü ve denetim kaydı</div></div>
+    <div class="arow ch"><div class="an">Solana</div><div class="ac">Firma kimliği, sipariş koşulları, teslim ve kalite kanıtları, imzalar, hakem kararları, karneler ve seviye kayıtları; stablecoin yolunda kasa hesabı</div></div>
+  </div>
+  <div class="grid2" style="align-items:stretch">
+    <div class="card"><span class="lbl">ERP ile veri akışı</span>
+      <div class="tbl" style="border:0"><table class="t9"><tbody>
+        <tr><td style="width:46%">Satın alma talebi ve stok</td><td>ERP → SolChain</td></tr>
+        <tr><td>Sipariş ve koşullar</td><td>SolChain → ERP</td></tr>
+        <tr><td>Sevk, mal kabul, kalite</td><td>e-İrsaliye, LIMS ↔ ERP</td></tr>
+        <tr><td>Fatura ve ödeme</td><td>e-Fatura, ödeme kuruluşu ↔ ERP</td></tr>
+        <tr><td>Karne ve risk olayları</td><td>SolChain → webhook</td></tr>
+      </tbody></table></div></div>
+    <div class="card"><span class="lbl">Roller ve yetkiler</span>
+      <div class="tbl" style="border:0"><table class="t9"><tbody>
+        <tr><td style="width:40%">Satın alma uzmanı</td><td>Talep ve teklif karşılaştırma</td></tr>
+        <tr><td>Satın alma müdürü</td><td>Limit dahilinde sipariş onayı</td></tr>
+        <tr><td>Kalite</td><td>Giriş kontrolü, itiraz, saha bildirimi</td></tr>
+        <tr><td>Depo · finans</td><td>Mal kabul · güvence ve erken tahsilat</td></tr>
+        <tr><td>Yönetici</td><td>Kullanıcı, limit ve entegrasyonlar</td></tr>
+      </tbody></table></div></div>
+  </div>
+  <div class="g3c">
+    <div class="card fill"><span class="lbl">Güvenlik</span><p>Kurumsal çoklu imza ve donanım güvenlik modülü; kullanıcıdan kripto cüzdan bilgisi istenmez. Mainnet öncesi bağımsız güvenlik denetimi.</p></div>
+    <div class="card fill"><span class="lbl">Uyum</span><p>ISO 9001 madde 8.4, KVKK ve GDPR, ödeme mevzuatı, e-belge düzenlemeleri, Incoterms® 2020.</p></div>
+    <div class="card fill"><span class="lbl">Operasyon ortakları</span><p>Lisanslı ödeme kuruluşu, banka, akrediteli laboratuvar ağı, bağımsız ekspertiz, e-belge entegratörü.</p></div>
+  </div>
+  <div class="pfoot"><span>SolChain B2B · Proje tanıtım dosyası</span><span>9</span></div>
+</section>
+
+<!-- 10 -->
+<section class="page">
+  <div class="phead"><span class="mini"><span class="seal"><span>SC</span></span>SOLCHAIN B2B</span><span>İş modeli ve büyüme</span></div>
+  <div class="kicker">İş modeli</div>
+  <h2>Tedarikçi ücretsiz katılır, kurumsal kullanıcı değer için öder</h2>
+  <div class="tbl"><table class="t9">
+    <thead><tr><th style="width:26%">Gelir kanalı</th><th>Açıklama</th></tr></thead>
+    <tbody>
+      <tr><td><b>Kurumsal üyelik</b></td><td>Üreticilere tedarikçi sayısı ve modüllere göre yıllık abonelik</td></tr>
+      <tr><td><b>İşlem hizmet bedeli</b></td><td>Koşullu ödeme ile tamamlanan siparişlerden düşük oranlı bedel</td></tr>
+      <tr><td><b>Premium yapay zekâ ve analitik</b></td><td>Satın alma asistanı, piyasa istihbaratı, risk izleme, ileri raporlar</td></tr>
+      <tr><td><b>Doğrulama ve sertifikasyon</b></td><td>Platinum için bağımsız denetim ve doğrulama hizmetleri (seviye satın alınamaz)</td></tr>
+      <tr><td><b>Finansal iş ortaklığı</b></td><td>Lisanslı kuruluşlarla erken tahsilat ve vadeli alım entegrasyonu gelirleri</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2" style="align-items:stretch">
+    <div class="card"><span class="lbl">Pazara giriş · önce bir sektörde vazgeçilmez olmak</span><p style="font-size:8.8pt;color:var(--muted)">İlk dikeyde 20 üretici ve 100 doğrulanmış tedarikçi ile aktif bir ağ hedeflenir. Çapa üretici kendi tedarikçilerini davet eder; tedarikçiler karnelerini yeni müşterilere taşıdıkça ağ yayılır. Kanallar: OSB ve sanayi odaları, ERP iş ortakları, belgelendirme kuruluşları, laboratuvarlar.</p></div>
+    <div class="card"><span class="lbl">Pilotta ölçülecekler</span><ul style="font-size:8.6pt"><li>OTIF ve gelen malzeme PPM</li><li>Ortalama tahsilat süresi ve erken tahsilat kullanımı</li><li>Kalite itirazlarının çözüm süresi</li><li>Tedarikçi değerlendirmesine harcanan süre</li></ul></div>
+  </div>
+  <div class="kicker">Yol haritası</div>
+  <div class="tbl"><table class="t9">
+    <thead><tr><th style="width:22%">Aşama</th><th>Kapsam</th></tr></thead>
+    <tbody>
+      <tr><td><b>Temel ürün · 0–6 ay</b></td><td>Dijital tedarikçi kimliği, karne, satın alma asistanı, teklif karşılaştırma, sipariş ve teslim kayıtları; ilk dikey pilot</td></tr>
+      <tr><td><b>Ticari güven · 6–12 ay</b></td><td>Güven skoru ve Verified seviyeleri, laboratuvar entegrasyonu, ERP bağlayıcıları, lisanslı ödeme güvencesi, kurumsal pilotlar</td></tr>
+      <tr><td><b>Finans ve veri · 12–24 ay</b></td><td>Tedarik finansmanı ortaklıkları, piyasa istihbaratı, risk erken uyarı, uluslararası ağ, çoklu ülke ve dil</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><b>Projenin durumu:</b> Çalışan bir üretici paneli prototipi hazırdır ve bir Solana ekosistemi hackathonu kapsamında geliştirilmektedir. Üretici ve tedarikçilerle görüşüyoruz; ekteki formla görüşünüzü paylaşabilirsiniz.</div>
+  <div class="contact">
+    <div><b>Yetkili</b>[Ad Soyad, unvan]</div>
+    <div><b>E-posta</b>[e-posta adresi]</div>
+    <div><b>Telefon</b>[telefon]</div>
+    <div><b>Prototip</b>[prototip bağlantısı]</div>
+  </div>
+  <div class="pfoot"><span>SolChain B2B · Proje tanıtım dosyası</span><span>10</span></div>
+</section>
+
+<!-- 11 FORM 1/2 -->
+<section class="page" style="gap:3.4mm">
+  <div class="phead"><span class="mini"><span class="seal"><span>SC</span></span>SOLCHAIN B2B</span><span>Değerlendirme formu · 1/2</span></div>
+  <div class="kicker">Değerlendirme ve pilot desteği</div>
+  <h2>Görüşünüz SolChain B2B'yi şekillendirecek</h2>
+  <p style="color:var(--muted);font-size:8.9pt">Yaklaşık 10 dakika sürer. Doldurulması gönüllüdür ve hukuki veya ticari yükümlülük doğurmaz. Bilgileriniz yalnızca ürün geliştirme amacıyla kullanılır ve üçüncü kişilerle paylaşılmaz.</p>
+  <div class="fsec"><div class="fh"><span>A</span>Firma profili</div>
+    <div class="frow"><span>Firma unvanı</span><div class="line"></div></div>
+    <div class="frow2"><div class="frow" style="grid-template-columns:28mm 1fr"><span>Yetkili ve unvanı</span><div class="line"></div></div><div class="frow" style="grid-template-columns:24mm 1fr"><span>E-posta / tel.</span><div class="line"></div></div></div>
+    <div class="frow2"><div class="frow" style="grid-template-columns:28mm 1fr"><span>Ülke / şehir</span><div class="line"></div></div><div class="frow" style="grid-template-columns:24mm 1fr"><span>Sektör</span><div class="line"></div></div></div>
+    <div class="frow"><span>Firma rolü</span><div class="boxes"><span>Üretici</span><span>Ham madde tedarikçisi</span><span>Her ikisi</span></div></div>
+    <div class="frow"><span>Çalışan sayısı</span><div class="boxes"><span>1–49</span><span>50–249</span><span>250–999</span><span>1000+</span></div></div>
+    <div class="frow"><span>Ham madde grubu</span><div class="boxes"><span>Kimya ve boya</span><span>Plastik</span><span>Metal</span><span>Tekstil</span><span>Gıda</span><span>Diğer: ________</span></div></div>
+    <div class="frow"><span>Aylık alım / satış hacmi</span><div class="boxes"><span>&lt; 1 mn ₺</span><span>1–10 mn ₺</span><span>10–50 mn ₺</span><span>50 mn ₺ +</span></div></div>
+    <div class="frow"><span>Kullandığınız ERP</span><div class="boxes"><span>SAP</span><span>Microsoft Dynamics</span><span>Logo / Netsis / Mikro</span><span>Diğer</span><span>Yok</span></div></div>
+  </div>
+  <div class="fsec"><div class="fh"><span>B</span>Mevcut süreç</div>
+    <div class="frow"><span>Tedarikçi değerlendirmesi</span><div class="boxes"><span>Yapmıyoruz</span><span>Excel / tablo</span><span>ERP modülü</span><span>SRM yazılımı</span></div></div>
+    <div class="frow"><span>Ortalama ödeme vadesi</span><div class="boxes"><span>Peşin</span><span>30 gün</span><span>60 gün</span><span>90 gün</span><span>120 gün +</span></div></div>
+    <div class="frow"><span>Kullandığınız güvenceler</span><div class="boxes"><span>Teminat mektubu</span><span>Akreditif</span><span>Çek / senet</span><span>Açık hesap</span><span>Yok</span></div></div>
+    <div class="frow"><span>Çoğunlukla teslim şekli</span><div class="boxes"><span>Tedarikçi kapısı</span><span>Liman</span><span>Üretici kapısı</span></div></div>
+    <div class="frow"><span>Kalite itirazı çözüm süresi</span><div class="boxes"><span>&lt; 1 hafta</span><span>1–4 hafta</span><span>1 ay +</span><span>Yaşamıyoruz</span></div></div>
+    <div class="frow"><span>Tedarikçi sorununu ne zaman öğreniyorsunuz?</span><div class="boxes"><span>Sipariş öncesi</span><span>Teslim sırasında</span><span>Sorun yaşandıktan sonra</span></div></div>
+  </div>
+  <div class="fsec"><div class="fh"><span>C</span>Sorunlar · ne ölçüde yaşıyorsunuz? (1 = hiç, 5 = çok sık)</div>
+  <div class="scale">
+    <div class="h q">Sorun</div><div class="h">1</div><div class="h">2</div><div class="h">3</div><div class="h">4</div><div class="h">5</div>
+    <div>Ham maddenin şartnameye uygunluğundan emin olamıyoruz.</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+    <div>Teslimat termini veya miktarında sapmalar yaşıyoruz.</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+    <div>Geciken ödemeler veya avans talepleri işletme sermayemizi etkiliyor.</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+    <div>Tedarikçinin finansal veya üretim sorunlarını geç öğreniyoruz.</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+    <div>Ham madde fiyat artışları bizi hazırlıksız yakalıyor.</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+    <div class="last">Farklı vade ve teslim koşullu teklifleri karşılaştırmak zor.</div><div class="c last"></div><div class="c last"></div><div class="c last"></div><div class="c last"></div><div class="c last"></div>
+  </div></div>
+  <div class="pfoot"><span>SolChain B2B · Proje tanıtım dosyası</span><span>11</span></div>
+</section>
+
+<!-- 12 FORM 2/2 -->
+<section class="page" style="gap:3.2mm">
+  <div class="phead"><span class="mini"><span class="seal"><span>SC</span></span>SOLCHAIN B2B</span><span>Değerlendirme formu · 2/2</span></div>
+  <div class="fsec"><div class="fh"><span>D</span>Çözümler · sizin için ne kadar değerli? (1 = değersiz, 5 = çok değerli)</div>
+  <div class="scale">
+    <div class="h q">Çözüm</div><div class="h">1</div><div class="h">2</div><div class="h">3</div><div class="h">4</div><div class="h">5</div>
+    <div>Yapay zekâ satın alma asistanı ve Malzeme Danışmanı</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+    <div>Doğrulanmış dijital tedarikçi kimliği, karne ve seviyeler</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+    <div>Teslim ve kalite kabulüne bağlı güvenceli ödeme</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+    <div>Risk erken uyarı ve güncel faaliyet belgesi kontrolü</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+    <div>Piyasa istihbaratı ve fiyat revizyon güvencesi</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+    <div>Erken tahsilat ve vadeli alım finansmanı</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+    <div class="last">ERP entegrasyonu</div><div class="c last"></div><div class="c last"></div><div class="c last"></div><div class="c last"></div><div class="c last"></div>
+  </div></div>
+  <div class="fsec"><div class="fh"><span>E</span>Tavsiye ve kullanım niyeti</div>
+    <span style="font-size:8.9pt">Bu çözümü sektörünüzdeki bir firmaya tavsiye etme olasılığınız nedir?</span>
+    <div class="nps"><div>0</div><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div></div>
+    <div class="npsl"><span>Hiç olası değil</span><span>Kesinlikle tavsiye ederim</span></div>
+    <div class="frow"><span>Tercih edeceğiniz kullanım modeli</span><div class="boxes"><span>Ücretsiz deneme</span><span>Kurumsal abonelik</span><span>İşlem başına bedel</span><span>Henüz değerlendiremem</span></div></div>
+  </div>
+  <div class="fsec"><div class="fh"><span>F</span>Pilot desteği</div>
+    <div class="boxes" style="flex-direction:column;gap:1.3mm"><span>Pilot programına katılmak istiyoruz (bir ham madde grubu, yaklaşık 3 ay).</span><span>Tedarikçilerimizi veya müşterilerimizi pilota davet edebiliriz.</span><span>Ürün geliştirme görüşmelerine katılmak istiyoruz.</span><span>Yalnızca gelişmelerden haberdar olmak istiyoruz.</span></div>
+    <div class="frow"><span>Pilot için ham madde ve aylık hacim</span><div class="line"></div></div>
+    <div class="frow"><span>En büyük sorununuz</span><div class="line"></div></div>
+  </div>
+  <span class="consent">Bu formdaki bilgilerin ürün geliştirme amacıyla işlenmesine ve benimle iletişime geçilmesine onay veriyorum (KVKK).</span>
+  <div class="sign"><div>Ad soyad</div><div>Tarih</div><div>İmza / kaşe</div></div>
+  <p class="note">Bu beyan bağlayıcı değildir. Formu taratıp [e-posta adresi] adresine gönderebilir veya görüşme sırasında iletebilirsiniz.</p>
+  <div class="pfoot"><span>SolChain B2B · Proje tanıtım dosyası</span><span>12</span></div>
+</section>
+
+<script>
+(function(){
+var NS='http://www.w3.org/2000/svg',INK='#121a22',MUT='#4f5c68',FAINT='#8a96a1',GRID='#dfe4e8',S1='#2a78d6',S2='#eb6834',FONT='IBM Plex Sans, Segoe UI, Arial',MONO='IBM Plex Mono, Consolas, monospace';
+function svg(w,h){var s=document.createElementNS(NS,'svg');s.setAttribute('viewBox','0 0 '+w+' '+h);s.setAttribute('width','100%');s.style.display='block';return s}
+function n(s,t,a,x){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;s.appendChild(e);return e}
+function f(v,d){return new Intl.NumberFormat('tr-TR',{minimumFractionDigits:d||0,maximumFractionDigits:d||0}).format(v)}
+(function(){var W=300,H=172,cx=150,cy=90,R=55,lab=['Kalınlık','Yüzey','Çekme dayanımı','Akma dayanımı','Kopma uzaması'],A=[100,80,100,100,95],B=[90,100,95,100,85],s=svg(W,H);
+function p(i,v){var a=-Math.PI/2+i*2*Math.PI/5;return [cx+Math.cos(a)*R*v/100,cy+Math.sin(a)*R*v/100]}
+[50,100].forEach(function(v){n(s,'polygon',{points:lab.map(function(_,i){return p(i,v).join(',')}).join(' '),fill:'none',stroke:GRID,'stroke-width':.8})});
+lab.forEach(function(l,i){var e=p(i,100);n(s,'line',{x1:cx,y1:cy,x2:e[0],y2:e[1],stroke:GRID,'stroke-width':.8});var q=p(i,120),an=Math.abs(q[0]-cx)<6?'middle':q[0]>cx?'start':'end';n(s,'text',{x:q[0],y:q[1]+3,'text-anchor':an,'font-size':9.4,fill:INK,'font-family':FONT},l)});
+n(s,'polygon',{points:lab.map(function(_,i){return p(i,90).join(',')}).join(' '),fill:'none',stroke:FAINT,'stroke-width':1,'stroke-dasharray':'3 3'});
+n(s,'polygon',{points:B.map(function(v,i){return p(i,v).join(',')}).join(' '),fill:'none',stroke:S2,'stroke-width':1.6});
+n(s,'polygon',{points:A.map(function(v,i){return p(i,v).join(',')}).join(' '),fill:S1,'fill-opacity':.14,stroke:S1,'stroke-width':1.6});
+[[B,S2],[A,S1]].forEach(function(z){z[0].forEach(function(v,i){var q=p(i,v);n(s,'circle',{cx:q[0],cy:q[1],r:2.6,fill:z[1],stroke:'#fff','stroke-width':1.2})})});
+document.getElementById('radar').appendChild(s)})();
+(function(){var rows=[['OTIF','%30',85],['Kalite (giriş + saha)','%30',93],['Beyan–ölçüm uyumu','%15',98],['Yeterlilik','%15',100],['Uyuşmazlık geçmişi','%10',70]],W=300,rh=22,H=rows.length*rh+6,s=svg(W,H),x0=140,bw=118;
+rows.forEach(function(r,i){var y=3+i*rh;n(s,'text',{x:0,y:y+10,'font-size':9.6,fill:INK,'font-family':FONT},r[0]);n(s,'text',{x:x0-6,y:y+10,'text-anchor':'end','font-size':8.4,fill:FAINT,'font-family':MONO},r[1]);
+n(s,'rect',{x:x0,y:y+3,width:bw,height:7,rx:3.5,fill:'#eef1f4'});n(s,'rect',{x:x0,y:y+3,width:bw*r[2]/100,height:7,rx:3.5,fill:S1});n(s,'text',{x:W,y:y+10,'text-anchor':'end','font-size':9.4,fill:INK,'font-family':MONO},f(r[2],1))});
+document.getElementById('bars').appendChild(s)})();
+(function(){var base=34920,m=.03,c=.035,o=[['Peşin',0],['30 g',1],['60 g',2],['90 g',3],['120 g',4]],W=300,H=150,L=42,B=22,T=12,iw=W-L-6,ih=H-T-B,lo=30000,hi=40000,s=svg(W,H);
+function y(v){return T+ih*(1-(v-lo)/(hi-lo))}
+[30000,35000,40000].forEach(function(t){n(s,'line',{x1:L,x2:W-6,y1:y(t),y2:y(t),stroke:GRID,'stroke-width':.7});n(s,'text',{x:L-4,y:y(t)+3,'text-anchor':'end','font-size':8,fill:MUT,'font-family':MONO},f(t))});
+var gw=iw/o.length,bw=gw*.32;o.forEach(function(q,i){var nom=base*Math.pow(1+m,q[1]),pv=nom/Math.pow(1+c,q[1]),gx=L+i*gw+gw/2;
+ n(s,'rect',{x:gx-bw-1,y:y(nom),width:bw,height:y(lo)-y(nom),rx:1.5,fill:S1});n(s,'rect',{x:gx+1,y:y(pv),width:bw,height:y(lo)-y(pv),rx:1.5,fill:S2});
+ n(s,'text',{x:gx-bw/2-1,y:y(nom)-3,'text-anchor':'middle','font-size':7,fill:INK,'font-family':MONO},f(nom/1000,1));n(s,'text',{x:gx+bw/2+1,y:y(pv)-3,'text-anchor':'middle','font-size':7,fill:INK,'font-family':MONO},f(pv/1000,1));
+ n(s,'text',{x:gx,y:H-6,'text-anchor':'middle','font-size':9,fill:INK,'font-family':FONT},q[0])});
+document.getElementById('vade').appendChild(s)})();
+(function(){var st=['Tedarikçi tesisi','Taşıyıcıya teslim','Yükleme limanı','Varış limanı','Üretici tesisi'],rows=[['EXW','İşyerinde teslim',0,0],['FCA','Taşıyıcıya teslim',1,1],['FOB','Gemide teslim',2,2],['CIF','Masraflar, sigorta ve navlun',3,2],['DAP','Belirlenen yerde teslim',4,4],['DDP','Gümrük vergileri ödenmiş',4,4]],
+W=620,L=200,R=16,T=26,rh=19,H=T+rows.length*rh+4,s=svg(W,H),iw=W-L-R;function x(i){return L+iw*i/(st.length-1)}
+st.forEach(function(t,i){n(s,'line',{x1:x(i),x2:x(i),y1:T-4,y2:H-3,stroke:GRID,'stroke-width':.8});n(s,'text',{x:x(i),y:13,'text-anchor':i===st.length-1?'end':'middle','font-size':9.4,fill:MUT,'font-family':FONT},t)});
+rows.forEach(function(r,i){var y=T+i*rh+rh/2;n(s,'text',{x:0,y:y+3.5,'font-size':11,fill:INK,'font-family':MONO,'font-weight':600},r[0]);n(s,'text',{x:36,y:y+3.5,'font-size':9.4,fill:MUT,'font-family':FONT},r[1]);
+ n(s,'line',{x1:x(0),x2:x(4),y1:y,y2:y,stroke:'#eef1f4','stroke-width':6,'stroke-linecap':'round'});if(r[2]>0)n(s,'line',{x1:x(0),x2:x(r[2]),y1:y,y2:y,stroke:S1,'stroke-width':6,'stroke-linecap':'round'});
+ var dx=x(r[3]);n(s,'rect',{x:dx-5,y:y-5,width:10,height:10,transform:'rotate(45 '+dx+' '+y+')',fill:S2,stroke:'#fff','stroke-width':1.4})});
+document.getElementById('inco').appendChild(s)})();
+(function(){var rows=[['DC01 + toz boya',100],['Galvanizli DX51D',112],['Alüminyum 5754',145]],W=300,rh=24,H=rows.length*rh+4,s=svg(W,H),x0=112,bw=150,mx=150;
+rows.forEach(function(r,i){var y=2+i*rh;n(s,'text',{x:0,y:y+13,'font-size':10,fill:INK,'font-family':FONT},r[0]);n(s,'rect',{x:x0,y:y+4,width:bw,height:11,rx:5.5,fill:'#eef1f4'});n(s,'rect',{x:x0,y:y+4,width:bw*r[1]/mx,height:11,rx:5.5,fill:i===0?FAINT:S1});n(s,'text',{x:W,y:y+13.5,'text-anchor':'end','font-size':10,fill:INK,'font-family':MONO},r[1])});
+document.getElementById('advCost').appendChild(s)})();
+(function(){var v=[33.1,33.4,33.2,33.6,33.9,34.0,34.2,34.1,34.6,35.2,35.9,36.4],m=['Ara','Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas'],W=300,H=130,L=30,R=26,T=10,B=20,iw=W-L-R,ih=H-T-B,lo=32,hi=38,s=svg(W,H);
+function x(i){return L+iw*i/11}function y(t){return T+ih*(1-(t-lo)/(hi-lo))}
+[32,35,38].forEach(function(t){n(s,'line',{x1:L,x2:W-R,y1:y(t),y2:y(t),stroke:GRID,'stroke-width':.7});n(s,'text',{x:L-4,y:y(t)+3,'text-anchor':'end','font-size':8,fill:MUT,'font-family':MONO},t)});
+var d=v.map(function(t,i){return (i?'L':'M')+x(i)+','+y(t)}).join(' ');n(s,'path',{d:d+' L'+x(11)+','+y(lo)+' L'+x(0)+','+y(lo)+' Z',fill:S1,'fill-opacity':.08});n(s,'path',{d:d,fill:'none',stroke:S1,'stroke-width':1.8});
+n(s,'circle',{cx:x(11),cy:y(v[11]),r:3,fill:S1,stroke:'#fff','stroke-width':1.2});n(s,'text',{x:x(11)-5,y:y(v[11])-6,'text-anchor':'end','font-size':8.6,fill:INK,'font-family':MONO},f(v[11],1));
+[0,3,6,9,11].forEach(function(i){n(s,'text',{x:x(i),y:H-5,'text-anchor':'middle','font-size':8.4,fill:MUT,'font-family':FONT},m[i])});
+document.getElementById('mkt').appendChild(s)})();
+})();
+</script>
+</body>
+</html>

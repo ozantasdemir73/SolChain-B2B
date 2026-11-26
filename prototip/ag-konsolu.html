@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SolChain B2B Ağ Konsolu</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: zincir konsolu; üst çubuk, senaryo seçimi ve sipariş özeti, solda yaşam döngüsü + fon durumu, sağda sekmeli teknik panel, altta işlem geçmişi */
+:root{
+  --bg:#f1f3f4; --surface:#ffffff; --raised:#f7f9f9; --fg:#111b20; --muted:#52616a; --faint:#8794a0; --line:#d6dde1; --soft:#e8edef;
+  --brand:#0d6b6e; --brand-soft:#dbeeed; --accent:#b3650f; --accent-soft:#f6e9d8;
+  --ok:#137a32; --ok-soft:#e0f1e4; --bad:#b8352b; --bad-soft:#f8e1de; --warn:#94600a; --warn-soft:#f5ebd6;
+  --code-bg:#0f171c; --code-fg:#d5e1e6; --code-dim:#7f939e; --code-hl:#7fd4d0;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",Roboto,Arial,sans-serif;
+  --mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1317; --surface:#151d22; --raised:#1a242a; --fg:#e3eaee; --muted:#9fb0ba; --faint:#6f808b; --line:#28343c; --soft:#1f2a31;
+  --brand:#5fc4c4; --brand-soft:#123232; --accent:#e5a35a; --accent-soft:#36271a;
+  --ok:#5fcb7c; --ok-soft:#163222; --bad:#ee7b70; --bad-soft:#3a1d1a; --warn:#e3b05a; --warn-soft:#342a17;
+  --code-bg:#0a0f12; --code-fg:#d5e1e6; --code-dim:#71858f; --code-hl:#7fd4d0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1317; --surface:#151d22; --raised:#1a242a; --fg:#e3eaee; --muted:#9fb0ba; --faint:#6f808b; --line:#28343c; --soft:#1f2a31;
+  --brand:#5fc4c4; --brand-soft:#123232; --accent:#e5a35a; --accent-soft:#36271a;
+  --ok:#5fcb7c; --ok-soft:#163222; --bad:#ee7b70; --bad-soft:#3a1d1a; --warn:#e3b05a; --warn-soft:#342a17;
+  --code-bg:#0a0f12; --code-fg:#d5e1e6; --code-dim:#71858f; --code-hl:#7fd4d0; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14.5px;line-height:1.55;margin:0;padding-block:0 56px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--surface)}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.inner{max-width:1240px;margin:0 auto}
+.mono{font-family:var(--mono)}
+button,select,textarea{font:inherit}
+button:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* üst çubuk */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--surface);border-bottom:1px solid var(--line)}
+.top .inner{display:flex;align-items:center;gap:14px 20px;flex-wrap:wrap;padding-block:10px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo svg{width:34px;height:34px;flex:none}
+.logo b{font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:.01em}
+.logo b span{color:var(--brand)}
+.logo small{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;margin-top:-2px}
+.netinfo{margin-left:auto;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.net{display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--fg);background:var(--raised)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
+.netinfo b{color:var(--fg);font-weight:500}
+/* giriş */
+.intro{padding-top:22px;display:flex;flex-direction:column;gap:14px}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--brand)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(24px,3.4vw,34px);line-height:1.12;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:700;font-size:16px;margin:0}
+h3{font-family:var(--display);font-weight:700;font-size:14.5px;margin:0}
+p{margin:0}
+.lead{color:var(--muted);max-width:86ch}
+.banner{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--warn);background:var(--warn-soft);border-radius:8px;padding:9px 12px}
+.scen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:720px){.scen{grid-template-columns:1fr}}
+.scard{display:flex;flex-direction:column;gap:4px;text-align:left;cursor:pointer;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.scard[aria-pressed="true"]{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand);background:var(--brand-soft)}
+.scard .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand)}
+.scard b{font-family:var(--display);font-size:16px}
+.scard span{font-size:13px;color:var(--muted)}
+.summary{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+@media (max-width:1000px){.summary{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.summary div{padding:10px 12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
+.summary span{display:block;font-size:11.5px;color:var(--muted)}
+.summary b{display:block;font-weight:600;font-size:13.5px;overflow-wrap:anywhere}
+.summary small{font-size:12px;color:var(--muted)}
+/* ana ızgara */
+.main{display:grid;grid-template-columns:minmax(0,370px) minmax(0,1fr);gap:16px;margin-top:16px}
+@media (max-width:980px){.main{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ph{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;justify-content:space-between}
+.foot{font-size:12px;color:var(--muted)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.steps li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.steps li:last-child{border-bottom:0}
+.sn{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:12px;border:1.5px solid var(--line);color:var(--muted);background:var(--surface)}
+.steps li.done .sn{background:var(--ok);border-color:var(--ok);color:#fff}
+.steps li.cur .sn{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.steps li.pend{opacity:.62}
+.st b{display:block;font-size:13.5px}
+.st .ix{font-family:var(--mono);font-size:11.5px;color:var(--brand)}
+.st .meta{font-size:12px;color:var(--muted)}
+.st .meta a,.linkbtn{background:none;border:0;padding:0;color:var(--brand);cursor:pointer;font-family:var(--mono);font-size:11.5px;text-decoration:underline;text-underline-offset:2px}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.btn{cursor:pointer;border-radius:7px;padding:8px 13px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font-size:13.5px}
+.btn.pri{background:var(--fg);color:var(--surface);border-color:var(--fg)}
+.btn.ok{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.btn.bad{background:var(--bad-soft);color:var(--bad);border-color:var(--bad)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.signing{font-size:12.5px;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.who{font-family:var(--mono);font-size:11.5px;padding:2px 7px;border-radius:4px;background:var(--soft);color:var(--fg)}
+.money{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mb{border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0;display:flex;flex-direction:column;gap:2px}
+.mb span{font-size:11.5px;color:var(--muted)}
+.mb b{font-family:var(--mono);font-weight:500;font-size:13px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.bar{height:8px;border-radius:4px;background:var(--soft);display:flex;overflow:hidden;gap:2px}
+.bar i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.events{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.events li{display:flex;gap:8px;align-items:flex-start}
+.pill{font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}.pill.bad{background:var(--bad-soft);color:var(--bad)}.pill.warn{background:var(--warn-soft);color:var(--warn)}.pill.br{background:var(--brand-soft);color:var(--brand)}.pill.neu{background:var(--soft);color:var(--muted)}
+/* sekmeler */
+.tabs{display:flex;gap:2px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:-2px -2px 0}
+.tabs button{background:none;border:0;padding:8px 12px;cursor:pointer;color:var(--muted);font-size:13.5px;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--fg);font-weight:600;border-bottom-color:var(--accent)}
+.plain{background:var(--brand-soft);border-radius:8px;padding:10px 12px;font-size:13.5px}
+.plain b{color:var(--brand)}
+.kv{display:grid;grid-template-columns:150px minmax(0,1fr);gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:13px}
+.kv div{padding:7px 10px;border-bottom:1px solid var(--line);min-width:0}
+.kv div:nth-child(odd){background:var(--raised);color:var(--muted)}
+.kv div:nth-last-child(-n+2){border-bottom:0}
+.kv code,.addr{font-family:var(--mono);font-size:12px;overflow-wrap:anywhere}
+@media (max-width:520px){.kv{grid-template-columns:1fr}.kv div:nth-child(odd){border-bottom:0;padding-bottom:0}}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;vertical-align:top;padding:7px 10px;border-bottom:1px solid var(--line)}
+th{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--raised)}
+tbody tr:last-child td{border-bottom:0}
+.flag{font-family:var(--mono);font-size:10.5px;padding:1px 5px;border-radius:3px;margin-right:3px}
+.f-w{background:var(--accent-soft);color:var(--accent)}.f-s{background:var(--brand-soft);color:var(--brand)}
+pre.code{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--mono);font-size:12px;line-height:1.6;padding:12px 14px;border-radius:8px;overflow-x:auto;white-space:pre}
+pre.code .d{color:var(--code-dim)}pre.code .h{color:var(--code-hl)}
+.acc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.acc{grid-template-columns:1fr}}
+.ac{border:1px solid var(--line);border-radius:8px;overflow:hidden;min-width:0}
+.ac .ah{padding:9px 11px;background:var(--raised);border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.ac .ah b{font-family:var(--mono);font-size:13px}
+.ac .ah span{font-family:var(--mono);font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+.ac table{font-size:12.5px}
+.ac td{padding:5px 11px;font-family:var(--mono);font-size:12px}
+.ac td:first-child{color:var(--muted);width:42%}
+.ac tr.chg td{background:var(--accent-soft)}
+.ac tr.chg td:last-child::after{content:" ●";color:var(--accent)}
+.ac .empty{padding:14px 11px;font-size:12.5px;color:var(--muted)}
+.docsel{display:flex;flex-wrap:wrap;gap:6px}
+.docsel button{cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:5px 10px;font-size:12.5px}
+.docsel button[aria-pressed="true"]{background:var(--fg);color:var(--surface);border-color:var(--fg)}
+.docsel button:disabled{opacity:.45;cursor:not-allowed}
+textarea{width:100%;min-height:230px;resize:vertical;font-family:var(--mono);font-size:12.5px;line-height:1.55;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--raised);color:var(--fg)}
+.hashbox{display:grid;grid-template-columns:120px minmax(0,1fr);gap:6px 10px;font-size:12.5px;align-items:baseline}
+.hashbox code{font-family:var(--mono);font-size:12px;overflow-wrap:anywhere}
+.verdict{border-radius:8px;padding:10px 12px;font-size:13.5px;font-weight:600}
+.verdict.ok{background:var(--ok-soft);color:var(--ok)}.verdict.bad{background:var(--bad-soft);color:var(--bad)}.verdict.neu{background:var(--soft);color:var(--muted)}
+.arch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:stretch}
+@media (max-width:760px){.arch{grid-template-columns:1fr}}
+.an{border:1px solid var(--line);border-radius:8px;padding:10px 11px;display:flex;flex-direction:column;gap:3px;font-size:12.5px;color:var(--muted)}
+.an b{color:var(--fg);font-family:var(--display);font-size:13.5px}
+.an.chain{border-color:var(--brand);background:var(--brand-soft)}
+.an.chain b{color:var(--brand)}
+.an small{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+/* eşleşme */
+.mgrid{display:grid;grid-template-columns:minmax(0,270px) minmax(0,1fr);gap:16px}
+@media (max-width:860px){.mgrid{grid-template-columns:1fr}}
+.form{display:flex;flex-direction:column;gap:12px}
+.ctl{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted)}
+.ctl b{color:var(--fg)}
+.ctl.check{flex-direction:row;align-items:flex-start;gap:8px;color:var(--fg)}
+.ctl input[type=number]{font:inherit;width:110px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg)}
+.ctl input[type=range]{accent-color:var(--accent);width:100%;max-width:220px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;align-self:flex-start}
+.seg button{border:0;background:transparent;color:var(--fg);padding:6px 10px;cursor:pointer;border-right:1px solid var(--line);font-size:13px}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--surface)}
+.seg button:disabled,.ctl input:disabled{opacity:.5;cursor:not-allowed}
+.offers{display:flex;flex-direction:column;gap:8px}
+.offer{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:10px;align-items:start;border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.offer.chosen{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand);background:var(--brand-soft)}
+.offer .rk{font-family:var(--display);font-weight:800;font-size:19px;color:var(--muted);line-height:1.2}
+.offer .nm{font-weight:600;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.offer .nm small{font-weight:400;color:var(--muted);font-size:12px}
+.offer .why{font-size:12.5px;color:var(--muted);margin-top:2px}
+.ometa{display:flex;flex-wrap:wrap;gap:3px 14px;font-size:12px;color:var(--muted);margin-top:5px}
+.ometa b{color:var(--fg);font-family:var(--mono);font-weight:500}
+.oright{display:flex;flex-direction:column;gap:6px;align-items:flex-end;min-width:150px}
+.msc{font-family:var(--mono);font-size:11.5px;color:var(--muted);text-align:right}
+.msc b{display:block;font-family:var(--display);font-size:19px;color:var(--fg)}
+.sbar{width:100%;height:6px;border-radius:3px;background:var(--soft);overflow:hidden}
+.sbar i{display:block;height:100%;background:var(--brand)}
+@media (max-width:560px){.offer{grid-template-columns:22px minmax(0,1fr)}.oright{grid-column:2;align-items:flex-start}.msc{text-align:left}}
+.elim{font-size:12.5px;color:var(--muted);padding:9px 11px;border:1px dashed var(--line);border-radius:8px}
+.elim b{color:var(--bad)}
+/* geçmiş */
+.hist tbody tr{cursor:pointer}
+.hist tbody tr:hover td{background:var(--raised)}
+.hist tbody tr.sel td{background:var(--brand-soft)}
+.below{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:16px}
+.note{font-size:12px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="top gut">
+  <div class="inner">
+    <div class="logo">
+      <svg viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="11" width="18" height="12" rx="6" fill="none" stroke="var(--fg)" stroke-width="3"/><rect x="13" y="11" width="18" height="12" rx="6" fill="none" stroke="var(--brand)" stroke-width="3"/></svg>
+      <div><b>SolChain <span>B2B</span></b><small>Ağ konsolu</small></div>
+    </div>
+    <div class="netinfo">
+      <span class="net"><span class="dot"></span>Solana Devnet · simülasyon</span>
+      <span>Slot <b id="slot">–</b></span>
+      <span>Program <b id="progShort">–</b></span>
+    </div>
+  </div>
+</header>
+
+<main class="gut">
+<div class="inner">
+  <section class="intro">
+    <div class="eyebrow">Sipariş yaşam döngüsü · zincir görünümü</div>
+    <h1>Bir ham madde siparişinin Solana üzerindeki yolculuğu</h1>
+    <p class="lead">Bu konsol, SolChain B2B'de bir siparişin her adımında blokzincire ne yazıldığını gösterir: hangi tarafın imzaladığını, hangi hesabın değiştiğini, paranın nerede durduğunu ve belgelerin zincirdeki kayıtla nasıl doğrulandığını. Bir ödeme yolu seçin, üretici olarak kısıtlarınızı girip tedarikçinizi seçin ve siparişi adım adım çalıştırın.</p>
+    <div class="banner"><span>ⓘ</span><span>Bu ekran bir simülasyondur. Firmalar, adresler, işlem imzaları ve tutarlar örnektir; gerçek Solana ağında karşılıkları yoktur. Belge doğrulamadaki SHA-256 özetleri ise tarayıcınızda gerçekten hesaplanır.</span></div>
+    <div class="scen" id="scen"></div>
+    <div class="summary" id="summary"></div>
+  </section>
+
+  <section class="panel" id="matchPanel" style="margin-top:16px">
+    <div class="ph"><h2>1 · Tedarikçi eşleşmesi</h2><span class="foot mono" id="rfqNo"></span></div>
+    <p class="foot" style="margin-top:-6px">Üretici olarak teklif talebinizin kısıtlarını girin. Şartları sağlamayan tedarikçiler elenir; kalanlar, karne endeksleri Solana'daki Scorecard hesaplarından okunarak önceliğinize göre sıralanır. Eşleşme uygulamada yapılır, zincire yazılmaz.</p>
+    <div class="mgrid">
+      <div class="form">
+        <div class="ctl">Malzeme<b id="mMat"></b></div>
+        <label class="ctl">Miktar (ton)<input type="number" id="mQty" min="5" max="300" step="1"></label>
+        <label class="ctl">Azami teslim süresi: <b id="mLeadV"></b><input type="range" id="mLead" min="6" max="21"></label>
+        <label class="ctl check"><input type="checkbox" id="mCert"> <span id="mCertLbl"></span></label>
+        <div class="ctl">Öncelik<div class="seg" id="mPrio"></div></div>
+        <p class="foot" id="mPrioNote"></p>
+        <p class="foot" id="mLock"></p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+        <div class="offers" id="offers"></div>
+        <div class="elim" id="elim"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="main">
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <section class="panel">
+        <div class="ph"><h2>2 · Sipariş yaşam döngüsü</h2><span class="foot" id="progress"></span></div>
+        <ol class="steps" id="steps"></ol>
+        <div class="signing" id="signing"></div>
+        <div class="acts" id="acts"></div>
+        <div class="acts"><button class="btn ghost" id="auto">▶ Otomatik oynat</button><button class="btn ghost" id="reset">↺ Baştan başlat</button></div>
+      </section>
+      <section class="panel">
+        <div class="ph"><h2>Fon durumu</h2><span class="pill br" id="railPill"></span></div>
+        <div class="bar" id="fbar"></div>
+        <div class="legend" id="flegend"></div>
+        <div class="money" id="money"></div>
+        <p class="foot" id="fundNote"></p>
+        <ul class="events" id="events"></ul>
+      </section>
+    </div>
+
+    <section class="panel">
+      <div class="tabs" role="tablist" id="tabs">
+        <button role="tab" data-t="tx">İşlem</button>
+        <button role="tab" data-t="acc">Zincirdeki hesaplar</button>
+        <button role="tab" data-t="doc">Belge doğrulama</button>
+        <button role="tab" data-t="prog">Program yapısı</button>
+        <button role="tab" data-t="wal">Taraflar ve cüzdanlar</button>
+      </div>
+      <div id="tab-tx"></div>
+      <div id="tab-acc" hidden></div>
+      <div id="tab-doc" hidden></div>
+      <div id="tab-prog" hidden></div>
+      <div id="tab-wal" hidden></div>
+    </section>
+  </div>
+
+  <div class="below">
+    <section class="panel">
+      <div class="ph"><h2>İşlem geçmişi</h2><span class="foot">Bir satıra tıklayarak işlemin ayrıntısını açın</span></div>
+      <div class="tbl"><table class="hist"><thead><tr><th>#</th><th>İmza</th><th>Talimat</th><th>İmzalayanlar</th><th>Slot</th><th>Zaman</th><th>Ücret</th><th>Durum</th></tr></thead><tbody id="hist"></tbody></table></div>
+    </section>
+    <section class="panel">
+      <div class="ph"><h2>Zincirde ne var, ne yok?</h2></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Bilgi</th><th>Nerede</th><th>Neden</th></tr></thead>
+        <tbody>
+          <tr><td>Sipariş durumu, taraflar, imzalar, zaman damgaları</td><td><span class="pill br">Solana</span></td><td>Hiçbir tarafın tek başına değiştiremeyeceği ortak kayıt</td></tr>
+          <tr><td>Belgelerin SHA-256 özetleri (sipariş, sevk, analiz, kalite raporu)</td><td><span class="pill br">Solana</span></td><td>Belge sonradan değiştirilirse özet tutmaz</td></tr>
+          <tr><td>Tedarikçi ve alıcı karneleri</td><td><span class="pill br">Solana</span></td><td>Her üreticinin aynı puanı bağımsız doğrulayabilmesi</td></tr>
+          <tr><td>Stablecoin yolunda sipariş tutarı</td><td><span class="pill br">Solana kasa hesabı</span></td><td>Ödeme koşullara bağlı olarak program tarafından serbest bırakılır</td></tr>
+          <tr><td>Fiat yolunda sipariş tutarı</td><td><span class="pill neu">Lisanslı ödeme kuruluşu</span></td><td>Yerel ödeme mevzuatı; zincirde yalnızca kuruluşun imzalı onayı bulunur</td></tr>
+          <tr><td>Belge içerikleri, fiyat detayları, kişisel veriler</td><td><span class="pill neu">Şifreli, zincir dışı</span></td><td>Ticari sır ve veri koruma (KVKK, GDPR)</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">Ödeme yolu her ülkenin mevzuatına göre seçilir. Kripto varlıkla ödemenin yasak olduğu Türkiye gibi ülkelerde fiat yolu kullanılır; stablecoin yolu yalnızca mevzuatın izin verdiği yerlerde ve hukuki teyitten sonra uygulanır.</p>
+    </section>
+  </div>
+</div>
+</main>
+
+</head>
+<body>
+<script>
+(function(){
+'use strict';
+/* ---------- yardımcılar ---------- */
+function ror(x,n){return (x>>>n)|(x<<(32-n))}
+var K=new Uint32Array('428a2f98 71374491 b5c0fbcf e9b5dba5 3956c25b 59f111f1 923f82a4 ab1c5ed5 d807aa98 12835b01 243185be 550c7dc3 72be5d74 80deb1fe 9bdc06a7 c19bf174 e49b69c1 efbe4786 0fc19dc6 240ca1cc 2de92c6f 4a7484aa 5cb0a9dc 76f988da 983e5152 a831c66d b00327c8 bf597fc7 c6e00bf3 d5a79147 06ca6351 14292967 27b70a85 2e1b2138 4d2c6dfc 53380d13 650a7354 766a0abb 81c2c92e 92722c85 a2bfe8a1 a81a664b c24b8b70 c76c51a3 d192e819 d6990624 f40e3585 106aa070 19a4c116 1e376c08 2748774c 34b0bcb5 391c0cb3 4ed8aa4a 5b9cca4f 682e6ff3 748f82ee 78a5636f 84c87814 8cc70208 90befffa a4506ceb bef9a3f7 c67178f2'.split(' ').map(function(h){return parseInt(h,16)}));
+function sha256(str){var by=new TextEncoder().encode(str),l=by.length,n=((l+9+63)>>6)<<6,m=new Uint8Array(n);m.set(by);m[l]=0x80;var dv=new DataView(m.buffer),bits=l*8;dv.setUint32(n-4,bits>>>0);dv.setUint32(n-8,Math.floor(bits/4294967296));var H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19],w=new Uint32Array(64);
+  for(var i=0;i<n;i+=64){for(var t=0;t<16;t++)w[t]=dv.getUint32(i+t*4);for(t=16;t<64;t++){var s0=ror(w[t-15],7)^ror(w[t-15],18)^(w[t-15]>>>3),s1=ror(w[t-2],17)^ror(w[t-2],19)^(w[t-2]>>>10);w[t]=(w[t-16]+s0+w[t-7]+s1)>>>0}
+  var a=H[0],b=H[1],c=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7];
+  for(t=0;t<64;t++){var S1=ror(e,6)^ror(e,11)^ror(e,25),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[t]+w[t])>>>0,S0=ror(a,2)^ror(a,13)^ror(a,22),mj=(a&b)^(a&c)^(b&c),t2=(S0+mj)>>>0;h=g;g=f;f=e;e=(d+t1)>>>0;d=c;c=b;b=a;a=(t1+t2)>>>0}
+  H=[H[0]+a,H[1]+b,H[2]+c,H[3]+d,H[4]+e,H[5]+f,H[6]+g,H[7]+h].map(function(x){return x>>>0})}
+  return H.map(function(x){return x.toString(16).padStart(8,'0')}).join('')}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+var B58='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+function b58(r,n){var s='';for(var i=0;i<n;i++)s+=B58[Math.floor(r()*58)];return s}
+function short(a){return a.slice(0,4)+'…'+a.slice(-4)}
+function fmt(v,d){d=d||0;return new Intl.NumberFormat('tr-TR',{minimumFractionDigits:d,maximumFractionDigits:d}).format(v)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function el(id){return document.getElementById(id)}
+function fdt(d){return d.toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+function fday(d){return d.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'})}
+
+var R0=rng(20261124);
+var PROGRAM='SCB2b'+b58(R0,39);
+var TOKEN_PROG='TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
+var SYS_PROG='11111111111111111111111111111111';
+var USDC_MINT='USDCd'+b58(R0,39);
+el('progShort').textContent=short(PROGRAM);
+
+/* ---------- senaryolar ---------- */
+var SCN={
+ fiat:{key:'fiat',code:'SC-2026-0148',tag:'Ödeme yolu 1',title:'Yurt içi · fiat yolu',sub:'Türkiye · TRY · lisanslı ödeme kuruluşu emanet hesabı. Solana koşulları ve kanıtları tutar.',
+  buyer:{name:'Örnek Üretici A.Ş.',loc:'Kocaeli, Türkiye'},supplier:{name:'Tedarikçi B Metal San. Ltd.',loc:'Bursa, Türkiye'},
+  mat:'Soğuk haddelenmiş sac · DC01, 1,00 mm',qty:32,price:36000,cur:'TRY',dec:2,base:'kuruş',baseMul:100,deliver:'06.12.2026',ship:'04.12.2026',lot:'P-ME-2421',
+  psp:'Örnek Ödeme Kuruluşu A.Ş.',doc:'e-İrsaliye',docNo:'İRS-2026-004817',
+  spec:'Kalınlık 0,95–1,05 mm (EN 10131) · Çekme dayanımı 270–410 MPa (ISO 6892-1) · Yüzey kusuru yok',
+  coa:['Kalınlık: 1,002 mm','Çekme dayanımı: 338 MPa (ISO 6892-1)','Akma dayanımı: 226 MPa','Kopma uzaması: %33,1','Yüzey: kusursuz'],
+  iqc:['Kalınlık (10 ölçüm ort.): 1,004 mm','Çekme dayanımı: 335 MPa','Yüzey muayenesi: uygun'],
+  iqcBad:['Kalınlık (10 ölçüm ort.): 1,071 mm  ✕ şart dışı','Çekme dayanımı: 331 MPa','Yüzey muayenesi: uygun'],
+  weak:'Kalınlık',
+  score:{deliveries:20,otif:17,qpass:19,qtotal:20,declared:9800,lost:1},buyerScore:{payments:48,onTime:44,disputes:5,unjust:1,delay:3.5}},
+ usdc:{key:'usdc',code:'SC-2026-0149',tag:'Ödeme yolu 2',title:'Sınır ötesi · stablecoin yolu',sub:'AB alıcı ↔ Birleşik Krallık tedarikçi · USDC · tutar Solana üzerindeki kasa hesabında kilitlenir.',
+  buyer:{name:'Örnek Manufacturing GmbH',loc:'Almanya · AB'},supplier:{name:'Örnek Polymers Ltd.',loc:'Birleşik Krallık'},
+  mat:'HDPE granül · enjeksiyon kalitesi',qty:40,price:1450,cur:'USDC',dec:2,base:'taban birim (6 ondalık)',baseMul:1000000,deliver:'10.12.2026',ship:'06.12.2026',lot:'P-PL-1187',
+  doc:'CMR sevk belgesi',docNo:'CMR-GB-2026-33810',
+  spec:'Eriyik akış hızı 0,25–0,35 g/10 dk (ISO 1133) · Nem ≤ %0,05 · Yoğunluk 0,949–0,955 g/cm³ (ISO 1183)',
+  coa:['Eriyik akış hızı: 0,31 g/10 dk (ISO 1133)','Nem: %0,028','Yoğunluk: 0,952 g/cm³ (ISO 1183)','Sarılık indeksi: 1,4','Kül: %0,012'],
+  iqc:['Eriyik akış hızı: 0,30 g/10 dk','Nem: %0,031','Yoğunluk: 0,952 g/cm³'],
+  iqcBad:['Eriyik akış hızı: 0,39 g/10 dk  ✕ şart dışı','Nem: %0,034','Yoğunluk: 0,951 g/cm³'],
+  weak:'Eriyik akış hızı',
+  score:{deliveries:26,otif:23,qpass:25,qtotal:26,declared:9700,lost:0},buyerScore:{payments:31,onTime:30,disputes:2,unjust:0,delay:1.8}}
+};
+function money(v,S){return fmt(v,S.dec)+' '+S.cur}
+function supIdx(s){return .3*(100*s.otif/s.deliveries)+.3*(100*s.qpass/s.qtotal)+.15*(s.declared/100)+.15*(s.yet==null?100:s.yet)+.1*Math.max(0,100-30*s.lost)}
+function idxOf(s){return s.deliveries<5?null:supIdx(s)}
+function fmtIdx(v){return v==null?'oluşmadı':fmt(v,1)}
+function bps(v){return v==null?'pending':Math.round(v*100)}
+var YET={ok:100,soon:80,expired:0};
+SCN.fiat.certMain='ISO 9001';SCN.fiat.certLabel='ISO 9001 ve EN 10204 3.1 belgeleri geçerli olmalı';
+SCN.usdc.certMain='ISO 9001';SCN.usdc.certLabel='ISO 9001 ve REACH uygunluk beyanı geçerli olmalı';
+SCN.fiat.suppliers=[
+ {id:'A',name:'Tedarikçi A Çelik A.Ş.',loc:'Kocaeli, Türkiye',price:37400,lead:10,cap:120,cert:'ok',score:{deliveries:24,otif:22,qpass:23,qtotal:24,declared:9900,lost:0}},
+ {id:'B',name:'Tedarikçi B Metal San. Ltd.',loc:'Bursa, Türkiye',price:36000,lead:12,cap:80,cert:'ok',score:{deliveries:20,otif:17,qpass:19,qtotal:20,declared:9800,lost:1}},
+ {id:'C',name:'Tedarikçi C Sac Ltd.',loc:'İzmir, Türkiye',price:35200,lead:9,cap:150,cert:'soon',score:{deliveries:18,otif:15,qpass:18,qtotal:18,declared:6400,lost:1}},
+ {id:'D',name:'Tedarikçi D Metal A.Ş.',loc:'Konya, Türkiye',price:33900,lead:8,cap:100,cert:'expired',score:{deliveries:21,otif:16,qpass:20,qtotal:21,declared:9600,lost:1}},
+ {id:'E',name:'Tedarikçi E Haddecilik',loc:'Manisa, Türkiye',price:34800,lead:11,cap:40,cert:'ok',score:{deliveries:3,otif:3,qpass:3,qtotal:3,declared:10000,lost:0}}];
+SCN.usdc.suppliers=[
+ {id:'A',name:'Örnek Kunststoffe GmbH',loc:'Almanya',price:1520,lead:7,cap:90,cert:'ok',score:{deliveries:30,otif:28,qpass:28,qtotal:30,declared:9900,lost:0}},
+ {id:'B',name:'Örnek Polymers Ltd.',loc:'Birleşik Krallık',price:1450,lead:12,cap:120,cert:'ok',score:{deliveries:26,otif:23,qpass:25,qtotal:26,declared:9700,lost:0}},
+ {id:'C',name:'Örnek Plastics B.V.',loc:'Hollanda',price:1395,lead:10,cap:150,cert:'soon',score:{deliveries:22,otif:17,qpass:21,qtotal:22,declared:6900,lost:1}},
+ {id:'D',name:'Örnek Resins Sp. z o.o.',loc:'Polonya',price:1340,lead:9,cap:110,cert:'expired',score:{deliveries:24,otif:19,qpass:23,qtotal:24,declared:9500,lost:1}},
+ {id:'E',name:'Örnek Chem s.r.o.',loc:'Çekya',price:1410,lead:9,cap:60,cert:'ok',score:{deliveries:2,otif:2,qpass:2,qtotal:2,declared:10000,lost:0}}];
+var PRIO={dengeli:{e:.55,f:.30,t:.15,l:'Endeks %55 · fiyat %30 · teslim süresi %15'},kalite:{e:.75,f:.15,t:.10,l:'Endeks %75 · fiyat %15 · teslim süresi %10'},maliyet:{e:.40,f:.45,t:.15,l:'Endeks %40 · fiyat %45 · teslim süresi %15'}};
+function scoreAddr(key,id){return b58(rng(9000+id.charCodeAt(0)*7+(key==='fiat'?0:500)),44)}
+function supScoreOf(sp){var x=JSON.parse(JSON.stringify(sp.score));x.yet=YET[sp.cert];return x}
+function buyIdx(b){return 60*(b.onTime/b.payments)+25*(1-b.delay/30)+15*(b.disputes?(1-b.unjust/b.disputes):1)}
+function tier(ix){if(ix==null)return 0;return ix>=85?.40:ix>=70?.25:.10}
+
+/* ---------- durum ---------- */
+var st,slot=352418204,autoTimer=null;
+function newState(key,supId,rfq){
+  var base=SCN[key],r=rng(key==='fiat'?101:202);
+  rfq=rfq||{qty:base.qty,lead:14,cert:true,prio:'dengeli'};
+  var sup=supId?base.suppliers.filter(function(x){return x.id===supId})[0]:null;
+  var S=Object.assign({},base,{qty:rfq.qty,supplier:sup,price:sup?sup.price:base.price});
+  var W={buyer:b58(r,44),supplier:b58(r,44),psp:b58(r,44),oracle:b58(r,44),lab:b58(r,44),settler:b58(r,44)};
+  var A={order:b58(r,44),vault:b58(r,44),funding:b58(r,44),supScore:b58(r,44),buyScore:b58(r,44),dispute:b58(r,44),supCo:b58(r,44),buyCo:b58(r,44),buyerAta:b58(r,44),supplierAta:b58(r,44)};
+  if(sup){W.supplier=b58(rng(7000+sup.id.charCodeAt(0)+(key==='fiat'?0:50)),44);A.supScore=scoreAddr(key,sup.id)}
+  var sc=sup?supScoreOf(sup):null,bs=JSON.parse(JSON.stringify(base.buyerScore));
+  var total=sup?S.qty*S.price:0,idx=sc?idxOf(sc):null,adv=sc?tier(idx):0;
+  var s={key:key,S:S,W:W,A:A,r:rng(key==='fiat'?303:404),step:sup?1:0,matched:!!sup,rfq:rfq,branch:null,late:false,verdict:null,total:total,adv:adv,idx0:idx,
+    funds:{locked:0,toSupplier:0,toBuyer:0},events:[],txs:[],sel:null,tab:st?st.tab:'tx',docSel:'terms',docEdits:{},
+    sc:sc,bs:bs,accounts:{},changed:{},time:key==='fiat'?new Date(2026,10,24,9,12,4):new Date(2026,10,25,14,3,51)};
+  s.accounts.buyScore=buyAcc(s);
+  if(sup){s.accounts.supScore=scoreAcc(s);
+  s.accounts.supCo={_name:'Company · tedarikçi',_addr:A.supCo,authority:short(W.supplier),role:'Supplier',legal_name_hash:sha256(sup.name).slice(0,16)+'…',kyb_attested_by:'KYB doğrulayıcı',credentials:key==='fiat'?'ISO 9001 · EN 10204 3.1':'ISO 9001 · REACH beyanı',credential_status:sup.cert==='ok'?'Valid':sup.cert==='soon'?'ExpiresIn60d':'Expired',status:'Verified'};}
+  s.accounts.buyCo={_name:'Company · alıcı',_addr:A.buyCo,authority:short(W.buyer),role:'Buyer',legal_name_hash:sha256(S.buyer.name).slice(0,16)+'…',kyb_attested_by:'KYB doğrulayıcı',status:'Verified'};
+  return s;
+}
+function scoreAcc(s){var x=s.sc;return {_name:'Scorecard · tedarikçi',_addr:s.A.supScore,company:short(s.W.supplier),deliveries:x.deliveries,on_time_in_full:x.otif,quality_lots_passed:x.qpass,quality_lots_total:x.qtotal,declared_match_bps:x.declared,disputes_lost:x.lost,credentials_score:x.yet,index_bps:bps(idxOf(x)),advance_tier_bps:tier(idxOf(x))*10000}}
+function buyAcc(s){var b=s.bs;return {_name:'Scorecard · alıcı',_addr:s.A.buyScore,company:short(s.W.buyer),payments:b.payments,paid_on_time:b.onTime,avg_delay_days_x10:Math.round(b.delay*10),disputes_opened:b.disputes,disputes_unjust:b.unjust,index_bps:Math.round(buyIdx(b)*100)}}
+
+/* ---------- belgeler ---------- */
+function docs(s){
+  var S=s.S,lines=function(a){return a.join('\n')};
+  var d={terms:{label:'Sipariş koşulları',at:'create_order',field:'terms_hash',text:lines([
+    'SATIN ALMA SİPARİŞİ · '+S.code,'Alıcı: '+S.buyer.name+' ('+S.buyer.loc+')','Tedarikçi: '+S.supplier.name+' ('+S.supplier.loc+')',
+    'Malzeme: '+S.mat,'Miktar: '+S.qty+' ton','Birim fiyat: '+money(S.price,S)+' / ton','Toplam: '+money(s.total,S),
+    'Ödeme yolu: '+(S.key==='fiat'?'Lisanslı ödeme kuruluşu emanet hesabı ('+S.psp+')':'Solana kasa hesabı (USDC)'),
+    'Avans: sevkiyatta %'+Math.round(s.adv*100)+' (tedarikçi endeksi '+fmtIdx(s.idx0)+')','Kalan tutar: kalite kabulünde',
+    'Teslim tarihi: '+S.deliver,'Kalite şartları: '+S.spec,'Uyuşmazlık: akrediteli hakem laboratuvarın kararı bağlayıcıdır'])},
+   ship:{label:S.doc,at:'record_shipment',field:'delivery_hash',text:lines([
+    (S.key==='fiat'?'ELEKTRONİK SEVK BELGESİ (e-İrsaliye) · ':'CMR SEVK BELGESİ · ')+S.docNo,'Sipariş: '+S.code,'Gönderen: '+S.supplier.name,'Alıcı: '+S.buyer.name,
+    'Malzeme: '+S.mat,'Miktar: '+S.qty+' ton','Parti no: '+S.lot,'Sevk tarihi: '+S.ship,(S.key==='fiat'?'Araç plakası: 16 ABC 482':'Taşıyıcı: Örnek Lojistik Ltd.')])},
+   coa:{label:'Analiz sertifikası',at:'record_shipment',field:'coa_hash',text:lines(['ANALİZ SERTİFİKASI · Parti '+S.lot,'Sipariş: '+S.code].concat(S.coa))},
+   iqc:{label:s.branch==='dispute'?'İtiraz bildirimi':'Giriş kalite kontrol raporu',at:s.branch==='dispute'?'open_dispute':'accept_delivery',field:'iqc_hash',text:lines([(s.branch==='dispute'?'İTİRAZ BİLDİRİMİ':'GİRİŞ KALİTE KONTROL RAPORU')+' · Parti '+S.lot,'Sipariş: '+S.code].concat(s.branch==='dispute'?S.iqcBad:S.iqc).concat([s.branch==='dispute'?'Talep: parti şartname dışı, hakem incelemesi':'Sonuç: KABUL']))}};
+  if(s.branch==='dispute')d.lab={label:'Hakem laboratuvar raporu',at:'resolve_dispute',field:'report_hash',text:lines(['HAKEM LABORATUVAR RAPORU · Parti '+S.lot,'Sipariş: '+S.code,'Laboratuvar: Örnek Akrediteli Test Lab.','İncelenen parametre: '+S.weak,
+    s.verdict==='buyer'?'Bulgu: numune şartname dışı':'Bulgu: numune şartnameye uygun','Karar: '+(s.verdict==='buyer'?'ALICI HAKLI':'TEDARİKÇİ HAKLI')])};
+  return d;
+}
+
+/* ---------- adımlar ---------- */
+function stepList(s){
+  var f=s.key==='fiat',L=[
+   {id:'match',t:'Tedarikçi seçildi',ix:'zincir dışı · eşleşme',who:['buyer'],plain:''},
+   {id:'create',t:'Sipariş oluşturuldu',ix:'create_order',who:['buyer'],plain:'Alıcı siparişi oluşturdu. Sipariş koşullarının özeti zincire yazıldı; koşullar artık sonradan değiştirilemez.'},
+   {id:'sign',t:'Tedarikçi koşulları onayladı',ix:'sign_order',who:['supplier'],plain:'Tedarikçi aynı koşulları kendi anahtarıyla imzaladı. Sipariş iki tarafça kabul edilmiş oldu.'},
+   {id:'fund',t:f?'Ödeme kuruluşu tutarı bloke etti':'Tutar kasa hesabına kilitlendi',ix:f?'attest_funding':'fund_order',who:f?['psp']:['buyer'],plain:f?'Tutar lisanslı ödeme kuruluşunun emanet hesabında TRY olarak bloke edildi. Kuruluş bunu kendi imzasıyla zincire bildirdi; para zincire taşınmadı.':'Alıcı '+money(s.total,s.S)+' tutarı, yalnızca SolChain B2B programının yönetebildiği kasa hesabına aktardı. Taraflardan hiçbiri bu parayı tek başına çekemez.'},
+   {id:'ship',t:'Sevkiyat kaydedildi, avans aktarıldı',ix:'record_shipment',who:['supplier','oracle'],plain:''},
+   {id:'iqc',t:'Giriş kalite kontrolü',ix:s.branch==='dispute'?'open_dispute':'accept_delivery',who:['buyer'],plain:''}
+  ];
+  if(s.branch==='dispute')L.push({id:'arb',t:'Hakem laboratuvar kararı',ix:'resolve_dispute',who:['lab'],plain:''});
+  L.push({id:'settle',t:'Mutabakat ve karne güncellemesi',ix:'settle_order',who:['settler'],plain:''});
+  return L;
+}
+var ROLE={buyer:'Alıcı',supplier:'Tedarikçi',psp:'Ödeme kuruluşu',oracle:'e-Belge doğrulayıcı',lab:'Hakem laboratuvar',settler:'Mutabakat servisi'};
+
+function snap(){var o={};Object.keys(st.accounts).forEach(function(k){o[k]=JSON.stringify(st.accounts[k])});return o}
+function diff(before){var ch={};Object.keys(st.accounts).forEach(function(k){var a=st.accounts[k],b=before[k]?JSON.parse(before[k]):null;ch[k]={};Object.keys(a).forEach(function(f){if(f[0]==='_')return;if(!b||JSON.stringify(b[f])!==JSON.stringify(a[f]))ch[k][f]=true})});return ch}
+function advTime(mins){st.time=new Date(st.time.getTime()+mins*60000+Math.floor(st.r()*50)*1000)}
+function mkTx(o){
+  slot+=Math.floor(40+st.r()*900);
+  var tx={n:st.txs.length+1,sig:b58(st.r,88),ix:o.ix,signers:o.signers,slot:slot,time:new Date(st.time),fee:5000*o.signers.length,cu:Math.floor(9000+st.r()*26000),
+    args:o.args||{},accounts:o.accounts||[],logs:[],balances:o.balances||[],plain:o.plain,title:o.title};
+  var camel=o.ix.split('_').map(function(p){return p[0].toUpperCase()+p.slice(1)}).join('');
+  tx.logs.push('Program '+PROGRAM+' invoke [1]','Program log: Instruction: '+camel);
+  (o.logs||[]).forEach(function(l){tx.logs.push(l)});
+  tx.logs.push('Program '+PROGRAM+' consumed '+tx.cu+' of 200000 compute units','Program '+PROGRAM+' success');
+  st.txs.push(tx);st.sel=tx.n;return tx;
+}
+function acct(name,addr,w,sg){return {name:name,addr:addr,w:!!w,s:!!sg}}
+
+function run(action){
+  var S=st.S,steps=stepList(st),cur=steps[st.step];if(!cur||cur.id==='match')return;
+  var before=snap(),A=st.A,W=st.W,d,o;
+  if(cur.id==='create'){
+    d=docs(st).terms;var th=sha256(d.text);
+    st.accounts.order={_name:'Order',_addr:A.order,order_id:S.code,buyer:short(W.buyer),supplier:short(W.supplier),status:'Created',rail:st.key==='fiat'?'FiatPsp':'UsdcEscrow',currency:S.cur,amount:String(Math.round(st.total*S.baseMul)),advance_bps:st.adv*10000,terms_hash:th,signed_by:'Buyer',delivery_hash:'—',coa_hash:'—',iqc_hash:'—',released:'0',refunded:'0'};
+    o=mkTx({ix:'create_order',signers:['buyer'],title:cur.t,plain:cur.plain,args:{order_id:S.code,amount:Math.round(st.total*S.baseMul)+' ('+S.base+')',currency:S.cur,advance_bps:st.adv*10000,terms_hash:th},
+      accounts:[acct('buyer',W.buyer,1,1),acct('supplier_company',A.supCo),acct('order (PDA)',A.order,1),acct('system_program',SYS_PROG)],
+      logs:['Program log: order '+S.code+' created, status=Created','Program log: terms_hash='+th.slice(0,16)+'…']});
+    advTime(28);
+  }else if(cur.id==='sign'){
+    st.accounts.order.status='Agreed';st.accounts.order.signed_by='Buyer, Supplier';
+    o=mkTx({ix:'sign_order',signers:['supplier'],title:cur.t,plain:cur.plain,args:{terms_hash:st.accounts.order.terms_hash},accounts:[acct('supplier',W.supplier,0,1),acct('order (PDA)',A.order,1)],
+      logs:['Program log: terms_hash matches, both parties signed','Program log: status Created -> Agreed']});
+    advTime(25);
+  }else if(cur.id==='fund'){
+    if(st.key==='fiat'){
+      var ref='PSP-'+Math.floor(100000+st.r()*899999);
+      st.accounts.funding={_name:'FundingAttestation',_addr:A.funding,order:short(A.order),psp:short(W.psp),psp_reference:ref,currency:'TRY',amount_locked:String(Math.round(st.total*100)),status:'Locked'};
+      st.accounts.order.status='Funded';st.funds.locked=st.total;
+      st.events.push(['bank','Emanet hesabında '+money(st.total,S)+' bloke edildi',ref]);
+      o=mkTx({ix:'attest_funding',signers:['psp'],title:cur.t,plain:cur.plain,args:{psp_reference:ref,amount:Math.round(st.total*100)+' (kuruş)',currency:'TRY'},accounts:[acct('psp_authority',W.psp,0,1),acct('order (PDA)',A.order,1),acct('funding_attestation (PDA)',A.funding,1),acct('system_program',SYS_PROG)],
+        logs:['Program log: psp authority verified','Program log: funds locked off-chain, ref='+ref,'Program log: status Agreed -> Funded']});
+    }else{
+      st.accounts.vault={_name:'Vault · USDC token hesabı',_addr:A.vault,owner:'Order PDA',mint:'USDC',amount:String(Math.round(st.total*1e6))};
+      st.accounts.order.status='Funded';st.funds.locked=st.total;
+      o=mkTx({ix:'fund_order',signers:['buyer'],title:cur.t,plain:cur.plain,args:{amount:Math.round(st.total*1e6)+' (6 ondalık)'},
+        accounts:[acct('buyer',W.buyer,1,1),acct('buyer_usdc_ata',A.buyerAta,1),acct('order (PDA)',A.order,1),acct('vault (PDA)',A.vault,1),acct('usdc_mint',USDC_MINT),acct('token_program',TOKEN_PROG)],
+        balances:[['Alıcı USDC hesabı',A.buyerAta,250000,250000-st.total],['Kasa (vault)',A.vault,0,st.total]],
+        logs:['Program '+TOKEN_PROG+' invoke [2]','Program log: Instruction: TransferChecked','Program '+TOKEN_PROG+' success','Program log: vault funded, status Agreed -> Funded']});
+    }
+    advTime(60*24*9+70);
+  }else if(cur.id==='ship'){
+    st.late=action==='late';var D=docs(st),dh=sha256(D.ship.text),ch=sha256(D.coa.text),adv=st.total*st.adv;
+    st.accounts.order.status='Shipped';st.accounts.order.delivery_hash=dh;st.accounts.order.coa_hash=ch;st.accounts.order.shipped_late=st.late;
+    st.accounts.order.released=String(Math.round(adv*S.baseMul));st.funds.locked-=adv;st.funds.toSupplier+=adv;
+    var plain='Tedarikçi sevkiyatı kaydetti. '+S.doc+' ve analiz sertifikasının özetleri zincire yazıldı; belge doğrulayıcı sevk belgesinin gerçek olduğunu onayladı'+(st.late?'. Teslim, anlaşılan tarihten 3 gün sonra gerçekleşti ve bu bilgi kayda geçti':'')+'. '+(adv>0?'Tedarikçinin endeksi '+fmt(st.idx0,1)+' olduğu için tutarın %'+Math.round(st.adv*100)+'\'ı avans olarak '+(st.key==='fiat'?'ödeme kuruluşuna aktarma talimatı olarak iletildi.':'kasadan tedarikçiye aktarıldı.'):'Tedarikçinin endeksi henüz oluşmadığı için (5 teslimattan az) avans verilmedi; tutarın tamamı kalite kabulüne kadar kilitli kaldı.');
+    var base={ix:'record_shipment',signers:['supplier','oracle'],title:cur.t,plain:plain,args:{delivery_hash:dh,coa_hash:ch,on_time:!st.late},
+      accounts:[acct('supplier',W.supplier,0,1),acct('document_oracle',W.oracle,0,1),acct('order (PDA)',A.order,1)]};
+    if(st.key==='fiat'){base.accounts.push(acct('funding_attestation (PDA)',A.funding,1));
+      if(adv>0){var r2='TRF-'+Math.floor(100000+st.r()*899999);st.accounts.funding.amount_released=String(Math.round(adv*100));
+      st.events.push(['chain','ReleaseInstruction yayınlandı: avans '+money(adv,S),'']);st.events.push(['bank','Ödeme kuruluşu avansı tedarikçiye aktardı',r2]);
+      base.logs=['Program log: delivery proof recorded','Program log: emit ReleaseInstruction { amount: '+Math.round(adv*100)+', currency: TRY, kind: Advance }','Program log: status Funded -> Shipped'];}
+      else base.logs=['Program log: delivery proof recorded','Program log: supplier index pending, advance_bps=0','Program log: status Funded -> Shipped'];}
+    else if(adv===0){base.logs=['Program log: delivery proof recorded','Program log: supplier index pending, advance_bps=0','Program log: status Funded -> Shipped'];}
+    else{st.accounts.vault.amount=String(Math.round((st.total-adv)*1e6));
+      base.accounts=base.accounts.concat([acct('vault (PDA)',A.vault,1),acct('supplier_usdc_ata',A.supplierAta,1),acct('token_program',TOKEN_PROG)]);
+      base.balances=[['Kasa (vault)',A.vault,st.total,st.total-adv],['Tedarikçi USDC hesabı',A.supplierAta,12500,12500+adv]];
+      base.logs=['Program log: delivery proof recorded','Program '+TOKEN_PROG+' invoke [2]','Program log: Instruction: TransferChecked','Program '+TOKEN_PROG+' success','Program log: advance released, status Funded -> Shipped'];}
+    o=mkTx(base);advTime(60*26+15);
+  }else if(cur.id==='iqc'){
+    if(action==='dispute'){st.branch='dispute';var D2=docs(st),ih=sha256(D2.iqc.text);
+      st.accounts.order.status='Disputed';st.accounts.order.iqc_hash=ih;
+      st.accounts.dispute={_name:'Dispute',_addr:A.dispute,order:short(A.order),opened_by:'Buyer',claim_hash:ih,arbiter:short(W.lab),verdict:'Pending',report_hash:'—'};
+      o=mkTx({ix:'open_dispute',signers:['buyer'],title:'İtiraz açıldı',plain:'Alıcı giriş kalite kontrolünde '+S.weak.toLowerCase()+' değerinin şart dışı olduğunu bildirdi. Kalan tutar kilitli kaldı; numune akrediteli hakem laboratuvara gönderildi.',
+        args:{claim_hash:ih},accounts:[acct('buyer',W.buyer,0,1),acct('order (PDA)',A.order,1),acct('dispute (PDA)',A.dispute,1),acct('system_program',SYS_PROG)],
+        logs:['Program log: dispute opened, remaining funds frozen','Program log: status Shipped -> Disputed']});
+      advTime(60*24*3+40);
+    }else{st.branch='accept';var D3=docs(st),ih2=sha256(D3.iqc.text);
+      st.accounts.order.status='Accepted';st.accounts.order.iqc_hash=ih2;st.accounts.order.signed_by='Buyer, Supplier · IQC: Buyer';
+      o=mkTx({ix:'accept_delivery',signers:['buyer'],title:'Kalite kabulü',plain:'Alıcı giriş kalite kontrolünü yaptı ve partiyi kabul etti. Kalite raporunun özeti zincire yazıldı.',args:{iqc_hash:ih2,result:'Pass'},
+        accounts:[acct('buyer',W.buyer,0,1),acct('order (PDA)',A.order,1)],logs:['Program log: IQC result=Pass','Program log: status Shipped -> Accepted']});
+      advTime(18);}
+  }else if(cur.id==='arb'){
+    st.verdict=action;var D4=docs(st),rh=sha256(D4.lab.text);
+    st.accounts.dispute.verdict=action==='buyer'?'BuyerWins':'SupplierWins';st.accounts.dispute.report_hash=rh;st.accounts.order.status='Resolved';
+    o=mkTx({ix:'resolve_dispute',signers:['lab'],title:'Hakem kararı',plain:'Akrediteli laboratuvar numuneyi inceledi ve kararını kendi anahtarıyla imzaladı: '+(action==='buyer'?'parti şartname dışı, alıcı haklı.':'parti şartnameye uygun, tedarikçi haklı.')+' Rapor özeti zincire yazıldı.',
+      args:{verdict:action==='buyer'?'BuyerWins':'SupplierWins',report_hash:rh},accounts:[acct('arbiter',W.lab,0,1),acct('dispute (PDA)',A.dispute,1),acct('order (PDA)',A.order,1)],
+      logs:['Program log: arbiter verified','Program log: verdict='+(action==='buyer'?'BuyerWins':'SupplierWins'),'Program log: status Disputed -> Resolved']});
+    advTime(32);
+  }else if(cur.id==='settle'){
+    var rest=st.total-st.funds.toSupplier,toBuyer=(st.verdict==='buyer');
+    var preS=idxOf(st.sc),preB=buyIdx(st.bs);
+    st.sc.deliveries++;if(!st.late)st.sc.otif++;st.sc.qtotal++;if(!toBuyer)st.sc.qpass++;if(toBuyer)st.sc.lost++;
+    st.bs.payments++;st.bs.onTime++;if(st.branch==='dispute'){st.bs.disputes++;if(st.verdict==='supplier')st.bs.unjust++}
+    st.accounts.supScore=scoreAcc(st);st.accounts.buyScore=buyAcc(st);
+    if(toBuyer){st.funds.toBuyer+=rest;st.accounts.order.refunded=String(Math.round(rest*S.baseMul))}else{st.funds.toSupplier+=rest;st.accounts.order.released=String(Math.round(st.total*S.baseMul))}
+    st.funds.locked=0;st.accounts.order.status='Settled';
+    var plain2=(toBuyer?'Kalan '+money(rest,S)+' alıcıya iade edildi.':'Kalan '+money(rest,S)+' tedarikçiye '+(st.key==='fiat'?'aktarılmak üzere ödeme kuruluşuna talimat olarak iletildi.':'kasadan aktarıldı.'))+' Tedarikçi endeksi '+fmtIdx(preS)+' → '+fmtIdx(idxOf(st.sc))+', alıcı endeksi '+fmt(preB,1)+' → '+fmt(buyIdx(st.bs),1)+' oldu. Bu karneleri artık her üretici ve tedarikçi bağımsız olarak doğrulayabilir.';
+    var base2={ix:'settle_order',signers:['settler'],title:cur.t,plain:plain2,args:{outcome:toBuyer?'RefundBuyer':'PaySupplier'},
+      accounts:[acct('settler',W.settler,0,1),acct('order (PDA)',A.order,1),acct('supplier_scorecard (PDA)',A.supScore,1),acct('buyer_scorecard (PDA)',A.buyScore,1)],
+      logs:['Program log: settlement outcome='+(toBuyer?'RefundBuyer':'PaySupplier'),'Program log: supplier index_bps '+bps(preS)+' -> '+bps(idxOf(st.sc)),'Program log: buyer index_bps '+Math.round(preB*100)+' -> '+Math.round(buyIdx(st.bs)*100),'Program log: status -> Settled']};
+    if(st.key==='fiat'){st.accounts.funding.status='Settled';st.accounts.funding.amount_released=String(Math.round(st.funds.toSupplier*100));if(toBuyer)st.accounts.funding.amount_refunded=String(Math.round(rest*100));
+      base2.accounts.push(acct('funding_attestation (PDA)',A.funding,1));base2.logs.splice(1,0,'Program log: emit ReleaseInstruction { amount: '+Math.round(rest*100)+', currency: TRY, kind: '+(toBuyer?'Refund':'Final')+' }');
+      st.events.push(['chain','ReleaseInstruction yayınlandı: '+(toBuyer?'iade ':'kalan tutar ')+money(rest,S),'']);
+      st.events.push(['bank',toBuyer?'Ödeme kuruluşu kalan tutarı alıcıya iade etti':'Ödeme kuruluşu kalan tutarı tedarikçiye aktardı','TRF-'+Math.floor(100000+st.r()*899999)]);}
+    else{st.accounts.vault.amount='0';base2.accounts=base2.accounts.concat([acct('vault (PDA)',A.vault,1),acct(toBuyer?'buyer_usdc_ata':'supplier_usdc_ata',toBuyer?A.buyerAta:A.supplierAta,1),acct('token_program',TOKEN_PROG)]);
+      base2.balances=toBuyer?[['Kasa (vault)',A.vault,rest,0],['Alıcı USDC hesabı',A.buyerAta,250000-st.total,250000-st.total+rest]]:[['Kasa (vault)',A.vault,rest,0],['Tedarikçi USDC hesabı',A.supplierAta,12500+st.total*st.adv,12500+st.total]];
+      base2.logs.splice(1,0,'Program '+TOKEN_PROG+' invoke [2]','Program log: Instruction: TransferChecked','Program '+TOKEN_PROG+' success');}
+    o=mkTx(base2);
+  }
+  st.changed=diff(before);st.step++;
+  if(st.tab!=='doc')st.tab='tx';
+  render();
+}
+
+/* ---------- çizim ---------- */
+function renderScen(){
+  var box=el('scen');box.innerHTML='';
+  ['fiat','usdc'].forEach(function(k){var S=SCN[k],b=document.createElement('button');b.className='scard';b.setAttribute('aria-pressed',String(st.key===k));
+    b.innerHTML='<span class="k">'+S.tag+'</span><b>'+S.title+'</b><span>'+S.sub+'</span>';
+    b.onclick=function(){stopAuto();st=newState(k);render()};box.appendChild(b)});
+  var S=st.S,sp=S.supplier;
+  el('summary').innerHTML=[['Sipariş',S.code,''],['Alıcı',S.buyer.name,S.buyer.loc],['Tedarikçi',sp?sp.name:'Seçilmedi',sp?sp.loc:'Eşleşmeden seçin'],['Malzeme',S.mat,sp?S.qty+' ton × '+money(S.price,S):S.qty+' ton'],['Tutar',sp?money(st.total,S):'—',sp?(st.adv>0?'Avans kademesi %'+Math.round(st.adv*100):'Avans yok · endeks oluşmadı'):'Tedarikçi seçilince hesaplanır'],['Order hesabı',short(st.A.order),'Program türetilmiş adres (PDA)']]
+    .map(function(x){return '<div><span>'+x[0]+'</span><b'+(x[0]==='Order hesabı'?' class="mono"':'')+'>'+esc(x[1])+'</b><small>'+esc(x[2])+'</small></div>'}).join('');
+}
+function renderSteps(){
+  var L=stepList(st),box=el('steps');box.innerHTML='';
+  el('progress').textContent=Math.min(st.step,L.length)+' / '+L.length+' adım';
+  L.forEach(function(s,i){var li=document.createElement('li'),tx=st.txs.filter(function(t){return t.ix===s.ix||(s.id==='iqc'&&(t.ix==='open_dispute'||t.ix==='accept_delivery'))})[0];
+    li.className=i<st.step?'done':i===st.step?'cur':'pend';
+    var ix=s.id==='iqc'?(st.branch==='dispute'?'open_dispute':st.branch==='accept'?'accept_delivery':'accept_delivery | open_dispute'):s.ix;
+    var meta=s.id==='match'?(st.matched?'Seçilen: '+esc(st.S.supplier.name):'Uygulamada yapılır; karneler zincirden okunur'):'İmzalayan: '+s.who.map(function(w){return ROLE[w]}).join(' + ')+(tx?' · slot '+fmt(tx.slot)+' · <button class="linkbtn" data-tx="'+tx.n+'">işlemi gör</button>':'');
+    li.innerHTML='<span class="sn">'+(i<st.step?'✓':i+1)+'</span><div class="st"><b>'+s.t+'</b><span class="ix">'+ix+'</span><div class="meta">'+meta+'</div></div>';
+    box.appendChild(li)});
+  box.querySelectorAll('[data-tx]').forEach(function(b){b.onclick=function(){st.sel=+b.dataset.tx;st.tab='tx';render()}});
+  var cur=L[st.step],A=el('acts'),sg=el('signing');A.innerHTML='';
+  function btn(l,c,a){var b=document.createElement('button');b.className='btn '+c;b.textContent=l;b.onclick=function(){stopAuto();run(a)};A.appendChild(b)}
+  if(!cur){sg.innerHTML='<span class="pill ok">Sipariş kapandı</span> Tüm adımlar zincire kaydedildi.';return}
+  if(cur.id==='match'){sg.innerHTML='Önce yukarıdaki eşleşme panelinden bir tedarikçi seçin.';var bt=document.createElement('button');bt.className='btn pri';bt.textContent='En iyi eşleşmeyi seç';bt.onclick=function(){stopAuto();selectTop()};A.appendChild(bt);return}
+  sg.innerHTML='Sıradaki işlemi imzalayacak: '+cur.who.map(function(w){return '<span class="who">'+ROLE[w]+' · '+short(st.W[w])+'</span>'}).join(' ');
+  if(cur.id==='create')btn('Siparişi oluştur ve imzala','pri');
+  if(cur.id==='sign')btn('Tedarikçi olarak onayla','pri');
+  if(cur.id==='fund')btn(st.key==='fiat'?'Ödeme kuruluşu onayını kaydet':money(st.total,st.S)+' kasaya kilitle','pri');
+  if(cur.id==='ship'){btn('Zamanında sevk et','ok','ontime');btn('Gecikmeli sevk et (+3 gün)','bad','late')}
+  if(cur.id==='iqc'){btn('Kalite kabulü','ok','accept');btn('İtiraz aç','bad','dispute')}
+  if(cur.id==='arb'){btn('Karar: tedarikçi haklı','ok','supplier');btn('Karar: alıcı haklı','bad','buyer')}
+  if(cur.id==='settle')btn('Mutabakatı çalıştır','pri');
+}
+function renderFunds(){
+  var S=st.S,f=st.funds,T=st.total;
+  el('railPill').textContent=st.key==='fiat'?'Fiat · ödeme kuruluşu':'USDC · Solana kasa';
+  var started=st.step>=3||(st.accounts.order&&st.accounts.order.status!=='Created'&&st.accounts.order.status!=='Agreed');
+  var parts=[[f.locked,'var(--accent)',st.key==='fiat'?'Emanet hesabında bloke':'Kasada kilitli'],[f.toSupplier,'var(--brand)','Tedarikçiye aktarılan'],[f.toBuyer,'var(--muted)','Alıcıya iade']];
+  el('fbar').innerHTML=started?parts.filter(function(p){return p[0]>0}).map(function(p){return '<i style="width:'+(100*p[0]/T)+'%;background:'+p[1]+'"></i>'}).join(''):'';
+  el('flegend').innerHTML=parts.map(function(p){return '<span><span class="sw" style="background:'+p[1]+'"></span>'+p[2]+'</span>'}).join('');
+  el('money').innerHTML=parts.map(function(p){return '<div class="mb"><span>'+p[2]+'</span><b>'+money(p[0],S)+'</b></div>'}).join('');
+  el('fundNote').textContent=st.key==='fiat'?'Para zincire taşınmaz. Ödeme kuruluşu, programın yayınladığı ReleaseInstruction olaylarını izler ve aktarımları kendi sisteminde yapar.':'Kasa hesabı bir program türetilmiş adrestir (PDA). Özel anahtarı yoktur; yalnızca SolChain B2B programı, koşullar sağlandığında parayı hareket ettirebilir.';
+  var ev=el('events');
+  ev.innerHTML=st.key==='fiat'?(st.events.length?st.events.map(function(e){return '<li><span class="pill '+(e[0]==='bank'?'warn':'br')+'">'+(e[0]==='bank'?'ÖDEME KURULUŞU':'ZİNCİR')+'</span><span>'+esc(e[1])+(e[2]?' <span class="mono foot">'+e[2]+'</span>':'')+'</span></li>'}).join(''):'<li class="foot">Ödeme kuruluşu olayları burada görünür.</li>'):'';
+}
+function signerRow(t){return t.signers.map(function(w){return '<span class="who">'+ROLE[w]+'</span>'}).join(' ')}
+function renderTx(){
+  var box=el('tab-tx'),t=st.txs.filter(function(x){return x.n===st.sel})[0];
+  if(!t){box.innerHTML='<div class="plain"><b>Henüz işlem yok.</b> '+(st.matched?'Soldaki "Siparişi oluştur ve imzala" düğmesiyle başlayın.':'Önce eşleşme panelinden bir tedarikçi seçin, ardından siparişi oluşturun.')+' Her adım burada bir Solana işlemi olarak görünecek.</div>';return}
+  var h='<div class="plain"><b>Bu adımda ne oldu?</b><br>'+esc(t.plain)+'</div>';
+  h+='<div class="kv"><div>İmza</div><div><code>'+t.sig+'</code></div><div>Durum</div><div><span class="pill ok">✓ Finalized</span></div><div>Slot</div><div><code>'+fmt(t.slot)+'</code></div><div>Blok zamanı</div><div>'+fdt(t.time)+'</div>'+
+    '<div>Ücret</div><div><code>'+fmt(t.fee)+' lamport ('+fmt(t.fee/1e9,6)+' SOL)</code></div><div>Hesaplama birimi</div><div><code>'+fmt(t.cu)+' / 200.000</code></div><div>İmzalayanlar</div><div>'+t.signers.map(function(w){return '<span class="who">'+ROLE[w]+'</span> <code>'+short(st.W[w])+'</code>'}).join('<br>')+'</div></div>';
+  h+='<h3>Talimat</h3><pre class="code"><span class="h">'+PROGRAM.slice(0,8)+'…::'+t.ix+'</span>(\n'+Object.keys(t.args).map(function(k){return '  <span class="d">'+k+':</span> '+esc(String(t.args[k]))}).join(',\n')+'\n)</pre>';
+  h+='<h3>Kullanılan hesaplar</h3><div class="tbl"><table><thead><tr><th>Hesap</th><th>Adres</th><th>Erişim</th></tr></thead><tbody>'+t.accounts.map(function(a){return '<tr><td>'+esc(a.name)+'</td><td><code class="addr">'+a.addr+'</code></td><td>'+(a.s?'<span class="flag f-s">imzalayan</span>':'')+(a.w?'<span class="flag f-w">yazılabilir</span>':'')+(!a.s&&!a.w?'<span class="flag" style="color:var(--muted)">salt okunur</span>':'')+'</td></tr>'}).join('')+'</tbody></table></div>';
+  if(t.balances.length)h+='<h3>Token bakiye değişimleri</h3><div class="tbl"><table><thead><tr><th>Hesap</th><th>Önce</th><th>Sonra</th><th>Değişim</th></tr></thead><tbody>'+t.balances.map(function(b){var dlt=b[3]-b[2];return '<tr><td>'+b[0]+'<br><code class="addr">'+short(b[1])+'</code></td><td class="mono">'+fmt(b[2],2)+' USDC</td><td class="mono">'+fmt(b[3],2)+' USDC</td><td class="mono" style="color:'+(dlt>=0?'var(--ok)':'var(--bad)')+'">'+(dlt>=0?'+':'')+fmt(dlt,2)+'</td></tr>'}).join('')+'</tbody></table></div>';
+  h+='<h3>Program günlükleri</h3><pre class="code">'+t.logs.map(function(l){return l.indexOf('Program log:')===0?'<span class="h">'+esc(l)+'</span>':'<span class="d">'+esc(l)+'</span>'}).join('\n')+'</pre>';
+  box.innerHTML=h;
+}
+function renderAcc(){
+  var box=el('tab-acc'),order=['order',st.key==='fiat'?'funding':'vault','dispute','supScore','buyScore','supCo','buyCo'],h='<p class="foot">Hesaplar, programın zincirde tuttuğu kayıtlardır. Son işlemde değişen alanlar işaretlidir <span style="color:var(--accent)">●</span>.</p><div class="acc">';
+  var placeholder={order:'Order · sipariş kaydı',funding:'FundingAttestation · ödeme kuruluşu onayı',vault:'Vault · USDC kasa hesabı',dispute:'Dispute · uyuşmazlık kaydı',supScore:'Scorecard · tedarikçi',supCo:'Company · tedarikçi'};
+  order.forEach(function(k){var a=st.accounts[k];
+    if(!a){if(k==='dispute'&&st.branch!=='dispute'&&st.step>5)return;var sup=(k==='supScore'||k==='supCo');h+='<div class="ac"><div class="ah"><b>'+placeholder[k]+'</b><span>'+(sup?'Tedarikçi seçilmedi':'Henüz oluşturulmadı')+'</span></div><div class="empty">'+(sup?'Tedarikçi seçildiğinde bu mevcut hesap zincirden okunur.':'Bu hesap ilgili adım çalıştığında zincirde oluşturulur.')+'</div></div>';return}
+    var ch=(st.changed[k])||{};
+    h+='<div class="ac"><div class="ah"><b>'+esc(a._name)+'</b><span>'+a._addr+'</span><span>Sahip program: '+short(PROGRAM)+'</span></div><table><tbody>'+Object.keys(a).filter(function(f){return f[0]!=='_'}).map(function(f){var v=a[f];return '<tr class="'+(ch[f]?'chg':'')+'"><td>'+f+'</td><td>'+esc(typeof v==='string'&&v.length>40?v.slice(0,20)+'…'+v.slice(-8):String(v))+'</td></tr>'}).join('')+'</tbody></table></div>'});
+  box.innerHTML=h+'</div>';
+}
+function renderDoc(){
+  if(!st.S.supplier){el('tab-doc').innerHTML='<div class="plain"><b>Belgeler henüz hazır değil.</b> Tedarikçi seçilip sipariş oluşturulduğunda sipariş koşulları, sevk belgesi, analiz sertifikası ve kalite raporu burada doğrulanabilir.</div>';return}
+  var box=el('tab-doc'),D=docs(st),keys=Object.keys(D),k=D[st.docSel]?st.docSel:'terms',doc=D[k];
+  var src=k==='lab'?st.accounts.dispute:st.accounts.order;
+  var onchain=src&&src[doc.field]&&src[doc.field]!=='—'?src[doc.field]:null;
+  if(k==='iqc'&&src&&st.branch==='dispute')onchain=st.accounts.dispute?st.accounts.dispute.claim_hash:onchain;
+  var txt=st.docEdits[k]!=null?st.docEdits[k]:doc.text;
+  var h='<div class="plain"><b>Değiştirilemez kayıt nasıl çalışır?</b><br>Belgenin kendisi zincire yazılmaz, yalnızca SHA-256 özeti yazılır. Belgede tek bir karakter bile değişirse özet tamamen değişir ve zincirdeki kayıtla eşleşmez. Aşağıdaki metni düzenleyerek deneyin.</div>';
+  h+='<div class="docsel">'+keys.map(function(x){var ok=!!(x==='lab'?(st.accounts.dispute&&st.accounts.dispute.report_hash!=='—'):true);return '<button data-d="'+x+'" aria-pressed="'+(x===k)+'">'+esc(D[x].label)+'</button>'}).join('')+'</div>';
+  h+='<textarea id="docText" spellcheck="false" aria-label="Belge metni">'+esc(txt)+'</textarea>';
+  h+='<div class="hashbox"><span class="foot">Hesaplanan özet</span><code id="calcHash"></code><span class="foot">Zincirdeki özet</span><code id="chainHash"></code><span class="foot">Kayıt alanı</span><code>'+(k==='lab'?'Dispute':'Order')+'.'+(k==='iqc'&&st.branch==='dispute'?'claim_hash':doc.field)+' · '+doc.at+'</code></div><div id="verdict"></div><div class="acts"><button class="btn" id="docReset">Orijinal metne dön</button></div>';
+  box.innerHTML=h;
+  function check(){var v=el('docText').value,hh=sha256(v);el('calcHash').textContent=hh;el('chainHash').textContent=onchain||'Henüz zincire yazılmadı';
+    var vd=el('verdict');if(!onchain){vd.className='verdict neu';vd.textContent='Bu belge ilgili adım ('+doc.at+') çalıştığında zincire kaydedilecek.'}
+    else if(hh===onchain){vd.className='verdict ok';vd.textContent='✓ Belge zincirdeki kayıtla birebir eşleşiyor. Sonradan değiştirilmemiş.'}
+    else{vd.className='verdict bad';vd.textContent='✕ Belge zincirdeki kayıtla eşleşmiyor. Metin, kaydedildiği andan sonra değiştirilmiş.'}}
+  el('docText').addEventListener('input',function(e){st.docEdits[k]=e.target.value;check()});
+  el('docReset').onclick=function(){delete st.docEdits[k];renderDoc()};
+  box.querySelectorAll('[data-d]').forEach(function(b){b.onclick=function(){st.docSel=b.dataset.d;renderDoc()}});
+  check();
+}
+function renderProg(){
+  var h='<div class="kv"><div>Program kimliği</div><div><code>'+PROGRAM+'</code></div><div>Çerçeve</div><div>Rust · Anchor (örnek tasarım)</div><div>Ağ</div><div>Solana Devnet (prototip) → Mainnet (denetim sonrası)</div><div>Yükseltme yetkisi</div><div>Çoklu imzalı yönetim hesabı</div></div>';
+  h+='<h3>Mimari</h3><div class="arch">'+
+   '<div class="an"><small>Kullanıcı</small><b>Web uygulaması</b>Üretici ve tedarikçi panelleri. Cüzdan veya kurumsal anahtar ile imza.</div>'+
+   '<div class="an"><small>Sunucu</small><b>API ve indeksleyici</b>Şifreli belgeler, fiyatlar, endeks hesaplama. Zinciri okuyup panellere veri sağlar.</div>'+
+   '<div class="an chain"><small>Solana</small><b>SolChain B2B programı</b>Sipariş, imza, kanıt, kasa ve karne kuralları. Tek doğruluk kaynağı.</div>'+
+   '<div class="an"><small>Dış imzacı</small><b>Ödeme kuruluşu</b>Fiat yolunda bloke ve aktarımı onaylar, ReleaseInstruction olaylarını uygular.</div>'+
+   '<div class="an"><small>Dış imzacı</small><b>e-Belge doğrulayıcı</b>e-İrsaliye veya CMR kaydının gerçek olduğunu imzalar.</div>'+
+   '<div class="an"><small>Dış imzacı</small><b>Hakem laboratuvar</b>Uyuşmazlıkta kararını ve rapor özetini imzalar.</div></div>';
+  h+='<h3>Hesap türleri</h3><div class="tbl"><table><thead><tr><th>Hesap</th><th>Adres türetme (seeds)</th><th>Tuttuğu bilgi</th></tr></thead><tbody>'+
+   [['Company','["company", authority]','Firma rolü, KYB onayı, belge özetleri'],['Order','["order", buyer, order_id]','Taraflar, tutar, para birimi, ödeme yolu, durum, belge özetleri'],
+    ['Vault','["vault", order]','Stablecoin yolunda kilitli USDC (token hesabı)'],['FundingAttestation','["funding", order]','Fiat yolunda ödeme kuruluşunun bloke ve aktarım onayları'],
+    ['Dispute','["dispute", order]','İtiraz, hakem, karar ve rapor özeti'],['Scorecard','["scorecard", company]','Teslimat, OTIF, kalite, beyan uyumu, uyuşmazlık, endeks']].map(function(r){return '<tr><td><code class="addr">'+r[0]+'</code></td><td><code class="addr">'+r[1]+'</code></td><td>'+r[2]+'</td></tr>'}).join('')+'</tbody></table></div>';
+  h+='<h3>Talimatlar</h3><div class="tbl"><table><thead><tr><th>Talimat</th><th>İmzalayan</th><th>Etkisi</th></tr></thead><tbody>'+
+   [['register_company','Firma + KYB doğrulayıcı','Firma kaydı ve belge özetleri'],['create_order','Alıcı','Sipariş ve koşul özeti oluşturulur'],['sign_order','Tedarikçi','Koşullar iki tarafça kabul edilir'],
+    ['fund_order','Alıcı','USDC kasaya kilitlenir (stablecoin yolu)'],['attest_funding','Ödeme kuruluşu','Fiat blokajı onaylanır (fiat yolu)'],['record_shipment','Tedarikçi + e-Belge doğrulayıcı','Sevk ve analiz özetleri, avans'],
+    ['accept_delivery','Alıcı','Kalite kabulü'],['open_dispute','Alıcı','İtiraz, kalan tutar dondurulur'],['resolve_dispute','Hakem laboratuvar','Karar ve rapor özeti'],['settle_order','Mutabakat servisi','Kalan tutar, karne güncellemesi']].map(function(r){return '<tr><td><code class="addr">'+r[0]+'</code></td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>'}).join('')+'</tbody></table></div>';
+  h+='<p class="note">Program tasarımı örnektir. Mainnet öncesinde bağımsız güvenlik denetimi planlanmaktadır.</p>';
+  el('tab-prog').innerHTML=h;
+}
+function renderWal(){
+  var S=st.S,rows=[['buyer',S.buyer.name,'Siparişi oluşturur, '+(st.key==='usdc'?'kasayı fonlar, ':'')+'kalite kabulünü veya itirazı imzalar'],['supplier',S.supplier?S.supplier.name:'Seçilmedi','Koşulları onaylar, sevkiyatı kaydeder'],
+    st.key==='fiat'?['psp',S.psp,'Emanet hesabındaki blokajı ve aktarımları onaylar']:null,['oracle','e-Belge doğrulayıcı','Sevk belgesinin gerçekliğini onaylar'],['lab','Örnek Akrediteli Test Lab.','Uyuşmazlıkta karar verir'],['settler','SolChain B2B mutabakat servisi','Mutabakatı tetikler; fona tek başına erişemez']].filter(Boolean);
+  el('tab-wal').innerHTML='<div class="tbl"><table><thead><tr><th>Rol</th><th>Taraf</th><th>Cüzdan adresi</th><th>Bu siparişteki görevi</th></tr></thead><tbody>'+rows.map(function(r){return '<tr><td><span class="who">'+ROLE[r[0]]+'</span></td><td>'+esc(r[1])+'</td><td><code class="addr">'+st.W[r[0]]+'</code></td><td>'+r[2]+'</td></tr>'}).join('')+'</tbody></table></div>'+
+   '<p class="note">Kurumsal kullanıcılar için imzalar, firmaya ait çoklu imzalı hesaplar veya donanım güvenlik modülleri üzerinden atılır. Kullanıcıların kripto cüzdan bilgisine ihtiyacı yoktur; imza web uygulamasının onay düğmesiyle alınır.</p>';
+}
+function renderHist(){
+  var tb=el('hist');tb.innerHTML=st.txs.length?'':'<tr><td colspan="8" class="foot">Henüz işlem yok.</td></tr>';
+  st.txs.slice().reverse().forEach(function(t){var tr=document.createElement('tr');if(t.n===st.sel)tr.className='sel';tr.tabIndex=0;
+    tr.innerHTML='<td class="mono">'+t.n+'</td><td><code class="addr">'+t.sig.slice(0,10)+'…'+t.sig.slice(-6)+'</code></td><td><code class="addr">'+t.ix+'</code></td><td>'+signerRow(t)+'</td><td class="mono">'+fmt(t.slot)+'</td><td>'+fdt(t.time)+'</td><td class="mono">'+fmt(t.fee/1e9,6)+' SOL</td><td><span class="pill ok">✓ Finalized</span></td>';
+    function open(){st.sel=t.n;st.tab='tx';render();el('tabs').scrollIntoView({block:'nearest'})}
+    tr.onclick=open;tr.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();open()}};tb.appendChild(tr)});
+}
+function renderTabs(){
+  el('tabs').querySelectorAll('button').forEach(function(b){var on=b.dataset.t===st.tab;b.setAttribute('aria-selected',String(on));b.onclick=function(){st.tab=b.dataset.t;render()}});
+  ['tx','acc','doc','prog','wal'].forEach(function(t){el('tab-'+t).hidden=t!==st.tab});
+  if(st.tab==='tx')renderTx();if(st.tab==='acc')renderAcc();if(st.tab==='doc')renderDoc();if(st.tab==='prog')renderProg();if(st.tab==='wal')renderWal();
+}
+/* ---------- eşleşme ---------- */
+function offersFor(){
+  var base=SCN[st.key],q=st.rfq,ok=[],out=[];
+  base.suppliers.forEach(function(sp){var sc=supScoreOf(sp),ix=idxOf(sc);
+    if(q.cert&&sp.cert==='expired')out.push([sp,base.certMain+' belgesinin süresi dolmuş']);
+    else if(sp.cap<q.qty)out.push([sp,'aylık kapasite '+sp.cap+' ton']);
+    else if(sp.lead>q.lead)out.push([sp,'teslim süresi '+sp.lead+' gün']);
+    else ok.push({sp:sp,sc:sc,ix:ix})});
+  var P=PRIO[q.prio],minP=Math.min.apply(null,ok.map(function(o){return o.sp.price})),minL=Math.min.apply(null,ok.map(function(o){return o.sp.lead}));
+  ok.forEach(function(o){o.ps=100*minP/o.sp.price;o.ls=100*minL/o.sp.lead;o.score=o.ix==null?null:P.e*o.ix+P.f*o.ps+P.t*o.ls});
+  ok.sort(function(a,b){if(a.score==null)return 1;if(b.score==null)return -1;return b.score-a.score});
+  return {ok:ok,out:out};
+}
+function choose(id){stopAuto();var tab=st.tab;st=newState(st.key,id,st.rfq);st.tab=tab==='doc'?'doc':'tx';render();el('steps').scrollIntoView({behavior:'smooth',block:'center'})}
+function selectTop(){var o=offersFor().ok.filter(function(x){return x.score!=null})[0];if(o)choose(o.sp.id)}
+function renderMatch(){
+  var S=SCN[st.key],q=st.rfq,locked=st.txs.length>0;
+  el('rfqNo').textContent='RFQ · '+S.code.replace('SC','RFQ');
+  el('mMat').textContent=S.mat;
+  var qi=el('mQty');if(document.activeElement!==qi)qi.value=q.qty;qi.disabled=locked;
+  var li=el('mLead');li.value=q.lead;li.disabled=locked;el('mLeadV').textContent=q.lead+' gün';
+  var ci=el('mCert');ci.checked=q.cert;ci.disabled=locked;el('mCertLbl').textContent=S.certLabel;
+  var pb=el('mPrio');pb.innerHTML='';[['dengeli','Dengeli'],['kalite','Kalite'],['maliyet','Maliyet']].forEach(function(p){var b=document.createElement('button');b.type='button';b.textContent=p[1];b.setAttribute('aria-pressed',String(q.prio===p[0]));b.disabled=locked;b.onclick=function(){st.rfq.prio=p[0];rfqChanged()};pb.appendChild(b)});
+  el('mPrioNote').textContent='Sıralama ağırlıkları: '+PRIO[q.prio].l+'. Sert kısıtlar sıralamadan önce uygulanır.';
+  el('mLock').textContent=locked?'Sipariş zincire yazıldığı için eşleşme kilitlendi. Değiştirmek için "Baştan başlat" kullanın.':'';
+  var res=offersFor(),box=el('offers');box.innerHTML='';
+  if(!res.ok.length)box.innerHTML='<div class="elim">Kısıtları sağlayan tedarikçi yok. Miktarı veya azami teslim süresini değiştirin.</div>';
+  res.ok.forEach(function(o,i){var sp=o.sp,sc=o.sc,chosen=st.matched&&st.S.supplier.id===sp.id,t=tier(o.ix);
+    var d=document.createElement('div');d.className='offer'+(chosen?' chosen':'');
+    var pills=(o.ix==null?'<span class="pill neu">Endeks oluşmadı</span>':'<span class="pill '+(o.ix>=85?'ok':o.ix>=70?'warn':'bad')+'">Endeks '+fmt(o.ix,1)+'</span>')+(sp.cert==='soon'?'<span class="pill warn">! Belge 60 gün içinde doluyor</span>':'')+(sc.declared<8000?'<span class="pill bad">Beyan uyumu düşük</span>':'');
+    var why=o.ix==null?'Yalnızca '+sc.deliveries+' teslimat kaydı var. Deneme siparişi olarak değerlendirilir; avans verilmez.':'OTIF %'+fmt(100*sc.otif/sc.deliveries,0)+' · kalite uygunluğu %'+fmt(100*sc.qpass/sc.qtotal,0)+' · beyan–ölçüm uyumu %'+fmt(sc.declared/100,0)+' · kaybedilen itiraz '+sc.lost+' · avans kademesi %'+Math.round(t*100);
+    d.innerHTML='<span class="rk">'+(i+1)+'</span><div style="min-width:0"><div class="nm">'+esc(sp.name)+' <small>'+esc(sp.loc)+'</small> '+pills+'</div><div class="why">'+why+'</div>'+
+      '<div class="ometa"><span>Fiyat <b>'+money(sp.price,S)+'/ton</b></span><span>Teslim <b>'+sp.lead+' gün</b></span><span>Kapasite <b>'+sp.cap+' ton/ay</b></span><span>Tutar <b>'+money(sp.price*q.qty,S)+'</b></span><span>Karne hesabı <b>'+short(scoreAddr(st.key,sp.id))+'</b></span></div></div>';
+    var r=document.createElement('div');r.className='oright';
+    r.innerHTML='<div class="msc">Eşleşme skoru<b>'+(o.score==null?'–':fmt(o.score,1))+'</b></div>'+(o.score==null?'':'<div class="sbar"><i style="width:'+Math.min(100,o.score)+'%"></i></div>');
+    var b=document.createElement('button');b.className='btn '+(chosen?'ok':'pri');b.textContent=chosen?'Seçildi ✓':'Seç ve devam et';b.disabled=locked||chosen;b.onclick=function(){choose(sp.id)};r.appendChild(b);
+    d.appendChild(r);box.appendChild(d)});
+  el('elim').innerHTML=res.out.length?'<b>Elenenler</b> · '+res.out.map(function(x){return esc(x[0].name)+' ('+x[1]+')'}).join(' · '):'Elenen tedarikçi yok.';
+}
+function rfqChanged(){if(st.txs.length)return;stopAuto();var tab=st.tab;st=newState(st.key,null,st.rfq);st.tab=tab;render()}
+el('mQty').addEventListener('change',function(e){var v=Math.max(5,Math.min(300,Math.round(+e.target.value||st.rfq.qty)));st.rfq.qty=v;rfqChanged()});
+el('mLead').addEventListener('input',function(e){st.rfq.lead=+e.target.value;rfqChanged()});
+el('mCert').addEventListener('change',function(e){st.rfq.cert=e.target.checked;rfqChanged()});
+
+function render(){renderScen();renderMatch();renderSteps();renderFunds();renderTabs();renderHist();el('slot').textContent=fmt(slot)}
+
+/* ---------- otomatik oynatma ---------- */
+function stopAuto(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;el('auto').textContent='▶ Otomatik oynat'}}
+el('auto').onclick=function(){if(autoTimer){stopAuto();return}
+  if(st.step>=stepList(st).length)st=newState(st.key,null,st.rfq);
+  el('auto').textContent='❚❚ Durdur';
+  autoTimer=setInterval(function(){var L=stepList(st);if(st.step>=L.length){stopAuto();return}var c=L[st.step].id;
+    if(c==='match'){var o=offersFor().ok.filter(function(x){return x.score!=null})[0];if(!o){stopAuto();return}var keep=autoTimer;st=newState(st.key,o.sp.id,st.rfq);autoTimer=keep;render();return}
+    run(c==='ship'?'ontime':c==='iqc'?'accept':null)},1400)};
+el('reset').onclick=function(){stopAuto();st=newState(st.key,null,st.rfq);render()};
+if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(function(){slot+=1;el('slot').textContent=fmt(slot)},420);
+
+st=newState('fiat');render();
+})();
+</script>
+</body>
+</html>

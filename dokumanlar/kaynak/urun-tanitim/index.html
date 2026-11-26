@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><title>SolChain B2B · Ürün Tanıtım Dosyası</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@page{size:A4;margin:14mm 14mm 16mm}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:9.6pt;line-height:1.5;color:#14181A;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.serif{font-family:Newsreader,Georgia,serif}
+.mono{font-family:"JetBrains Mono","Courier New",monospace}
+.page{break-before:page}
+.cover{background:#101416;color:#ECEAE4;border-radius:6px;padding:34px 34px 30px;position:relative;overflow:hidden}
+.cover:after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;border:1px solid #2E3538}
+.eb{font-family:"JetBrains Mono",monospace;font-size:7.8pt;letter-spacing:2.5px;color:#6CCBCB}
+.cover h1{font-family:Newsreader,Georgia,serif;font-weight:500;font-size:40pt;line-height:1;margin:14px 0 10px}
+.cover .tag{font-family:Newsreader,Georgia,serif;font-style:italic;font-size:15pt;color:#6CCBCB;max-width:80%}
+.cover p.d{color:#B5BCBF;max-width:84%;margin-top:14px;font-size:10pt}
+.vals{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.vals div{border-top:1px solid #2E3538;padding-top:8px}
+.vals b{display:block;font-family:Newsreader,Georgia,serif;font-size:13pt;font-weight:500;color:#ECEAE4}
+.vals span{font-size:8.6pt;color:#9FA7AA}
+h2{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:17pt;line-height:1.15;margin:18px 0 6px;break-after:avoid}
+h2 .k{display:block;font-family:"JetBrains Mono",monospace;font-size:7.6pt;letter-spacing:2.5px;color:#0D6B6E;font-weight:500;margin-bottom:4px}
+h3{font-size:10.4pt;margin:10px 0 4px;break-after:avoid}
+p{margin:4px 0}
+.lead{font-size:10.2pt;color:#40464A;max-width:94%}
+table{width:100%;border-collapse:collapse;font-size:8.8pt;margin:8px 0}
+th{background:#101416;color:#ECEAE4;text-align:left;font-weight:600;padding:5px 7px}
+td{padding:5px 7px;border-bottom:1px solid #E1DDD3;vertical-align:top}
+tr:nth-child(even) td{background:#F7F6F2}
+tr{break-inside:avoid}
+td b{color:#0D6B6E}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.card{border:1px solid #E1DDD3;border-radius:6px;padding:9px 11px;break-inside:avoid;background:#FFFFFE}
+.card .n{font-family:"JetBrains Mono",monospace;font-size:7.4pt;color:#0D6B6E;letter-spacing:1.5px}
+.card b{display:block;font-size:9.8pt;margin:2px 0}
+.card span{font-size:8.5pt;color:#40464A}
+.card.new{border-color:#0D6B6E;box-shadow:inset 3px 0 0 #0D6B6E}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
+.st{background:#F4F3EF;border-radius:6px;padding:8px 9px;break-inside:avoid}
+.st .n{font-family:"JetBrains Mono",monospace;font-size:7.4pt;color:#0D6B6E}
+.st b{display:block;font-size:9.4pt;margin:2px 0}
+.st span{font-size:8.2pt;color:#40464A}
+.st i{display:block;font-style:normal;font-size:7.8pt;color:#0D6B6E;margin-top:4px;border-top:1px solid #E1DDD3;padding-top:3px}
+.box{background:#101416;color:#ECEAE4;border-radius:6px;padding:11px 14px;margin:10px 0;break-inside:avoid}
+.box b{color:#6CCBCB}
+.note{background:#DCEDED;border-radius:6px;padding:9px 12px;margin:8px 0;font-size:9pt;break-inside:avoid}
+.code{background:#101416;color:#6CCBCB;font-family:"JetBrains Mono",monospace;font-size:8pt;border-radius:6px;padding:9px 11px;margin:6px 0;white-space:pre-wrap}
+ul{margin:4px 0 4px 16px}li{margin:2px 0}
+.badge{display:inline-block;font-size:7.4pt;font-weight:700;padding:1px 6px;border-radius:9px;background:#DCEDED;color:#0D6B6E;margin-left:4px;vertical-align:middle}
+.foot{margin-top:14px;font-size:7.6pt;color:#6B7073;border-top:1px solid #E1DDD3;padding-top:6px}
+</style></head><body>
+
+<!-- 1 · Kapak ve özet -->
+<div class="cover">
+<p class="eb">ÜRÜN TANITIM DOSYASI · SÜRÜM 2.0 · KASIM 2026</p>
+<h1>SolChain B2B</h1>
+<p class="tag">Üretici ile tedarikçi arasında kanıta dayalı satın alma ve güven altyapısı.</p>
+<p class="d">Talepten ödemeye kadar satın alma sürecinin tamamını tek akışta yönetir; her adımda değiştirilemez bir kanıt bırakır. Mal kabul NFC etiketiyle doğrulanır, ödeme ancak sipariş, teslim ve fatura birbirini tuttuğunda serbest kalır, tedarikçinin performansı şirketten şirkete taşınabilen bir karneye dönüşür.</p>
+<div class="vals">
+<div><b>Kontrollü satın alma</b><span>Onay zinciri, bütçe kontrolü, üçlü eşleştirme</span></div>
+<div><b>Kanıtlanmış teslim</b><span>NFC etiketli mal kabul, zincirde kayıt</span></div>
+<div><b>Taşınabilir güven</b><span>İki yönlü karne, seviyeler, avans ve finansman</span></div>
+</div>
+</div>
+
+<h2><span class="k">YÖNETİCİ ÖZETİ</span>Neyi, kimin için çözüyoruz?</h2>
+<p class="lead">Ham madde satın alması hâlâ e-posta, Excel ve telefon teyidiyle yürüyor. Kalite beyanı ölçümle karşılaştırılmıyor, teslimin kanıtı tartışmalı, fatura farkları elle yakalanıyor, tedarikçinin riski ancak üretim durduğunda fark ediliyor. Tedarikçi ise iyi performansını yeni müşteriye kanıtlayamıyor ve parasını geç alıyor.</p>
+<table>
+<tr><th style="width:22%">Kullanıcı</th><th>SolChain B2B ile ne kazanır?</th></tr>
+<tr><td><b>Satın alma</b></td><td>Gerekçeli tedarikçi önerisi, vade ve navlun dahil toplam maliyet karşılaştırması, sözleşme ve fiyat revizyonu takibi</td></tr>
+<tr><td><b>Finans</b></td><td>Bütçe kontrolü, tolerans dışı faturada otomatik ödeme blokajı, kilitli ve serbest bırakılan tutarların tek ekranda izlenmesi</td></tr>
+<tr><td><b>Depo ve kalite</b></td><td>Telefonla NFC etiket okutarak doğru paleti doğrulama, sayım ve kalite sonucunu anında kayda geçirme</td></tr>
+<tr><td><b>Yönetim</b></td><td>Harcama analizi, tek kaynak riski, erken uyarılar ve değiştirilemez denetim izi</td></tr>
+<tr><td><b>Tedarikçi</b></td><td>Ücretsiz katılım, taşınabilir karne, iyi karneyle teslimde avans ve erken tahsilat</td></tr>
+</table>
+
+<h2><span class="k">SORUN</span>Sahada her gün yaşanan altı kırılma</h2>
+<table>
+<tr><th style="width:30%">Sorun</th><th style="width:34%">İşletmeye etkisi</th><th>SolChain B2B’deki karşılığı</th></tr>
+<tr><td>Sertifika var, kalite yok</td><td>Hatalı parti, hurda, müşteri şikâyeti</td><td>Her teslimatta ölçüm ve beyan–ölçüm uyumu karneye işlenir</td></tr>
+<tr><td>Mal gitti, para gelmedi</td><td>Tedarikçide nakit sıkışması, fiyatlara yansıyan risk primi</td><td>Tutar sipariş anında lisanslı kuruluşta kilitlenir</td></tr>
+<tr><td>Tedarikçi batmış, haberimiz yok</td><td>Plansız üretim duruşu</td><td>Faaliyet belgesi, SGK, vergi, kapasite ve bağımlılık sinyalleri</td></tr>
+<tr><td>Zam geldi, sözleşme sustu</td><td>Bütçe sapması, sipariş sonrası pazarlık</td><td>Anonim fiyat endeksi ve sözleşmede revizyon maddesi</td></tr>
+<tr><td>İtiraz aylar sürdü</td><td>Bloke para, bozulan ilişki</td><td>Bağımsız uzman muayenesi ve akrediteli laboratuvar kararı</td></tr>
+<tr><td>İyi tedarikçi her müşteride sıfırdan</td><td>Uzun tedarikçi onayı, yüksek giriş maliyeti</td><td>Seviyeli, şirketler arası taşınabilen karne</td></tr>
+</table>
+
+<!-- 2 · Ürün akışı -->
+<h2><span class="k">ÜRÜN</span>Uçtan uca satın alma akışı: sekiz adım, sekiz kanıt</h2>
+<p class="lead">Her adım bir rolün onayıyla ilerler ve geride doğrulanabilir bir kayıt bırakır. Yeni eklenen adımlar işaretlidir.</p>
+<div class="flow">
+<div class="st"><p class="n">01 · TALEP</p><b>İhtiyaç girilir <span class="badge">YENİ</span></b><span>Kalem, miktar, maliyet merkezi, ihtiyaç tarihi. Yapay zekâ asistanı düz cümleden talep oluşturabilir.</span><i>Kanıt: talep kaydı</i></div>
+<div class="st"><p class="n">02 · ONAY</p><b>Tutara göre onay zinciri <span class="badge">YENİ</span></b><span>Birim yöneticisi; 250.000 üzeri satın alma müdürü; 1.000.000 üzeri veya bütçe aşımında finans.</span><i>Kanıt: her onay imzalı</i></div>
+<div class="st"><p class="n">03 · TEKLİF</p><b>Karşılaştırma ve öneri</b><span>Fiyat, navlun, vade (bugünkü değer), termin, seviye ve risk sinyali birlikte değerlendirilir.</span><i>Kanıt: gerekçeli öneri</i></div>
+<div class="st"><p class="n">04 · SİPARİŞ</p><b>İki imza, kilitli ödeme</b><span>Koşullar ve fiyat revizyon maddesi imzalanır; tutar lisanslı ödeme kuruluşunda kilitlenir.</span><i>Kanıt: koşul özeti zincirde</i></div>
+<div class="st"><p class="n">05 · SEVK</p><b>NFC etiketi yazılır <span class="badge">YENİ</span></b><span>Tedarikçi palete sipariş, lot, miktar ve özet içeren etiketi yazar.</span><i>Kanıt: sevk ve etiket özeti</i></div>
+<div class="st"><p class="n">06 · MAL KABUL</p><b>Etiket okutulur <span class="badge">YENİ</span></b><span>Depo telefonla etiketi okutur; yanlış palet ya da değiştirilmiş etiket anında yakalanır. Sayım ve kalite girilir.</span><i>Kanıt: teslim anı ve miktar</i></div>
+<div class="st"><p class="n">07 · FATURA</p><b>Üçlü eşleştirme <span class="badge">YENİ</span></b><span>e-Fatura; sipariş fiyatı ve mal kabul miktarıyla kıyaslanır. %2 toleransı aşan fark ödemeyi bloke eder.</span><i>Kanıt: eşleşme sonucu</i></div>
+<div class="st"><p class="n">08 · ÖDEME VE KARNE</p><b>Serbest bırakma</b><span>Finans onayıyla ödeme serbest kalır; teslim ve kalite sonucu karneye işlenir, seviye güncellenir.</span><i>Kanıt: ödeme ve karne kaydı</i></div>
+</div>
+<div class="note"><b>İtiraz olursa:</b> kalan tutar donar, bağımsız uzman malı yeniden inceler, akrediteli laboratuvar kararı imzalayıp zincire yazar; ödeme ya da iade otomatik uygulanır.</div>
+
+<h2><span class="k">MODÜLLER</span>Tek platformda on iki modül</h2>
+<div class="grid3">
+<div class="card"><p class="n">01</p><b>Genel bakış</b><span>Rol bazlı “sıradaki işleriniz”, bütçe kullanımı, kilitli tutar, erken uyarılar</span></div>
+<div class="card new"><p class="n">02 · YENİ</p><b>Talep ve onay</b><span>Çok seviyeli onay, maliyet merkezi bütçesi, bütçe aşımında otomatik finans onayı</span></div>
+<div class="card"><p class="n">03</p><b>Teklif karşılaştırma</b><span>Bugünkü değer, navlun, termin, karne ve riske göre gerekçeli öneri</span></div>
+<div class="card"><p class="n">04</p><b>Sipariş takibi</b><span>Beş aşamalı yaşam döngüsü, kilitli ve ödenen tutar</span></div>
+<div class="card new"><p class="n">05 · YENİ</p><b>Mal kabul · NFC</b><span>Telefonla etiket okuma ve yazma, sayım, kalite kontrol</span></div>
+<div class="card new"><p class="n">06 · YENİ</p><b>Fatura eşleştirme</b><span>Sipariş–mal kabul–fatura karşılaştırması, tolerans, düzeltme talebi</span></div>
+<div class="card"><p class="n">07</p><b>Tedarikçiler ve karne</b><span>Endeks, seviye, teslimde avans hakkı, risk sinyalleri</span></div>
+<div class="card new"><p class="n">08 · YENİ</p><b>Sözleşmeler</b><span>Çerçeve anlaşmalar, bitiş uyarısı, endekse bağlı fiyat revizyonu</span></div>
+<div class="card new"><p class="n">09 · YENİ</p><b>Harcama analizi</b><span>Kategori, tedarikçi ve ay bazında harcama; tek kaynak uyarısı</span></div>
+<div class="card"><p class="n">10</p><b>Risk ve piyasa</b><span>Belge, SGK, vergi, kapasite sinyalleri; anonim fiyat endeksi</span></div>
+<div class="card"><p class="n">11</p><b>Yapay zekâ asistanı</b><span>Satın alma asistanı ve Malzeme Danışmanı; puanlamaz, gerekçe sunar</span></div>
+<div class="card new"><p class="n">12 · YENİ</p><b>Zincir kayıtları</b><span>Rol bazlı denetim izi; kurcalamaya karşı özet zinciri</span></div>
+</div>
+
+<!-- 3 · NFC -->
+<h2><span class="k">NFC İLE MAL KABUL</span>Teslim tartışmasını depo kapısında bitirmek</h2>
+<p class="lead">Mal kabul, güven zincirinin en zayıf halkasıdır: yanlış palet, eksik sayım ya da sonradan değiştirilen irsaliye karneyi ve ödemeyi doğrudan etkiler. SolChain B2B bu anı NFC etiketiyle kanıta bağlar.</p>
+<div class="grid2">
+<div class="card"><p class="n">TEDARİKÇİ · SEVK</p><b>Etiket yazılır</b><span>Sevk anında palete yapıştırılan NFC etiketine sipariş numarası, lot, miktar, birim ve 16 haneli bir doğrulama özeti yazılır. Sevk kaydı zincire düşer.</span></div>
+<div class="card"><p class="n">DEPO · MAL KABUL</p><b>Etiket okutulur</b><span>Depo sorumlusu telefonu etikete yaklaştırır. Uygulama sipariş ve özeti karşılaştırır; eşleşmezse kabul durur ve uyarı kaydı oluşur. Eşleşirse sayım ve kalite girilir.</span></div>
+</div>
+<h3>Etiket içeriği (örnek)</h3>
+<div class="code">{"t":"SCB2B","v":1,"po":"PO-0142","lot":"L-88120","q":40,"u":"ton","h":"3f9a1c7e5b20d4a8"}</div>
+<table>
+<tr><th style="width:26%">Konu</th><th>Uygulama</th></tr>
+<tr><td><b>Etiket</b></td><td>NTAG213 (144 bayt) ve üzeri; tek etiket maliyeti düşük, palete ya da big-bag’e yapıştırılır</td></tr>
+<tr><td><b>Cihaz</b></td><td>Demo: Android’de Chrome ile Web NFC (HTTPS gerekir). Ürün: yerel mobil uygulama ve endüstriyel el terminalleri</td></tr>
+<tr><td><b>Güvenlik</b></td><td>Etiketteki özet, sipariş ve lot bilgisinden türetilir; etiketi değiştirmek ya da başka palete yapıştırmak doğrulamada yakalanır. Ürün sürümünde imzalı ya da kilitlenebilir etiketler kullanılacak</td></tr>
+<tr><td><b>Etiketsiz durum</b></td><td>Etiket okunamazsa kabul “etiketsiz” olarak işaretlenir ve karnede ayrıca izlenir</td></tr>
+<tr><td><b>Kazanım</b></td><td>Doğru palet doğrulaması, tartışmasız teslim anı, karnede güvenilir zamanında teslim (OTIF) verisi, faturayla otomatik eşleşen miktar</td></tr>
+</table>
+
+<h2><span class="k">GÜVEN KATMANI</span>İki yönlü karne ve seviyeler</h2>
+<div class="grid2">
+<div class="card"><p class="n">TEDARİKÇİ KARNE ENDEKSİ</p><span>Zamanında ve eksiksiz teslim %30 · kalite (giriş + saha) %30 · beyan–ölçüm uyumu %15 · yeterlilik %15 · uyuşmazlık geçmişi %10. Beş teslimattan azsa puan gösterilmez.</span></div>
+<div class="card"><p class="n">ÜRETİCİ · ALICI ENDEKSİ</p><span>Zamanında ödeme %60 · gecikme günü %25 · haklı itiraz oranı %15. Düzenli ödeyen alıcı pazarlıkta güçlenir.</span></div>
+</div>
+<table>
+<tr><th style="width:18%">Seviye</th><th style="width:44%">Koşul</th><th>Açtığı imkân</th></tr>
+<tr><td><b>Verified</b></td><td>Kimlik ve temel belgeler doğrulandı</td><td>Ağda görünür, teklif alır</td></tr>
+<tr><td><b>Silver</b></td><td>10+ teslimat, endeks 70+</td><td>Teslimde %25 avans</td></tr>
+<tr><td><b>Gold</b></td><td>20+ teslimat, endeks 85+, 5+ farklı alıcı</td><td>Teslimde %40 avans</td></tr>
+<tr><td><b>Platinum</b></td><td>40+ teslimat, endeks 90+, 10+ farklı alıcı</td><td>Finansman ortaklarında öncelik (planlanan)</td></tr>
+</table>
+<p>Şişirmeye karşı: puan yalnızca gerçek siparişten gelir, farklı alıcı şartı aranır, karşılıklı puanlama tespit edilir. Zorunlu belgenin süresi dolarsa tedarikçi askıya alınır.</p>
+
+<!-- 4 · Kontroller ve teknoloji -->
+<h2><span class="k">KONTROLLER</span>Kurumsal satın alma politikası, kod olarak</h2>
+<table>
+<tr><th style="width:26%">Kontrol</th><th style="width:38%">Kural (varsayılan, şirkete göre ayarlanır)</th><th>Etkisi</th></tr>
+<tr><td><b>Onay zinciri</b></td><td>Tutar eşiğine göre birim → satın alma → finans</td><td>Yetkisiz harcama yapılamaz</td></tr>
+<tr><td><b>Bütçe kontrolü</b></td><td>Maliyet merkezi bütçesi aşılırsa finans onayı zorunlu</td><td>Bütçe sapması talep anında görünür</td></tr>
+<tr><td><b>Üçlü eşleştirme</b></td><td>Miktar ve fiyat farkı %2’yi aşarsa ödeme bloke</td><td>Fazla ve hatalı ödeme engellenir</td></tr>
+<tr><td><b>Belge geçerliliği</b></td><td>Faaliyet belgesi 90 günden eskiyse siparişten önce güncellenir</td><td>Kapanmış ya da faaliyet dışı firmayla iş yapılmaz</td></tr>
+<tr><td><b>Risk sinyali</b></td><td>SGK/vergi yapılandırması → avans %10 ile sınırlı</td><td>Mali riski olan tedarikçiye ön ödeme sınırlanır</td></tr>
+<tr><td><b>Tek kaynak</b></td><td>Kategoride bir tedarikçinin payı %45’i geçerse uyarı</td><td>Tedarik sürekliliği korunur</td></tr>
+<tr><td><b>Fiyat revizyonu</b></td><td>Endeks %4’ü aşarsa sözleşmedeki formül devreye girer</td><td>Zam sürprizi ve sipariş sonrası pazarlık biter</td></tr>
+<tr><td><b>Rol ve denetim</b></td><td>Talep sahibi, birim yöneticisi, satın alma, finans, depo, tedarikçi rolleri</td><td>Her işlem kimin yaptığıyla birlikte kayıtlı</td></tr>
+</table>
+
+<h2><span class="k">TEKNOLOJİ</span>Mimari, entegrasyon ve güvenlik</h2>
+<div class="grid2">
+<div class="card"><p class="n">DÖRT KATMAN</p><span><b style="display:inline;color:#14181A">Arayüz:</b> web paneli, mobil mal kabul (NFC).<br><b style="display:inline;color:#14181A">Uygulama:</b> talep, onay, teklif, sipariş, eşleştirme, karne, risk ve yapay zekâ servisleri.<br><b style="display:inline;color:#14181A">Entegrasyon:</b> ERP, e-Fatura/e-İrsaliye, ödeme kuruluşu, banka, laboratuvar.<br><b style="display:inline;color:#14181A">Kanıt:</b> Solana.</span></div>
+<div class="card"><p class="n">SOLANA’YA NE YAZILIR?</p><span>Belge ve koşul özetleri, imzalar, kilit ve serbest bırakma kuralı, etiket ve teslim kaydı, kalite sonucu, laboratuvar kararı, karneyi oluşturan kayıtlar.<br><b style="display:inline;color:#14181A">Yazılmayan:</b> ticari veri ve para. Türkiye’de para TL olarak lisanslı ödeme kuruluşunda tutulur.</span></div>
+</div>
+<table>
+<tr><th style="width:24%">Entegrasyon</th><th>Kapsam</th></tr>
+<tr><td><b>ERP</b></td><td>SAP, Microsoft Dynamics, Logo, Netsis, Mikro: talep, sipariş, stok ve fatura verisinin çift giriş olmadan akışı</td></tr>
+<tr><td><b>e-Belge</b></td><td>e-Fatura ve e-İrsaliye ile otomatik eşleştirme</td></tr>
+<tr><td><b>Ödeme</b></td><td>Lisanslı ödeme kuruluşu ve bankalar: kilit, serbest bırakma, erken tahsilat</td></tr>
+<tr><td><b>Kalite</b></td><td>Laboratuvar bilgi sistemleri ve akrediteli laboratuvarlar</td></tr>
+<tr><td><b>Geliştirici</b></td><td>REST API ve webhook</td></tr>
+</table>
+<p><b>Güvenlik ve uyum:</b> KVKK uyumlu veri işleme, rol bazlı erişim, değiştirilemez denetim izi; ana ağa geçmeden önce akıllı sözleşmeler için bağımsız güvenlik denetimi.</p>
+
+<!-- 5 · İş modeli, rekabet, durum -->
+<h2><span class="k">İŞ MODELİ</span>Üretici öder, tedarikçi kazanır, ağ büyür</h2>
+<table>
+<tr><th style="width:24%">Gelir kanalı</th><th>Açıklama</th></tr>
+<tr><td><b>Abonelik</b></td><td>Üreticiye, modül ve tedarikçi sayısına göre yıllık lisans</td></tr>
+<tr><td><b>İşlem ücreti</b></td><td>Güvenceli ödemeyle tamamlanan siparişten düşük oran</td></tr>
+<tr><td><b>Finansman payı</b></td><td>Erken tahsilat ve vade finansmanında ortaklarla gelir paylaşımı</td></tr>
+<tr><td><b>Veri hizmeti</b></td><td>Risk izleme ve anonim piyasa istihbaratı paketi</td></tr>
+<tr><td><b>Tedarikçi premium</b></td><td>Kayıt ücretsiz; analitik ve görünürlük ücretli</td></tr>
+</table>
+<p><b>İlk hedef müşteri:</b> organize sanayi bölgelerinde, ISO 9001 sertifikalı, düzenli metal ve plastik ham madde alan orta ölçekli üreticiler. <b>Büyüme:</b> üretici tedarikçilerini davet eder; tedarikçi karnesini yeni müşterilere taşır. Fiyatlandırma sahadaki görüşmelerle netleşecek.</p>
+
+<h2><span class="k">REKABET</span>Parçalar piyasada var; döngü yok</h2>
+<table>
+<tr><th style="width:30%">Yetkinlik</th><th>SRM / satın alma yazılımları</th><th>Blokzincir escrow projeleri</th><th>SolChain B2B</th></tr>
+<tr><td>Talep, onay, bütçe</td><td>Var</td><td>Yok</td><td><b>Var</b></td></tr>
+<tr><td>Üçlü eşleştirme</td><td>Var</td><td>Yok</td><td><b>Var, ödemeye bağlı</b></td></tr>
+<tr><td>NFC ile kanıtlı mal kabul</td><td>Kısmen (el terminali)</td><td>Yok</td><td><b>Var, zincirde kayıtlı</b></td></tr>
+<tr><td>Taşınabilir tedarikçi karnesi</td><td>Şirket içi</td><td>Yok</td><td><b>Var, seviyeli</b></td></tr>
+<tr><td>İki yönlü puan (alıcı da)</td><td>Yok</td><td>Yok</td><td><b>Var</b></td></tr>
+<tr><td>Kaliteye bağlı kilitli ödeme</td><td>Yok</td><td>Kısmen (stablecoin)</td><td><b>Var, TL ile uyumlu</b></td></tr>
+<tr><td>Değiştirilemez denetim izi</td><td>Kısmen</td><td>Var</td><td><b>Var</b></td></tr>
+</table>
+
+<h2><span class="k">DURUM</span>Bugün neredeyiz, sırada ne var?</h2>
+<table>
+<tr><th style="width:38%">Bileşen</th><th style="width:22%">Durum</th><th>Not</th></tr>
+<tr><td>Satın alma demo uygulaması (12 modül, NFC)</td><td><b>Çalışıyor</b></td><td>GitHub Pages’te yayınlanabilir; veri tarayıcıda tutulur</td></tr>
+<tr><td>Kurcalamaya karşı kayıt zinciri (SHA-256)</td><td><b>Çalışıyor</b></td><td>Tarayıcıda; Solana programının mantığını gösterir</td></tr>
+<tr><td>Solana programı (sipariş, kilit, karne, uyuşmazlık)</td><td>Tasarlandı</td><td>Sıradaki geliştirme adımı</td></tr>
+<tr><td>ERP, e-Fatura ve ödeme kuruluşu entegrasyonu</td><td>Planlanan</td><td>İlk müşteriyle birlikte</td></tr>
+<tr><td>Belge ve risk okuyucu (yapay zekâ)</td><td>Planlanan</td><td>Belge tarihlerini otomatik okuma</td></tr>
+</table>
+
+<div class="box"><b>Kapanış.</b> Dijital çağın şımarık yıldızı yeterince alkış aldı; artık sahne üretici ve tedarikçinin. SolChain B2B, firmadan firmaya ticarette hakkın kanıtla arandığı altyapıdır.</div>
+<p class="foot mono">SOLCHAIN B2B · ÜRÜN TANITIM DOSYASI · Demo: [GitHub Pages bağlantısı] · İletişim: [Ad Soyad] · [e-posta] · Tablolardaki eşik ve oranlar varsayılan ayarlardır; firmalar ve tutarlar örnek veridir.</p>
+</body></html>
