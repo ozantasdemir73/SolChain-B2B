@@ -1,0 +1,14 @@
+{
+  "name": "SolChain B2B Üretici Paneli",
+  "short_name": "SolChain B2B",
+  "description": "Satın alma asistanı, talep ve onay, teklif, NFC ile mal kabul, üçlü eşleştirme, risk merkezi ve doğrulanabilir karne.",
+  "lang": "tr",
+  "start_url": "./#kabul",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2f4f6",
+  "theme_color": "#0f1c22",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
