@@ -6,7 +6,7 @@ Talepten ödemeye kadar satın alma sürecini tek akışta yönetir ve her adım
 
 > Dijital çağın şımarık yıldızı yeterince alkış aldı; artık sahne üretici ve tedarikçinin.
 
-**Uygulama:** https://ozantasdemir73.github.io/SolChain-B2B/ · **Depo:** https://github.com/ozantasdemir73/SolChain-B2B
+**Uygulama:** https://solchain-b2b.vercel.app · **Depo:** https://github.com/ozantasdemir73/SolChain-B2B
 
 ---
 
@@ -60,9 +60,12 @@ Kurulum ve derleme gerektirmeyen, tek dosyalık bir web uygulaması: üretici pa
   `{"t":"SCB2B","v":1,"po":"SC-2026-0151","lot":"L-48213","q":30,"u":"ton","h":"<16 hane özet>"}`
 - Uygulama telefonda **Ana ekrana ekle** ile uygulama gibi açılabilir.
 
-### GitHub Pages ile yayınlama
+### Yayın
 
-**Settings › Pages** bölümünde kaynak olarak `Deploy from a branch`, dal olarak `main` ve klasör olarak `/ (root)` seçin. Kök sayfa uygulamaya yönlendirir.
+- **Vercel (ana adres):** https://solchain-b2b.vercel.app. Depo Vercel'e bağlı; `main` dalına yapılan her gönderim otomatik yayınlanır. Derleme gerekmez (Framework Preset: Other).
+- **GitHub Pages (yedek):** https://ozantasdemir73.github.io/SolChain-B2B/. **Settings › Pages** bölümünde `main` dalı ve `/ (root)` klasörüyle yayınlanır.
+
+İki adreste de kök sayfa uygulamaya yönlendirir. İkisi de HTTPS olduğu için NFC her ikisinde de çalışır.
 
 ## Solana'nın rolü
 
